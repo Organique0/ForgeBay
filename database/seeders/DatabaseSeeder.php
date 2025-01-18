@@ -21,9 +21,17 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'admin',
+            'email' => 'admin@example.com',
         ])->assignRole(RolesEnum::Admin->value);
+        User::factory()->create([
+          'name' => 'seller',
+          'email' => 'seller@example.com',
+        ])->assignRole(RolesEnum::Seller->value);
+        User::factory()->create([
+          'name' => 'user',
+          'email' => 'user@example.com',
+        ])->assignRole(RolesEnum::User->value);
         $testUser = new user([
             'name' => config('test.user_login'),
             'email' => config('test.user_email'),

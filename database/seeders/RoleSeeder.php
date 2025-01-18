@@ -16,6 +16,7 @@ class RoleSeeder extends Seeder
     {
         $userRole = Role::create(['name' => RolesEnum::User->value]);
         $adminRole = Role::create(['name' => RolesEnum::Admin->value]);
+        $sellerRole = Role::create(['name' => RolesEnum::Seller->value]);
 
         //you can also make permissions here and sync them with roles
     }
