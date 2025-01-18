@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\CustomFilamentAuthenticate;
+use App\RolesEnum;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -17,6 +19,9 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -27,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->domain('admin.localhost')
             ->login()
-            ->colors([
+			->colors([
                 'primary' => Color::Amber,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
@@ -52,7 +57,7 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
-                Authenticate::class,
+                CustomFilamentAuthenticate::class,
             ]);
     }
 }
