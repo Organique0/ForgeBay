@@ -2,15 +2,26 @@
     "name": "karlverger/starterkit",
     "type": "project",
     "description": "Starter kit for Laravel11, Jetstream, Inertia, React, Chakra and swr applications.",
-    "keywords": ["laravel", "framework", "jetstream", "inertia", "react", "chakra ui", "swr"],
+    "keywords": [
+        "laravel",
+        "framework",
+        "jetstream",
+        "inertia",
+        "react",
+        "chakra ui",
+        "swr"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "filament/filament": "^3.2",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.9",
         "laravel/jetstream": "^5.1",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "livewire/livewire": "^3.5",
+        "spatie/laravel-permission": "^6.10",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
@@ -42,7 +53,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"

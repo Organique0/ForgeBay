@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Team;
+// use App\Models\Team;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\RolesEnum;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -17,10 +18,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->withPersonalTeam()->create();
 
+        $this->call(RoleSeeder::class);
+
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-        ]);
+        ])->assignRole(RolesEnum::Admin->value);
         $testUser = new user([
             'name' => config('test.user_login'),
             'email' => config('test.user_email'),
