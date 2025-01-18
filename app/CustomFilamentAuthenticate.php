@@ -30,12 +30,12 @@ class CustomFilamentAuthenticate extends Authenticate
 
 		$panel = Filament::getCurrentPanel();
 
-		if (!$user->hasRole('admin')) {
+/*		if (!$user->hasRole('admin')) {
 			Auth::guard('web')->logout();
 			session()->invalidate();
 			session()->regenerateToken();
 			abort(403);
-		}
+		}*/
 	}
 
 	protected function redirectTo($request): ?string
