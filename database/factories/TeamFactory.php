@@ -17,10 +17,11 @@ class TeamFactory extends Factory
      */
     public function definition(): array
     {
-        return [
+       /* return [
             'name' => $this->faker->unique()->company(),
             'user_id' => User::factory(),
             'personal_team' => true,
-        ];
+        ];*/
+      return [];
     }
 }

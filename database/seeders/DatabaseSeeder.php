@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->withPersonalTeam()->create();
 
-        User::factory()->withPersonalTeam()->create([
+        User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         $testUser->save();
 
         // Create a personal access token for the user and display it in the console
-        $token = $testUser->createToken('auth_token');
+/*        $token = $testUser->createToken('auth_token');
         echo 'TEST_AUTHENTICATION_BEARER_TOKEN: '.$token->plainTextToken.PHP_EOL.PHP_EOL;
 
         $testTeam = new Team([
@@ -39,6 +39,6 @@ class DatabaseSeeder extends Seeder
             'user_id' => $testUser->id,
             'personal_team' => true,
         ]);
-        $testTeam->save();
+        $testTeam->save();*/
     }
 }
