@@ -11,7 +11,6 @@ import DropdownLink from '@/Components/DropdownLink';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Team } from '@/types';
-
 interface Props {
   title: string;
   renderHeader?(): JSX.Element;
@@ -24,8 +23,8 @@ export default function AppLayout({
 }: PropsWithChildren<Props>) {
   const page = useTypedPage();
   const route = useRoute();
-  const [showingNavigationDropdown, setShowingNavigationDropdown] =
-    useState(false);
+  const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
 
   function switchToTeam(e: React.FormEvent, team: Team) {
     e.preventDefault();
@@ -59,23 +58,24 @@ export default function AppLayout({
               <div className="flex">
                 {/* <!-- Logo --> */}
                 <div className="flex-shrink-0 flex items-center">
-                  <Link href={route('dashboard')}>
+                  <Link href={route('home')}>
                     <ApplicationMark className="block h-9 w-auto" />
                   </Link>
                 </div>
 
                 {/* <!-- Navigation Links --> */}
                 <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                  <NavLink
+                 <NavLink
                     href={route('dashboard')}
                     active={route().current('dashboard')}
                   >
-                    Dashboard
+                  Dashboard
                   </NavLink>
                 </div>
               </div>
 
-              <div className="hidden sm:flex sm:items-center sm:ml-6">
+              <div className={"flex"}>
+              {page.props.auth.user && <div className="hidden sm:flex sm:items-center sm:ml-6">
                 <div className="ml-3 relative">
                   {/* <!-- Teams Dropdown --> */}
                   {page.props.jetstream.hasTeamFeatures ? (
@@ -223,6 +223,10 @@ export default function AppLayout({
                       </DropdownLink>
                     ) : null}
 
+                    <DropdownLink href={route('dashboard')}>
+                      Dashboard
+                    </DropdownLink>
+
                     <div className="border-t border-gray-200 dark:border-gray-600"></div>
 
                     {/* <!-- Authentication --> */}
@@ -231,7 +235,31 @@ export default function AppLayout({
                     </form>
                   </Dropdown>
                 </div>
-              </div>
+              </div>}
+
+
+                <div className="p-6 text-right">
+                  {!page.props.auth.user && (
+                    <>
+                      <Link
+                        href={route('login')}
+                        className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                      >
+                        Login
+                      </Link>
+
+
+                        <Link
+                          href={route('register')}
+                          className="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                        >
+                          Register
+                        </Link>
+                      )
+                    </>
+                  )}
+                </div>
+
 
               {/* <!-- Hamburger --> */}
               <div className="-mr-2 flex items-center sm:hidden">
@@ -269,6 +297,7 @@ export default function AppLayout({
                     />
                   </svg>
                 </button>
+              </div>
               </div>
             </div>
           </div>

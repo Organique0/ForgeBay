@@ -9,7 +9,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
 
 // 1. Import the utilities
-import {ChakraProvider, extendTheme} from '@chakra-ui/react';
+import {ChakraProvider, extendTheme } from '@chakra-ui/react';
 
 // 2. Update the breakpoints as key-value pairs
 const breakpoints = {
