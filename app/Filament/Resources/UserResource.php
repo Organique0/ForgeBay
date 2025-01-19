@@ -78,15 +78,26 @@ class UserResource extends Resource
             ])
 			->defaultSort('name', 'desc')
             ->filters([
-                Tables\Filters\Filter::make('Active')
-				->query(fn (Builder $query): Builder => $query->where('active', true)),
-				Tables\Filters\Filter::make('Inactive')
-				->query(fn (Builder $query): Builder => $query->where('active', false)),
-				Tables\Filters\Filter::make('Email Verified')
-				->query(fn (Builder $query): Builder => $query->whereNot('email_verified_at' )),
-				Tables\Filters\Filter::make('Email Not Verified')
-				->query(fn (Builder $query): Builder => $query->where('email_verified_at' ))
-            ])
+               	Tables\Filters\TernaryFilter::make('active')
+				->label('Active')
+				->placeholder('All Users')
+				->name('active'),
+				Tables\Filters\TernaryFilter::make('email_verified_at')
+				->label('Email Verified')
+				->placeholder('All Users')
+				->nullable(),
+				SelectFilter::make('role')
+					->label('Role')
+					->options(Role::pluck('name', 'id'))
+					->query(function (Builder $query, array $data) {
+						return $query->when(
+							$data['value'],
+							fn (Builder $query, $roleId) => $query->whereHas('roles', fn ($q) => $q->where('id', $roleId))
+						);
+					})
+
+
+			])
             ->actions([
 				Tables\Actions\ViewAction::make('view')
             ])
