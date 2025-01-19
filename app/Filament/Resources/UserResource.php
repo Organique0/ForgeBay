@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use App\RolesEnum;
 use Filament\Actions\Action;
 use Filament\Actions\SelectAction;
 use Filament\Forms;
@@ -13,12 +14,14 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Password;
+use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
 {
@@ -69,8 +72,8 @@ class UserResource extends Resource
 				->badge()
 				->color(fn (string $state) => match ($state) {
 					'user' => 'success',
-					'admin' => 'danger',
-					'seller' => 'warning',
+					'admin' => 'info',
+					'super-admin' => 'warning',
 				}),
             ])
 			->defaultSort('name', 'desc')
@@ -118,9 +121,17 @@ class UserResource extends Resource
 					->deselectRecordsAfterCompletion()
                 ]),
             ])
-			->checkIfRecordIsSelectableUsing(
-				fn (User $user): bool => !$user->hasRole('admin')
-			)
+			->checkIfRecordIsSelectableUsing(function (User $user): bool {
+				$currentUser = auth()->user();
+				if ($currentUser->hasRole('admin') && $user->hasRole('user')) {
+					return true;
+				}
+				if ($currentUser->can('modify-admins')) {
+					return true;
+				}
+				return false;
+			})
+
 			;
     }
 
