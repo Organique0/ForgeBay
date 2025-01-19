@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Password;
 
 class UserResource extends Resource
 {
@@ -94,7 +95,12 @@ class UserResource extends Resource
 						$user->save();
 					}))
 					->deselectRecordsAfterCompletion(),
-					Tables\Actions\BulkAction::make('Reset Passwords'),
+					Tables\Actions\BulkAction::make('Reset Passwords')
+					->requiresConfirmation()
+					->action(fn (Collection $users) => $users->each(function ($user) {
+						Password::sendResetLink(['email' => $user->email]);
+					}))
+					->deselectRecordsAfterCompletion(),
 					Tables\Actions\BulkAction::make('Remove Email Verified')
 					->requiresConfirmation()
 					->action(fn (Collection $users) => $users->each(function ($user) {
