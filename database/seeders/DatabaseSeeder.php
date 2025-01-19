@@ -24,14 +24,19 @@ class DatabaseSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@example.com',
         ])->assignRole(RolesEnum::Admin->value);
-        User::factory()->create([
+		User::factory()->create([
+			'name' => 'superAdmin',
+			'email' => 'superAdmin@example.com',
+		])->assignRole(RolesEnum::SuperAdmin->value);
+/*        User::factory()->create([
           'name' => 'seller',
           'email' => 'seller@example.com',
-        ])->assignRole(RolesEnum::Seller->value);
+        ])->assignRole(RolesEnum::Seller->value);*/
         User::factory()->create([
           'name' => 'user',
           'email' => 'user@example.com',
         ])->assignRole(RolesEnum::User->value);
+
         $testUser = new user([
             'name' => config('test.user_login'),
             'email' => config('test.user_email'),
@@ -39,7 +44,7 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
         ]);
-        $testUser->save();
+        //$testUser->save();
 
         // Create a personal access token for the user and display it in the console
 /*        $token = $testUser->createToken('auth_token');

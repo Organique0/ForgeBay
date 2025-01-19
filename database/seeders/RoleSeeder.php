@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\PermissionsEnum;
 use App\RolesEnum;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleSeeder extends Seeder
@@ -16,8 +18,10 @@ class RoleSeeder extends Seeder
     {
         $userRole = Role::create(['name' => RolesEnum::User->value]);
         $adminRole = Role::create(['name' => RolesEnum::Admin->value]);
-        $sellerRole = Role::create(['name' => RolesEnum::Seller->value]);
+//        $sellerRole = Role::create(['name' => RolesEnum::Seller->value]);
+		$superAdminRole = Role::create(['name' => RolesEnum::SuperAdmin->value]);
 
         //you can also make permissions here and sync them with roles
+		$modifyAdmins = Permission::create(['name' => PermissionsEnum::ModifyAdmins->value]);
     }
 }
