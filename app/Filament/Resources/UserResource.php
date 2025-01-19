@@ -63,7 +63,15 @@ class UserResource extends Resource
 				Tables\Columns\IconColumn::make('email_verified_at')
 				->label('Email Verified')
 				->boolean()
-				->getStateUsing(fn ($record) => $record->email_verified_at !== null)
+				->getStateUsing(fn ($record) => $record->email_verified_at !== null),
+				TextColumn::make('Role')
+				->getStateUsing(fn (User $user) => $user->getRoleNames())
+				->badge()
+				->color(fn (string $state) => match ($state) {
+					'user' => 'success',
+					'admin' => 'danger',
+					'seller' => 'warning',
+				}),
             ])
 			->defaultSort('name', 'desc')
             ->filters([
