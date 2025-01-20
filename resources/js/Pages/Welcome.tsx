@@ -5,6 +5,7 @@ import useTypedPage from '@/Hooks/useTypedPage';
 import { Head } from '@inertiajs/react';
 import HeroeSection from "@/Components/Heroes/HeroeSection";
 import AppLayout from '@/Layouts/AppLayout';
+import Messages from '@/Components/messages/Messages';
 
 interface Props {
   canLogin: boolean;
@@ -26,11 +27,13 @@ export default function Welcome({
     <AppLayout title={'Welcome'}>
       <Head title="Welcome to ForgeHub" />
 
-      <div className="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-gray-100 bg-center dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-        <div className="max-w-7xl mx-auto p-6 lg:p-8">
-          <HeroeSection />
-        </div>
-      </div>
+      <div className="max-w-7xl mx-auto p-6 lg:p-8">
+				<HeroeSection />
+			</div>
+			<div>
+				<Messages/>
+			</div>
+
     </AppLayout>
   );
 }

@@ -1,8 +1,10 @@
 <?php
 
+use App\Events\MessageSent;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 Route::domain('localhost')->group(function () {
   Route::get('/', function () {
@@ -19,9 +21,25 @@ Route::domain('localhost')->group(function () {
     config('jetstream.auth_session'),
     'verified',
   ])->group(function () {
+
+
     Route::get('/dashboard', function () {
       return Inertia::render('Dashboard');
     })->name('dashboard');
+
+
+		Route::post('/messages', function (Request $request) {
+			$request->validate([
+				'message' => 'required|string',
+			]);
+			MessageSent::dispatch(auth()->user()->name, $request->message);
+			return response()->json(
+				[
+					'text' => 'Message sent!',
+					'user' => auth()->user()->name,
+				]
+			);
+		})->name('messages.send');
   });
 });
 

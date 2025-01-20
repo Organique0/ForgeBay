@@ -238,7 +238,7 @@ return [
 		],
 
 		\Laravel\Reverb\Pulse\Recorders\ReverbMessages::class => [
-			'sampler_rate' => 1,
+			'sample_rate' => 1,
 		],
     ],
 ];
