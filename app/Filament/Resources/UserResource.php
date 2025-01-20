@@ -3,23 +3,19 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use App\RolesEnum;
-use Filament\Actions\Action;
-use Filament\Actions\SelectAction;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Password;
 use Spatie\Permission\Models\Role;
 
@@ -35,9 +31,11 @@ class UserResource extends Resource
             ->schema([
                Forms\Components\TextInput::make('name')
 				->required()
-				->maxLength(255),
+				->maxLength(255)
+				->disabled(),
 				Forms\Components\TextInput::make('email')
-					->email()
+				->email()
+				->disabled()
 				->required()
 				->maxLength(255),
 				Forms\Components\Select::make('active')
@@ -45,9 +43,24 @@ class UserResource extends Resource
 					true => 'Active',
 					false => 'Inactive',
 				]),
-				Forms\Components\TextInput::make('email_verified_at')
+				Forms\Components\DateTimePicker::make('email_verified_at')
 				->disabled(),
 
+				Select::make('role')
+					->label('Role')
+					->options(RolesEnum::class)
+					// For some reason using the default function here does not work ...
+					// Even if I copy-paste the code directly from the documentation ...
+					->afterStateHydrated(function (Select $component, Model $record) {
+						$component->state($record->roles->first()?->name);
+					})
+					->afterStateUpdated(function ($state, Select $component, Model $record) {
+						if ($record && $state) {
+							$record->syncRoles($state);
+						}
+					})
+					->selectablePlaceholder(false)
+					->required()
             ]);
     }
 
@@ -74,7 +87,7 @@ class UserResource extends Resource
 					'user' => 'success',
 					'admin' => 'info',
 					'super-admin' => 'warning',
-				}),
+				})
             ])
 			->defaultSort('name', 'desc')
             ->filters([
@@ -137,7 +150,7 @@ class UserResource extends Resource
 				if ($currentUser->hasRole('admin') && $user->hasRole('user')) {
 					return true;
 				}
-				if ($currentUser->can('modify-admins')) {
+				if ($currentUser->can('modify-admins') && !$user->hasRole('super-admin')) {
 					return true;
 				}
 				return false;
@@ -158,6 +171,7 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
+			'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 }
