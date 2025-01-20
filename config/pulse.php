@@ -232,5 +232,13 @@ return [
                 '#^/telescope#', // Telescope dashboard...
             ],
         ],
+
+		\Laravel\Reverb\Pulse\Recorders\ReverbConnections::class => [
+			'sample_rate' => 1,
+		],
+
+		\Laravel\Reverb\Pulse\Recorders\ReverbMessages::class => [
+			'sampler_rate' => 1,
+		],
     ],
 ];
