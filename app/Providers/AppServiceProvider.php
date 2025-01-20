@@ -24,5 +24,9 @@ class AppServiceProvider extends ServiceProvider
 		Gate::before(function ($user, $ability) {
 			return $user->hasRole(RolesEnum::SuperAdmin->value) ? true : null;
 		});
+
+		Gate::define('viewPulse', function ($user) {
+			return $user->hasRole(RolesEnum::SuperAdmin->value) ? true : false;
+		});
     }
 }
