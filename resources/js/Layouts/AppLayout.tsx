@@ -65,12 +65,13 @@ export default function AppLayout({
 
                 {/* <!-- Navigation Links --> */}
                 <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                   <NavLink
+                   {/*<NavLink
                      href={route('dashboard')}
                      active={route().current('dashboard')}
                    >
                      Dashboard
-                   </NavLink>
+                   </NavLink>*/}
+
                  </div>
               </div>
 
@@ -240,7 +241,7 @@ export default function AppLayout({
                   </div>
                 )}
 
-                <div className="p-6 text-right">
+                <div className="p-6 text-right hidden sm:block">
                   {!page.props.auth.user && (
                     <>
                       <Link
@@ -302,22 +303,39 @@ export default function AppLayout({
           </div>
 
           {/* <!-- Responsive Navigation Menu --> */}
-          <div
+				 <div
             className={classNames('sm:hidden', {
               block: showingNavigationDropdown,
               hidden: !showingNavigationDropdown,
             })}
           >
             <div className="pt-2 pb-3 space-y-1">
-              <ResponsiveNavLink
-                href={route('dashboard')}
-                active={route().current('dashboard')}
-              >
-                Dashboard
-              </ResponsiveNavLink>
+
+							{!page.props.auth.user ? (
+								<>
+									<ResponsiveNavLink
+										href={route('login')}
+									>
+										Login
+									</ResponsiveNavLink>
+
+									<ResponsiveNavLink
+										href={route('register')}
+									>
+										Register
+									</ResponsiveNavLink>
+								</>
+							): <ResponsiveNavLink
+								href={route('dashboard')}
+								active={route().current('dashboard')}
+							>
+								Dashboard
+							</ResponsiveNavLink>}
+
             </div>
 
             {/* <!-- Responsive Settings Options --> */}
+					 {page.props.auth.user &&
             <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
               <div className="flex items-center px-4">
                 {page.props.jetstream.managesProfilePhotos ? (
@@ -422,7 +440,7 @@ export default function AppLayout({
                   </>
                 ) : null}
               </div>
-            </div>
+            </div>}
           </div>
         </nav>
 
