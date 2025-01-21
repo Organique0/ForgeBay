@@ -16,7 +16,7 @@ class WelcomeController extends Controller
 	 */
 	public function __invoke()
 	{
-		$ideas = Idea::with('user')
+		$ideas = Idea::with('user','tags', 'tasks')
 			->latest()
 			->get();
 
