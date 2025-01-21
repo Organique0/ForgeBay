@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use App\Models\Team;
+use App\Models\Team;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\RolesEnum;
@@ -16,38 +17,38 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->withPersonalTeam()->create();
+       // User::factory(10)->withPersonalTeam()->create();
 
         $this->call(RoleSeeder::class);
+				$this->call(IdeaSeeder::class);
+				$this->call(TaskSeeder::class);
+				$this->call(ApplicationSeeder::class);
+				$this->call(TagSeeder::class);
 
         User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@example.com',
         ])->assignRole(RolesEnum::Admin->value);
-		User::factory()->create([
-			'name' => 'superAdmin',
-			'email' => 'superAdmin@example.com',
-		])->assignRole(RolesEnum::SuperAdmin->value);
-/*        User::factory()->create([
-          'name' => 'seller',
-          'email' => 'seller@example.com',
-        ])->assignRole(RolesEnum::Seller->value);*/
-        User::factory()->create([
+				User::factory()->create([
+					'name' => 'superAdmin',
+					'email' => 'superAdmin@example.com',
+				])->assignRole(RolesEnum::SuperAdmin->value);
+        User::factory()->withPersonalTeam()->create([
           'name' => 'user',
           'email' => 'user@example.com',
         ])->assignRole(RolesEnum::User->value);
 
         $testUser = new user([
-            'name' => config('test.user_login'),
-            'email' => config('test.user_email'),
-            'password' => bcrypt(config('test.user_password')),
-            'email_verified_at' => now(),
-            'remember_token' => Str::random(10),
-        ]);
-        //$testUser->save();
+					'name' => config('test.user_login'),
+					'email' => config('test.user_email'),
+					'password' => bcrypt(config('test.user_password')),
+					'email_verified_at' => now(),
+					'remember_token' => Str::random(10),
+				]);
+        $testUser->save();
 
         // Create a personal access token for the user and display it in the console
-/*        $token = $testUser->createToken('auth_token');
+        $token = $testUser->createToken('auth_token');
         echo 'TEST_AUTHENTICATION_BEARER_TOKEN: '.$token->plainTextToken.PHP_EOL.PHP_EOL;
 
         $testTeam = new Team([
@@ -55,6 +56,6 @@ class DatabaseSeeder extends Seeder
             'user_id' => $testUser->id,
             'personal_team' => true,
         ]);
-        $testTeam->save();*/
+        $testTeam->save();
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -19,10 +20,10 @@ class User extends Authenticatable implements FilamentUser
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
-//    use HasTeams;
+    use HasTeams;
     use Notifiable;
     use TwoFactorAuthenticatable;
-//    use HasPermissions;
+    use HasPermissions;
     use HasRoles;
 
     /**
@@ -74,5 +75,15 @@ class User extends Authenticatable implements FilamentUser
 	public function canAccessPanel(Panel $panel): bool
 	{
 		return $this->hasRole(['admin', 'super-admin']);
+	}
+
+	public function idea(): HasMany
+	{
+		return $this->hasMany(Idea::class);
+	}
+
+	public function application(): HasMany
+	{
+		return $this->hasMany(Application::class);
 	}
 }

@@ -11,21 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tasks', function (Blueprint $table) {
-            $table->id();
-						$table->string('name');
-						$table->text('description');
-						$table->float('value');
-						$table->foreignId('idea_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
-        });
-    }
+			Schema::create('idea_tag', function (Blueprint $table) {
+				$table->id();
+				$table->foreignId('idea_id')->constrained()->onDelete('cascade');
+				$table->foreignId('tag_id')->constrained()->onDelete('cascade');
+			});
+
+		}
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('idea_tag');
     }
 };

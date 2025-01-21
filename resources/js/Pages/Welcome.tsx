@@ -6,12 +6,14 @@ import { Head } from '@inertiajs/react';
 import HeroeSection from "@/Components/Heroes/HeroeSection";
 import AppLayout from '@/Layouts/AppLayout';
 import Messages from '@/Components/messages/Messages';
+import Ideas from '@/Components/Ideas';
 
 interface Props {
   canLogin: boolean;
   canRegister: boolean;
   laravelVersion: string;
   phpVersion: string;
+	ideas: any;
 }
 
 export default function Welcome({
@@ -19,6 +21,7 @@ export default function Welcome({
   canRegister,
   laravelVersion,
   phpVersion,
+	ideas
 }: Props) {
   const route = useRoute();
   const page = useTypedPage();
@@ -27,11 +30,15 @@ export default function Welcome({
     <AppLayout title={'Welcome'}>
       <Head title="Welcome to ForgeHub" />
 
-      <div className="max-w-7xl mx-auto p-6 lg:p-8">
+      <div>
 				<HeroeSection />
 			</div>
 			<div>
-				<Messages/>
+				{/*<Messages/>*/}
+			</div>
+			<div>
+				<h1>Latest Ideas</h1>
+				<Ideas ideas={ideas} />
 			</div>
 
     </AppLayout>

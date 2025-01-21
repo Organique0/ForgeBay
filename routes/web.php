@@ -7,14 +7,7 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 Route::domain('localhost')->group(function () {
-  Route::get('/', function () {
-    return Inertia::render('Welcome', [
-      'canLogin' => Route::has('login'),
-      'canRegister' => Route::has('register'),
-      'laravelVersion' => Application::VERSION,
-      'phpVersion' => PHP_VERSION,
-    ]);
-  })->name('home');
+  Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
 
   Route::middleware([
     'auth:sanctum',
