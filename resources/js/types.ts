@@ -10,19 +10,6 @@ export interface Team {
   updated_at: DateTime;
 }
 
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  current_team_id: Nullable<number>;
-  profile_photo_path: Nullable<string>;
-  profile_photo_url: string;
-  two_factor_enabled: boolean;
-  email_verified_at: Nullable<DateTime>;
-  created_at: DateTime;
-  updated_at: DateTime;
-}
-
 export interface Auth {
   user: Nullable<
     User & {
@@ -93,4 +80,50 @@ export interface TeamInvitation {
   role: Nullable<string>;
   created_at: DateTime;
   updated_at: DateTime;
+}
+
+export interface IdeasProps {
+	ideas: Idea[];
+}
+
+export type Idea = {
+	created_at: string;
+	description: string;
+	id: number;
+	title: string;
+	updated_at: string;
+	user: User;
+	user_id: number;
+	tags: Tag[];
+	tasks: Task[];
+}
+
+export type User = {
+	active: boolean;
+	created_at: string;
+	current_team_id: number;
+	email: string;
+	email_verified_at?: string;
+	id: number;
+	name: string;
+	profile_photo_path?: string;
+	profile_photo_url?: string;
+	two_factor_confirmed_at?: string;
+	updated_at: string;
+}
+
+export type Tag = {
+	created_at?: string;
+	id: number;
+	name: string;
+	updated_at?: string;
+}
+
+export type Task = {
+	created_at?: string;
+	description: string;
+	id: number;
+	idea_id: number;
+	updated_at?: string;
+	value: number;
 }

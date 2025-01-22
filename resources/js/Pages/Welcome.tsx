@@ -1,12 +1,11 @@
-import { Link } from '@inertiajs/react';
 import React from 'react';
 import useRoute from '@/Hooks/useRoute';
 import useTypedPage from '@/Hooks/useTypedPage';
 import { Head } from '@inertiajs/react';
 import HeroeSection from "@/Components/Heroes/HeroeSection";
 import AppLayout from '@/Layouts/AppLayout';
-import Messages from '@/Components/messages/Messages';
 import Ideas from '@/Components/Ideas';
+import { Heading } from '@chakra-ui/react';
 
 interface Props {
   canLogin: boolean;
@@ -28,16 +27,16 @@ export default function Welcome({
 
   return (
     <AppLayout title={'Welcome'}>
-      <Head title="Welcome to ForgeHub" />
+			<Head title="Welcome to ForgeHub" />
 
-      <div>
-				<HeroeSection />
-			</div>
+			<HeroeSection />
+
 			<div>
 				{/*<Messages/>*/}
 			</div>
-			<div>
-				<h1>Latest Ideas</h1>
+
+			<div className={'mx-6'}>
+				<Heading className={'text-3xl my-4'}>Latest Ideas</Heading>
 				<Ideas ideas={ideas} />
 			</div>
 

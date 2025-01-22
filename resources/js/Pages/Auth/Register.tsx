@@ -28,7 +28,7 @@ export default function Register() {
     });
   }
 
-  return (
+	return (
     <AuthenticationCard>
       <Head title="Register" />
 
@@ -104,6 +104,7 @@ export default function Register() {
                   name="terms"
                   id="terms"
                   checked={form.data.terms}
+									//@ts-ignore
                   onChange={e => form.setData('terms', e.currentTarget.checked)}
                   required
                 />
