@@ -16,6 +16,8 @@ return new class extends Migration
 						$table->string('name');
 						$table->text('description');
 						$table->float('value');
+						$table->string('status');
+						$table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
 						$table->foreignId('idea_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

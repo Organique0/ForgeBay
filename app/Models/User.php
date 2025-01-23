@@ -77,12 +77,12 @@ class User extends Authenticatable implements FilamentUser
 		return $this->hasRole(['admin', 'super-admin']);
 	}
 
-	public function idea(): HasMany
+	public function ideas(): HasMany
 	{
 		return $this->hasMany(Idea::class);
 	}
 
-	public function application(): HasMany
+	public function applications(): HasMany
 	{
 		return $this->hasMany(Application::class);
 	}

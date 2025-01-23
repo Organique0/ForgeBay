@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Container, chakra, Stack, Text, Button, Box, Heading } from '@chakra-ui/react';
-
+import { Container, chakra, Stack, Text, Box, Heading  } from '@chakra-ui/react';
+import { Button } from '@/ui/button';
 const HeroSection = () => {
     return (
 					 <Container maxW={'full'} className={'bg-red-200'}>

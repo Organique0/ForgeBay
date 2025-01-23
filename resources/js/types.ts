@@ -126,4 +126,18 @@ export type Task = {
 	idea_id: number;
 	updated_at?: string;
 	value: number;
+	status: Status;
+	applications: Application[];
+	name: string;
 }
+
+export type Application = {
+	id: number,
+	task_id: number,
+	description: string,
+	status: boolean,
+	created_at?: string,
+	updated_at?: string,
+}
+
+export type Status = 'to_do' | 'in_progress' | 'done';

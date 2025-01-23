@@ -10,6 +10,7 @@ import Dropdown from '@/Components/Dropdown';
 import DropdownLink from '@/Components/DropdownLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Team } from '@/types';
+import { ColorModeButton } from '@/ui/color-mode';
 interface Props {
   title: string;
   renderHeader?(): JSX.Element;
@@ -259,6 +260,7 @@ export default function AppLayout({
                     </>
                   )}
                 </div>
+								{/*<ColorModeButton className={'absolute right-[-7px] top-[-7px] rounded-2xl bg-slate-300 dark:bg-slate-700'}/>*/}
 
                 {/* <!-- Hamburger --> */}
                 <div className="-mr-2 flex items-center sm:hidden">

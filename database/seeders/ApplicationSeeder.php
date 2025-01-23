@@ -14,20 +14,17 @@ class ApplicationSeeder extends Seeder
     public function run(): void
     {
 		DB::table('applications')->insert([
-			'task_id' => 1,
-			'user_id' => 1,
+			'task_id' => 11,
 			'description' => 'Description 1',
 			'status' => 1,
 		]);
 		DB::table('applications')->insert([
-			'task_id' => 2,
-			'user_id' => 1,
+			'task_id' => 11,
 			'description' => 'Description 1',
 			'status' => 1,
 		]);
 		DB::table('applications')->insert([
-			'task_id' => 3,
-			'user_id' => 1,
+			'task_id' => 11,
 			'description' => 'Description 1',
 			'status' => 1,
 		]);

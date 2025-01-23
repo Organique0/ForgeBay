@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 Route::domain('localhost')->group(function () {
   Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
+	Route::get('/idea/{id}', [\App\Http\Controllers\IdeaController::class, 'show'])->name('idea.show');
 
   Route::middleware([
     'auth:sanctum',
