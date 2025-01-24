@@ -1,6 +1,5 @@
-import { LuBadgeCheck, LuBadgeX, LuCheck, LuShip } from 'react-icons/lu';
+import { LuBadgeCheck, LuBadgeX, LuShip } from 'react-icons/lu';
 import React from 'react';
-import { IconType } from 'react-icons';
 import { Status } from '@/types';
 
 type Props = {
@@ -10,11 +9,11 @@ type Props = {
 const StatusComponent: React.FC<Props> = ({status})  => {
 		switch (status) {
 			case 'to_do':
-				return <LuBadgeX />
+				return <LuBadgeX color={'red'}/>
 			case 'in_progress':
-				return <LuShip />
+				return <LuShip color={'orange'}/>
 			case 'done':
-				return <LuBadgeCheck />
+				return <LuBadgeCheck color={'green'}/>
 			default:
 				return <LuBadgeCheck />
 		}
