@@ -16,7 +16,7 @@ import StatusPretty from '@/Components/StatusPretty';
 
 const Ideas: React.FC<IdeasProps> = ({ ideas } ) => {
 	return (
-		<SimpleGrid minChildWidth={'sm'} gap={'20px'}>
+		<SimpleGrid gap={'20px'} className={'grid-cols-1 lg:grid-cols-2'}>
 			{ideas.map((idea: Idea) => {
 				const totalValue = idea.tasks.reduce((acc, task) => acc + task.value, 0);
 				return (

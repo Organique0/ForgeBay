@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/react';
 import HeroeSection from "@/Components/Heroes/HeroeSection";
 import AppLayout from '@/Layouts/AppLayout';
 import Ideas from '@/Components/MyComponents/Ideas';
-import { Heading } from '@chakra-ui/react';
+import { Container, Heading } from '@chakra-ui/react';
 
 interface Props {
   canLogin: boolean;
@@ -35,10 +35,10 @@ export default function Welcome({
 				{/*<Messages/>*/}
 			</div>
 
-			<div className={'mx-6'}>
+			<Container>
 				<Heading className={'text-3xl my-4'}>Latest Ideas</Heading>
 				<Ideas ideas={ideas} />
-			</div>
+			</Container>
 
     </AppLayout>
   );

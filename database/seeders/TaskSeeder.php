@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Task;
 use App\TaskStatus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,6 +15,8 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
+			Task::factory(10)->create();
+
         DB::table('tasks')->insert([
 			'name' => 'Task 1',
 			'description' => 'Description 1',

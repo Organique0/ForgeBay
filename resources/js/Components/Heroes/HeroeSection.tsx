@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Container, chakra, Stack, Text, Box, Heading  } from '@chakra-ui/react';
+import { chakra, Stack, Text, Box, Heading  } from '@chakra-ui/react';
 import { Button } from '@/ui/button';
 const HeroSection = () => {
     return (
-					 <Container maxW={'full'} className={'bg-red-200'}>
 							 <Stack
+								 className={'bg-red-300'}
 									 as={Box}
 									 textAlign={'center'}
 									 gap={{ base: 8, md: 14 }}
@@ -28,12 +28,11 @@ const HeroSection = () => {
 											 align={'center'}
 											 alignSelf={'center'}
 											 position={'relative'}>
-											 <Button size="lg">
+											 <Button size="lg" className={'bg-indigo-400'}>
 													 Get started
 											 </Button>
 									 </Stack>
 							 </Stack>
-					 </Container>
     );
 };
 

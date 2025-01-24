@@ -7,7 +7,7 @@ export const TimelineConnector = React.forwardRef<
 >(function TimelineConnector(props, ref) {
   return (
     <ChakraTimeline.Connector ref={ref}>
-      <ChakraTimeline.Separator />
+      <ChakraTimeline.Separator className={'bg-black w-[1px]'}/>
       <ChakraTimeline.Indicator {...props} />
     </ChakraTimeline.Connector>
   )
