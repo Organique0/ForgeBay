@@ -4,13 +4,14 @@ import { Status as StatusSnippet } from '@/ui/status';
 
 type Props = {
 	idea: Idea;
+	[key: string]: any;
 };
 type StatusValue = "success" | "error" | "warning" | "info";
 type TaskStatus = "to_do" | "in_progress" | "done" | "No Tasks";
 
-const StatusPretty: React.FC<Props> = ({ idea }) => {
+const StatusPretty: React.FC<Props> = ({ idea, ...rest }) => {
 	const startStatus: TaskStatus = idea.tasks.length > 0 ? idea.tasks[idea.tasks.length - 1].status : 'No Tasks';
-	const [status, setStatus] = useState<TaskStatus>('No Tasks');
+	const [status, setStatus] = useState<string>('');
 	const [value, setValue] = useState<StatusValue | undefined>(undefined);
 
 	useEffect(() => {
@@ -34,7 +35,7 @@ const StatusPretty: React.FC<Props> = ({ idea }) => {
 	}, [startStatus]);
 
 	return (
-		<StatusSnippet value={value}>
+		<StatusSnippet value={value} {...rest}>
 			{status}
 		</StatusSnippet>
 	);

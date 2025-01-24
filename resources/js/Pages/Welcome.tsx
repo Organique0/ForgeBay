@@ -4,7 +4,7 @@ import useTypedPage from '@/Hooks/useTypedPage';
 import { Head } from '@inertiajs/react';
 import HeroeSection from "@/Components/Heroes/HeroeSection";
 import AppLayout from '@/Layouts/AppLayout';
-import Ideas from '@/Components/Ideas';
+import Ideas from '@/Components/MyComponents/Ideas';
 import { Heading } from '@chakra-ui/react';
 
 interface Props {
