@@ -51,7 +51,6 @@ export default function Dropdown({
         leave="transition ease-in duration-75"
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
-        className={'relative z-50'}
       >
         <div
           className={classNames(
