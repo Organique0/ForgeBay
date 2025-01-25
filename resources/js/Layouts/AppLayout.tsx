@@ -53,6 +53,7 @@ export default function AppLayout({
 
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
         <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+					{<ColorModeButton className={'fixed right-2 bottom-2 rounded-2xl bg-slate-300 dark:bg-slate-700 z-50'}/>}
           {/* <!-- Primary Navigation Menu --> */}
           <Container>
             <div className="flex justify-between h-16">
@@ -261,7 +262,6 @@ export default function AppLayout({
                     </>
                   )}
                 </div>
-								{/*<ColorModeButton className={'absolute right-[-7px] top-[-7px] rounded-2xl bg-slate-300 dark:bg-slate-700'}/>*/}
 
                 {/* <!-- Hamburger --> */}
                 <div className="-mr-2 flex items-center sm:hidden">
