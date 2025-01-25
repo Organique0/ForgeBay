@@ -15,9 +15,8 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-			Task::factory(10)->create();
 
-        DB::table('tasks')->insert([
+      DB::table('tasks')->insert([
 			'name' => 'Task 1',
 			'description' => 'Description 1',
 			'value' => 40.00,

@@ -22,8 +22,8 @@ class Application extends Model
 		return $this->belongsTo(Task::class);
 	}
 
-	public function users(): BelongsToMany
+	public function users(): BelongsTo
 	{
-		return $this->belongsToMany(User::class);
+		return $this->belongsTo(User::class);
 	}
 }
