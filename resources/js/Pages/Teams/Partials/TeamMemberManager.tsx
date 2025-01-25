@@ -197,7 +197,7 @@ export default function TeamMemberManager({
                     <button
                       type="button"
                       className={classNames(
-                        'relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-600',
+                        'relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-hidden focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-600',
                         {
                           'border-t border-gray-200 dark:border-gray-700 focus:border-none rounded-t-none':
                             i > 0,
@@ -288,7 +288,7 @@ export default function TeamMemberManager({
                     {/* <!-- Cancel Team Invitation --> */}
                     {userPermissions.canRemoveTeamMembers ? (
                       <button
-                        className="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
+                        className="cursor-pointer ml-6 text-sm text-red-500 focus:outline-hidden"
                         onClick={() => cancelTeamInvitation(invitation)}
                       >
                         Cancel
@@ -385,7 +385,7 @@ export default function TeamMemberManager({
                 <button
                   type="button"
                   className={classNames(
-                    'relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-600',
+                    'relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-hidden focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-600',
                     {
                       'border-t border-gray-200 dark:border-gray-700 focus:border-none rounded-t-none':
                         i > 0,
