@@ -250,7 +250,7 @@ export default function APITokenManager({
             again.
           </div>
 
-          <div className="mt-4 bg-gray-100 dark:bg-gray-900 px-4 py-2 rounded-sm font-mono text-sm text-gray-500">
+          <div className="mt-4 bg-gray-100 dark:bg-gray-900 px-4 py-2 rounded font-mono text-sm text-gray-500">
             {page.props?.jetstream?.flash?.token}
           </div>
         </DialogModal.Content>

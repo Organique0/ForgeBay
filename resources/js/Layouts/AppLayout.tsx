@@ -59,7 +59,7 @@ export default function AppLayout({
             <div className="flex justify-between h-16">
               <div className="flex">
                 {/* <!-- Logo --> */}
-                <div className="shrink-0 flex items-center">
+                <div className="flex-shrink-0 flex items-center">
                   <Link href={route('home')}>
                     <ApplicationMark className="block h-9 w-auto" />
                   </Link>
@@ -90,7 +90,7 @@ export default function AppLayout({
                             <span className="inline-flex rounded-md">
                               <button
                                 type="button"
-                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-hidden focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
+                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
                               >
                                 {page.props.auth.user?.current_team?.name}
 
@@ -181,7 +181,7 @@ export default function AppLayout({
                         width="48"
                         renderTrigger={() =>
                           page.props.jetstream.managesProfilePhotos ? (
-                            <button className="flex text-sm border-2 border-transparent rounded-full focus:outline-hidden focus:border-gray-300 transition">
+                            <button className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                               <img
                                 className="h-8 w-8 rounded-full object-cover"
                                 src={page.props.auth.user?.profile_photo_url}
@@ -192,7 +192,7 @@ export default function AppLayout({
                             <span className="inline-flex rounded-md">
                               <button
                                 type="button"
-                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-hidden focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
+                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
                               >
                                 {page.props.auth.user?.name}
 
@@ -248,14 +248,14 @@ export default function AppLayout({
                     <>
                       <Link
                         href={route('login')}
-                        className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-xs focus:outline-red-500"
+                        className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                       >
                         Login
                       </Link>
 
                       <Link
                         href={route('register')}
-                        className="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-xs focus:outline-red-500"
+                        className="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                       >
                         Register
                       </Link>
@@ -269,7 +269,7 @@ export default function AppLayout({
                     onClick={() =>
                       setShowingNavigationDropdown(!showingNavigationDropdown)
                     }
-                    className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-hidden focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
+                    className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
                   >
                     <svg
                       className="h-6 w-6"
@@ -341,7 +341,7 @@ export default function AppLayout({
             <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
               <div className="flex items-center px-4">
                 {page.props.jetstream.managesProfilePhotos ? (
-                  <div className="shrink-0 mr-3">
+                  <div className="flex-shrink-0 mr-3">
                     <img
                       className="h-10 w-10 rounded-full object-cover"
                       src={page.props.auth.user?.profile_photo_url}
@@ -448,7 +448,7 @@ export default function AppLayout({
 
         {/* <!-- Page Heading --> */}
         {renderHeader ? (
-          <header className="bg-white dark:bg-gray-800 shadow-sm">
+          <header className="bg-white dark:bg-gray-800 shadow">
             <Container className="mx-auto py-6 px-4 sm:px-6 lg:px-8">
               {renderHeader()}
             </Container>
