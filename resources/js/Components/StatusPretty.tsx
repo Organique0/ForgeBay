@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Idea } from '@/types';
-import { Status as StatusSnippet } from '@/ui/status';
 
 type Props = {
 	idea: Idea;
@@ -35,9 +34,9 @@ const StatusPretty: React.FC<Props> = ({ idea, ...rest }) => {
 	}, [startStatus]);
 
 	return (
-		<StatusSnippet value={value} {...rest}>
+		<span>
 			{status}
-		</StatusSnippet>
+		</span>
 	);
 };
 

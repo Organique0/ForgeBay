@@ -1,14 +1,7 @@
 import React from 'react';
 import { Idea as IdeaType } from '@/types';
 import AppLayout from '@/Layouts/AppLayout';
-import {
-	Container, Flex,
-	Heading, Stack, StackSeparator,
-	Text,
-} from '@chakra-ui/react';
 import StatusComponent from '@/Components/StatusComponent';
-import {TimelineItem, TimelineRoot, TimelineConnector, TimelineContent, TimelineDescription, TimelineTitle } from '@/ui/timeline';
-import { Button } from '@/ui/button';
 import { Link } from '@inertiajs/react';
 import useTypedPage from '@/Hooks/useTypedPage';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -21,15 +14,15 @@ const Idea = ({idea}: {idea: IdeaType})=> {
 
 	return (
 		<AppLayout title={'Idea'}>
-			<Container>
-				<Stack className={'mt-12'} separator={<StackSeparator/>} gap={'9'}>
-					<Container className={'p-0'}>
-						<Heading className={'text-4xl mb-12'}>{idea.title}</Heading>
-						<Text>{idea.description}</Text>
-					</Container>
+			<div>
+				<div className={'mt-12'}>
+					<div className={'p-0'}>
+						<h1 className={'text-4xl mb-12'}>{idea.title}</h1>
+						<p>{idea.description}</p>
+					</div>
 
-					<Container className={'p-0'}>
-						<TimelineRoot size={'xl'}>
+					<div className={'p-0'}>
+					{/*	<TimelineRoot size={'xl'}>
 							{idea.tasks.map( (task, index) => (
 								<TimelineItem key={index}>
 									<TimelineContent width={'15em'} className={'hidden lg:block'}>
@@ -67,10 +60,10 @@ const Idea = ({idea}: {idea: IdeaType})=> {
 								</TimelineItem>
 							))}
 
-						</TimelineRoot>
-					</Container>
-				</Stack>
-			</Container>
+						</TimelineRoot>*/}
+					</div>
+				</div>
+			</div>
 
 
 		</AppLayout>

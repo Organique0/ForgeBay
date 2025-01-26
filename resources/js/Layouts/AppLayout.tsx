@@ -10,8 +10,6 @@ import Dropdown from '@/Components/Dropdown';
 import DropdownLink from '@/Components/DropdownLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Team } from '@/types';
-import { ColorModeButton } from '@/ui/color-mode';
-import { Container } from '@chakra-ui/react';
 interface Props {
   title: string;
   renderHeader?(): JSX.Element;
@@ -53,9 +51,9 @@ export default function AppLayout({
 
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
         <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-					{<ColorModeButton className={'fixed right-2 bottom-2 rounded-2xl bg-slate-300 dark:bg-slate-700 z-50'}/>}
+					{<button className={'fixed right-2 bottom-2 rounded-2xl bg-slate-300 dark:bg-slate-700 z-50'}/>}
           {/* <!-- Primary Navigation Menu --> */}
-          <Container>
+          <div>
             <div className="flex justify-between h-16">
               <div className="flex">
                 {/* <!-- Logo --> */}
@@ -302,7 +300,7 @@ export default function AppLayout({
                 </div>
               </div>
             </div>
-          </Container>
+          </div>
 
           {/* <!-- Responsive Navigation Menu --> */}
 				 <div
@@ -449,9 +447,9 @@ export default function AppLayout({
         {/* <!-- Page Heading --> */}
         {renderHeader ? (
           <header className="bg-white dark:bg-gray-800 shadow">
-            <Container className="mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto py-6 px-4 sm:px-6 lg:px-8">
               {renderHeader()}
-            </Container>
+            </div>
           </header>
         ) : null}
 
