@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Idea } from '@/types';
+import { Badge } from '@/Components/Shadcn/ui/badge';
 
 type Props = {
 	idea: Idea;
@@ -12,6 +13,8 @@ const StatusPretty: React.FC<Props> = ({ idea, ...rest }) => {
 	const startStatus: TaskStatus = idea.tasks.length > 0 ? idea.tasks[idea.tasks.length - 1].status : 'No Tasks';
 	const [status, setStatus] = useState<string>('');
 	const [value, setValue] = useState<StatusValue | undefined>(undefined);
+
+	const className = rest.className;
 
 	useEffect(() => {
 		switch (startStatus) {
@@ -34,9 +37,9 @@ const StatusPretty: React.FC<Props> = ({ idea, ...rest }) => {
 	}, [startStatus]);
 
 	return (
-		<span>
+		<Badge variant={value} className={className}>
 			{status}
-		</span>
+		</Badge>
 	);
 };
 

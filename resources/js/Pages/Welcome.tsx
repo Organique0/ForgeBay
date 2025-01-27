@@ -34,7 +34,7 @@ export default function Welcome({
 				{/*<Messages/>*/}
 			</div>
 
-			<div>
+			<div className={'templateWidth mx-auto'}>
 				<h1 className={'text-3xl my-4'}>Latest Ideas</h1>
 				<Ideas ideas={ideas} />
 			</div>

@@ -10,6 +10,7 @@ import Dropdown from '@/Components/Dropdown';
 import DropdownLink from '@/Components/DropdownLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Team } from '@/types';
+import { ModeToggle } from '@/Components/MyComponents/mode-toggle';
 interface Props {
   title: string;
   renderHeader?(): JSX.Element;
@@ -50,10 +51,10 @@ export default function AppLayout({
       <Banner />
 
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+				<ModeToggle/>
         <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-					{<button className={'fixed right-2 bottom-2 rounded-2xl bg-slate-300 dark:bg-slate-700 z-50'}/>}
           {/* <!-- Primary Navigation Menu --> */}
-          <div>
+          <div className={'templateWidth mx-auto'}>
             <div className="flex justify-between h-16">
               <div className="flex">
                 {/* <!-- Logo --> */}
