@@ -19,8 +19,8 @@ const Ideas: React.FC<IdeasProps> = ({ ideas } ) => {
 								<StatusPretty idea={idea} className={"absolute top-6 right-6"}/>
 								<p>${totalValue}</p>
 							</CardHeader>
-							<CardContent className={'flex-grow'}>
-								<p className={'flex-grow'}>{idea.description}</p>
+							<CardContent className={'grow'}>
+								<p className={'grow'}>{idea.description}</p>
 							</CardContent>
 							<CardFooter className={'gap-2'}>
 								{idea.tags.map((tag: Tag) => (
