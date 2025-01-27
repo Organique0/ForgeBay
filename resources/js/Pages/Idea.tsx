@@ -1,17 +1,17 @@
 import React from 'react';
 import { Idea as IdeaType } from '@/types';
 import AppLayout from '@/Layouts/AppLayout';
-import useTypedPage from '@/Hooks/useTypedPage';
-import useRoute from '@/Hooks/useRoute';
 import {
 	Timeline, TimelineBody,
 	TimelineDescription, TimelineFooter,
 	TimelineItem,
 	TimelineTitle,
-	TimelineLink
+	TimelineLink,
+	TimelineIcon
 } from '@/Components/MyComponents/timeline';
 import StatusPretty from '@/Components/MyComponents/StatusPretty';
 import { LuPencilRuler } from 'react-icons/lu';
+import StatusComponent from '@/Components/MyComponents/StatusComponent';
 
 const Idea = ({ idea }: { idea: IdeaType }) => {
   const firstToDoIndex = idea.tasks.findIndex(task => task.status === 'to_do');
@@ -29,6 +29,9 @@ const Idea = ({ idea }: { idea: IdeaType }) => {
             <Timeline className={'max-w-6xl'}>
 							{idea.tasks.map((task, index) => (
 								<TimelineItem>
+									<TimelineIcon>
+										<StatusComponent status={	task.status}/>
+									</TimelineIcon>
 									<TimelineTitle>
 										{task.name}
 										<div className={'flex flex-grow'}/>
