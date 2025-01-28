@@ -26,7 +26,7 @@ const Idea = ({ idea }: { idea: IdeaType }) => {
           </div>
 
           <div className={'p-0'}>
-            <Timeline className={'max-w-6xl'}>
+            <Timeline className={'max-w-5xl mx-auto'}>
 							{idea.tasks.map((task, index) => (
 								<TimelineItem>
 									<TimelineIcon>

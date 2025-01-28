@@ -4,11 +4,11 @@ import React from 'react';
 import useRoute from '@/Hooks/useRoute';
 import useTypedPage from '@/Hooks/useTypedPage';
 import AuthenticationCard from '@/Components/AuthenticationCard';
-import {Checkbox} from '@/Components/Shadcn/ui/checkbox';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import InputError from '@/Components/InputError';
 import { Input } from '@/Components/Shadcn/ui/input';
+import Checkbox from '@/Components/Checkbox';
 
 export default function Register() {
   const page = useTypedPage();

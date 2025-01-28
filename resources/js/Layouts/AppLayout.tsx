@@ -119,20 +119,20 @@ export default function AppLayout({
                                 </DropdownMenuLabel>
 
                                 {/* <!-- Team Settings --> */}
-                                <DropdownMenuItem>
 																	<Link href={route('teams.show', [
 																		page.props.auth.user?.current_team!,
-																	])}>
+																	])} className={'group cursor-pointer'}>
+                                <DropdownMenuItem className={'cursor-pointer'}>
                                   Team Settings
-																	</Link>
                                 </DropdownMenuItem>
+																	</Link>
 
                                 {page.props.jetstream.canCreateTeams ? (
-                                  <DropdownMenuItem>
-																		<Link href={route('teams.create')}>
+																		<Link href={route('teams.create')} className={'group cursor-pointer'}>
+                                  <DropdownMenuItem className={'cursor-pointer'}>
                                     Create New Team
-																		</Link>
                                   </DropdownMenuItem>
+																		</Link>
                                 ) : null}
 
                                 <DropdownMenuSeparator className="border-t border-gray-200 dark:border-gray-600" />
@@ -215,40 +215,40 @@ export default function AppLayout({
 															Manage Account
 														</DropdownMenuLabel>
 
+															<Link href={route('profile.show')} className={'group cursor-pointer'}>
 														<DropdownMenuItem >
-															<Link href={route('profile.show')}>
 															Profile
-															</Link>
 														</DropdownMenuItem>
+															</Link>
 
 														{page.props.jetstream.hasApiFeatures ? (
+																<Link  href={route('api-tokens.index')} className={'group cursor-pointer'}>
 															<DropdownMenuItem>
-																<Link  href={route('api-tokens.index')}>
 																API Tokens
-																</Link>
 															</DropdownMenuItem>
+																</Link>
 														) : null}
 
+															<Link  href={route('dashboard')} className={'group cursor-pointer'}>
 														<DropdownMenuItem>
-															<Link  href={route('dashboard')}>
 															Dashboard
-															</Link>
 														</DropdownMenuItem>
+															</Link>
 
 														<DropdownMenuSeparator className="border border-zinc dark:border-gray-600"></DropdownMenuSeparator>
 
 													{/* <!-- Authentication --> */}
-														<DropdownMenuItem>
 													<form onSubmit={logout}>
+														<DropdownMenuItem>
 															<Button
 																type="submit"
 																variant={'link'}
-																className={'p-0 m-0 h-5 cursor-pointer'}
+																className={'p-0 m-0 h-5 cursor-pointer flex flex-grow'}
 															>
 																Log Out
 															</Button>
-													</form>
 														</DropdownMenuItem>
+													</form>
 												</DropdownMenuContent>
                       </DropdownMenu>
                     </div>
