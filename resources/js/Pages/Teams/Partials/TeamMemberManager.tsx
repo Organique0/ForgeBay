@@ -9,7 +9,6 @@ import FormSection from '@/Components/FormSection';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import SecondaryButton from '@/Components/SecondaryButton';
 import SectionBorder from '@/Components/SectionBorder';
 import {
@@ -24,6 +23,7 @@ import { router } from '@inertiajs/core';
 import { useForm } from '@inertiajs/react';
 import classNames from 'classnames';
 import React, { useState } from 'react';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 interface UserMembership extends User {
   membership: {
@@ -168,7 +168,7 @@ export default function TeamMemberManager({
             {/* <!-- Member Email --> */}
             <div className="col-span-6 sm:col-span-4">
               <InputLabel htmlFor="email" value="Email" />
-              <TextInput
+              <Input
                 id="email"
                 type="email"
                 className="mt-1 block w-full"

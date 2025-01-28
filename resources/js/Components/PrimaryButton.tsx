@@ -16,7 +16,7 @@ export default function PrimaryButton({
 			variant={'default'}
       {...props}
       className={classNames(
-        '',
+        'cursor-pointer',
         props.className,
       )}
     >

@@ -7,7 +7,7 @@ import FormSection from '@/Components/FormSection';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 export default function UpdatePasswordForm() {
   const route = useRoute();
@@ -62,7 +62,7 @@ export default function UpdatePasswordForm() {
     >
       <div className="col-span-6 sm:col-span-4">
         <InputLabel htmlFor="current_password">Current Password</InputLabel>
-        <TextInput
+        <Input
           id="current_password"
           type="password"
           className="mt-1 block w-full"
@@ -78,7 +78,7 @@ export default function UpdatePasswordForm() {
 
       <div className="col-span-6 sm:col-span-4">
         <InputLabel htmlFor="password">New Password</InputLabel>
-        <TextInput
+        <Input
           id="password"
           type="password"
           className="mt-1 block w-full"
@@ -94,7 +94,7 @@ export default function UpdatePasswordForm() {
         <InputLabel htmlFor="password_confirmation">
           Confirm Password
         </InputLabel>
-        <TextInput
+        <Input
           id="password_confirmation"
           type="password"
           className="mt-1 block w-full"

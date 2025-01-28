@@ -6,7 +6,7 @@ import AuthenticationCard from '@/Components/AuthenticationCard';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 export default function ConfirmPassword() {
   const route = useRoute();
@@ -33,7 +33,7 @@ export default function ConfirmPassword() {
       <form onSubmit={onSubmit}>
         <div>
           <InputLabel htmlFor="password">Password</InputLabel>
-          <TextInput
+          <Input
             id="password"
             type="password"
             className="mt-1 block w-full"

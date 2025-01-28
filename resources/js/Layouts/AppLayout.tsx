@@ -6,11 +6,18 @@ import useRoute from '@/Hooks/useRoute';
 import useTypedPage from '@/Hooks/useTypedPage';
 import ApplicationMark from '@/Components/ApplicationMark';
 import Banner from '@/Components/Banner';
-import Dropdown from '@/Components/Dropdown';
-import DropdownLink from '@/Components/DropdownLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Team } from '@/types';
 import { ModeToggle } from '@/Components/MyComponents/mode-toggle';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/Components/Shadcn/ui/dropdown-menu";
+import { Button } from '@/Components/Shadcn/ui/button';
 interface Props {
   title: string;
   renderHeader?(): JSX.Element;
@@ -82,69 +89,65 @@ export default function AppLayout({
                     <div className="ml-3 relative">
                       {/* <!-- Teams Dropdown --> */}
                       {page.props.jetstream.hasTeamFeatures ? (
-                        <Dropdown
-                          align="right"
-                          width="60"
-                          renderTrigger={() => (
-                            <span className="inline-flex rounded-md">
-                              <button
-                                type="button"
-                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-hidden focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
-                              >
+                        <DropdownMenu>
+														 <span className="inline-flex rounded-md">
+                              <DropdownMenuTrigger
+																className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-hidden focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
+															>
                                 {page.props.auth.user?.current_team?.name}
 
-                                <svg
-                                  className="ml-2 -mr-0.5 h-4 w-4"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
+																<svg
+																	className="ml-2 -mr-0.5 h-4 w-4"
+																	xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 20 20"
+																	fill="currentColor"
+																>
                                   <path
-                                    fillRule="evenodd"
-                                    d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                                    clipRule="evenodd"
-                                  />
+																		fillRule="evenodd"
+																		d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+																		clipRule="evenodd"
+																	/>
                                 </svg>
-                              </button>
+                              </DropdownMenuTrigger>
                             </span>
-                          )}
-                        >
-                          <div className="w-60">
+                          <DropdownMenuContent className="w-60">
                             {/* <!-- Team Management --> */}
                             {page.props.jetstream.hasTeamFeatures ? (
                               <>
-                                <div className="block px-4 py-2 text-xs text-gray-400">
+                                <DropdownMenuLabel className="block px-4 py-2 text-xs text-gray-400">
                                   Manage Team
-                                </div>
+                                </DropdownMenuLabel>
 
                                 {/* <!-- Team Settings --> */}
-                                <DropdownLink
-                                  href={route('teams.show', [
-                                    page.props.auth.user?.current_team!,
-                                  ])}
-                                >
+                                <DropdownMenuItem>
+																	<Link href={route('teams.show', [
+																		page.props.auth.user?.current_team!,
+																	])}>
                                   Team Settings
-                                </DropdownLink>
+																	</Link>
+                                </DropdownMenuItem>
 
                                 {page.props.jetstream.canCreateTeams ? (
-                                  <DropdownLink href={route('teams.create')}>
+                                  <DropdownMenuItem>
+																		<Link href={route('teams.create')}>
                                     Create New Team
-                                  </DropdownLink>
+																		</Link>
+                                  </DropdownMenuItem>
                                 ) : null}
 
-                                <div className="border-t border-gray-200 dark:border-gray-600" />
+                                <DropdownMenuSeparator className="border-t border-gray-200 dark:border-gray-600" />
 
                                 {/* <!-- Team Switcher --> */}
-                                <div className="block px-4 py-2 text-xs text-gray-400">
+                                <DropdownMenuLabel className="block px-4 py-2 text-xs text-gray-400">
                                   Switch Teams
-                                </div>
+                                </DropdownMenuLabel>
 
                                 {page.props.auth.user?.all_teams?.map(team => (
                                   <form
                                     onSubmit={e => switchToTeam(e, team)}
                                     key={team.id}
                                   >
-                                    <DropdownLink as="button">
+                                    <DropdownMenuItem>
                                       <div className="flex items-center">
                                         {team.id ==
                                           page.props.auth.user
@@ -163,81 +166,91 @@ export default function AppLayout({
                                         )}
                                         <div>{team.name}</div>
                                       </div>
-                                    </DropdownLink>
+                                    </DropdownMenuItem>
                                   </form>
                                 ))}
                               </>
                             ) : null}
-                          </div>
-                        </Dropdown>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       ) : null}
                     </div>
 
                     {/* <!-- Settings Dropdown --> */}
-                    <div className="ml-3 relative">
-                      <Dropdown
-                        align="right"
-                        width="48"
-                        renderTrigger={() =>
-                          page.props.jetstream.managesProfilePhotos ? (
-                            <button className="flex text-sm border-2 border-transparent rounded-full focus:outline-hidden focus:border-gray-300 transition">
-                              <img
-                                className="h-8 w-8 rounded-full object-cover"
-                                src={page.props.auth.user?.profile_photo_url}
-                                alt={page.props.auth.user?.name}
-                              />
-                            </button>
-                          ) : (
-                            <span className="inline-flex rounded-md">
-                              <button
-                                type="button"
-                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-hidden focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
-                              >
+                    <div className="ml-3 relative z-100">
+                      <DropdownMenu>
+													{page.props.jetstream.managesProfilePhotos ? (
+													<DropdownMenuTrigger className="flex text-sm border-2 border-transparent rounded-full focus:outline-hidden focus:border-gray-300 transition">
+														<img
+															className="h-8 w-8 rounded-full object-cover"
+															src={page.props.auth.user?.profile_photo_url}
+															alt={page.props.auth.user?.name}
+														/>
+													</DropdownMenuTrigger>
+													) : (
+                              <DropdownMenuTrigger
+																className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-hidden focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
+															>
+													<span className="inline-flex rounded-md">
                                 {page.props.auth.user?.name}
 
-                                <svg
-                                  className="ml-2 -mr-0.5 h-4 w-4"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
+																<svg
+																	className="ml-2 -mr-0.5 h-4 w-4"
+																	xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 20 20"
+																	fill="currentColor"
+																>
                                   <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                                  />
+																		strokeLinecap="round"
+																		strokeLinejoin="round"
+																		d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+																	/>
                                 </svg>
-                              </button>
                             </span>
-                          )
-                        }
-                      >
+                              </DropdownMenuTrigger>
+													)}
                         {/* <!-- Account Management --> */}
-                        <div className="block px-4 py-2 text-xs text-gray-400">
-                          Manage Account
-                        </div>
+                        <DropdownMenuContent>
+														<DropdownMenuLabel className="block px-4 py-2 text-xs text-gray-400">
+															Manage Account
+														</DropdownMenuLabel>
 
-                        <DropdownLink href={route('profile.show')}>
-                          Profile
-                        </DropdownLink>
+														<DropdownMenuItem >
+															<Link href={route('profile.show')}>
+															Profile
+															</Link>
+														</DropdownMenuItem>
 
-                        {page.props.jetstream.hasApiFeatures ? (
-                          <DropdownLink href={route('api-tokens.index')}>
-                            API Tokens
-                          </DropdownLink>
-                        ) : null}
+														{page.props.jetstream.hasApiFeatures ? (
+															<DropdownMenuItem>
+																<Link  href={route('api-tokens.index')}>
+																API Tokens
+																</Link>
+															</DropdownMenuItem>
+														) : null}
 
-                        <DropdownLink href={route('dashboard')}>
-                          Dashboard
-                        </DropdownLink>
+														<DropdownMenuItem>
+															<Link  href={route('dashboard')}>
+															Dashboard
+															</Link>
+														</DropdownMenuItem>
 
-                        <div className="border-t border-gray-200 dark:border-gray-600"></div>
+														<DropdownMenuSeparator className="border border-zinc dark:border-gray-600"></DropdownMenuSeparator>
 
-                        {/* <!-- Authentication --> */}
-                        <form onSubmit={logout}>
-                          <DropdownLink as="button">Log Out</DropdownLink>
-                        </form>
-                      </Dropdown>
+													{/* <!-- Authentication --> */}
+														<DropdownMenuItem>
+													<form onSubmit={logout}>
+															<Button
+																type="submit"
+																variant={'link'}
+																className={'p-0 m-0 h-5 cursor-pointer'}
+															>
+																Log Out
+															</Button>
+													</form>
+														</DropdownMenuItem>
+												</DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
                 )}

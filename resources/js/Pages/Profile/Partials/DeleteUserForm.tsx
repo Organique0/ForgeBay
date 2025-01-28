@@ -5,9 +5,9 @@ import useRoute from '@/Hooks/useRoute';
 import ActionSection from '@/Components/ActionSection';
 import DangerButton from '@/Components/DangerButton';
 import DialogModal from '@/Components/DialogModal';
-import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
 import SecondaryButton from '@/Components/SecondaryButton';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 export default function DeleteUserForm() {
   const route = useRoute();
@@ -62,7 +62,7 @@ export default function DeleteUserForm() {
           Please enter your password to confirm you would like to permanently
           delete your account.
           <div className="mt-4">
-            <TextInput
+            <Input
               type="password"
               className="mt-1 block w-3/4"
               placeholder="Password"

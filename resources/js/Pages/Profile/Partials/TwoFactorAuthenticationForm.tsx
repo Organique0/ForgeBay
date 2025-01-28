@@ -10,8 +10,8 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
-import TextInput from '@/Components/TextInput';
 import useTypedPage from '@/Hooks/useTypedPage';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 interface Props {
   requiresConfirmation: boolean;
@@ -183,7 +183,7 @@ export default function TwoFactorAuthenticationForm({
                 <div className="mt-4">
                   <InputLabel htmlFor="code" value="Code" />
 
-                  <TextInput
+                  <Input
                     id="code"
                     type="text"
                     name="code"

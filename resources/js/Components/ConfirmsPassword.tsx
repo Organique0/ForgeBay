@@ -5,8 +5,8 @@ import useRoute from '@/Hooks/useRoute';
 import DialogModal from '@/Components/DialogModal';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import SecondaryButton from '@/Components/SecondaryButton';
+import { Input } from './Shadcn/ui/input';
 
 interface Props {
   title?: string;
@@ -78,7 +78,7 @@ export default function ConfirmsPassword({
           {content}
 
           <div className="mt-4">
-            <TextInput
+            <Input
               ref={passwordRef}
               type="password"
               className="mt-1 block w-3/4"

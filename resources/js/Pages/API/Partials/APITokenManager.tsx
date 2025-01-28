@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import useRoute from '@/Hooks/useRoute';
 import ActionMessage from '@/Components/ActionMessage';
 import ActionSection from '@/Components/ActionSection';
-import Checkbox from '@/Components/Checkbox';
+import {Checkbox} from '@/Components/Shadcn/ui/checkbox';
 import ConfirmationModal from '@/Components/ConfirmationModal';
 import DangerButton from '@/Components/DangerButton';
 import DialogModal from '@/Components/DialogModal';
@@ -12,11 +12,11 @@ import FormSection from '@/Components/FormSection';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import SecondaryButton from '@/Components/SecondaryButton';
 import SectionBorder from '@/Components/SectionBorder';
 import { ApiToken } from '@/types';
 import useTypedPage from '@/Hooks/useTypedPage';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 interface Props {
   tokens: ApiToken[];
@@ -124,7 +124,7 @@ export default function APITokenManager({
         {/* <!-- Token Name --> */}
         <div className="col-span-6 sm:col-span-4">
           <InputLabel htmlFor="name">Name</InputLabel>
-          <TextInput
+          <Input
             id="name"
             type="text"
             className="mt-1 block w-full"

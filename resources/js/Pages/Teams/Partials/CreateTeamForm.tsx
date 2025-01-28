@@ -7,8 +7,8 @@ import FormSection from '@/Components/FormSection';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import classNames from 'classnames';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 export default function CreateTeamForm() {
   const route = useRoute();
@@ -67,7 +67,7 @@ export default function CreateTeamForm() {
 
       <div className="col-span-6 sm:col-span-4">
         <InputLabel htmlFor="name" value="Team Name" />
-        <TextInput
+        <Input
           id="name"
           type="text"
           className="mt-1 block w-full"

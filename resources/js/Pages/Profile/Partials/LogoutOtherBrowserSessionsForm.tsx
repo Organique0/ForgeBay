@@ -7,9 +7,9 @@ import ActionSection from '@/Components/ActionSection';
 import DialogModal from '@/Components/DialogModal';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { Session } from '@/types';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 interface Props {
   sessions: Session[];
@@ -133,7 +133,7 @@ export default function LogoutOtherBrowserSessions({ sessions }: Props) {
           Please enter your password to confirm you would like to log out of
           your other browser sessions across all of your devices.
           <div className="mt-4">
-            <TextInput
+            <Input
               type="password"
               className="mt-1 block w-3/4"
               placeholder="Password"

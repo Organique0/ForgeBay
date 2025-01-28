@@ -4,11 +4,11 @@ import React from 'react';
 import useRoute from '@/Hooks/useRoute';
 import useTypedPage from '@/Hooks/useTypedPage';
 import AuthenticationCard from '@/Components/AuthenticationCard';
-import Checkbox from '@/Components/Checkbox';
+import {Checkbox} from '@/Components/Shadcn/ui/checkbox';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 export default function Register() {
   const page = useTypedPage();
@@ -35,7 +35,7 @@ export default function Register() {
       <form onSubmit={onSubmit}>
         <div>
           <InputLabel htmlFor="name">Name</InputLabel>
-          <TextInput
+          <Input
             id="name"
             type="text"
             className="mt-1 block w-full"
@@ -50,7 +50,7 @@ export default function Register() {
 
         <div className="mt-4">
           <InputLabel htmlFor="email">Email</InputLabel>
-          <TextInput
+          <Input
             id="email"
             type="email"
             className="mt-1 block w-full"
@@ -63,7 +63,7 @@ export default function Register() {
 
         <div className="mt-4">
           <InputLabel htmlFor="password">Password</InputLabel>
-          <TextInput
+          <Input
             id="password"
             type="password"
             className="mt-1 block w-full"
@@ -79,7 +79,7 @@ export default function Register() {
           <InputLabel htmlFor="password_confirmation">
             Confirm Password
           </InputLabel>
-          <TextInput
+          <Input
             id="password_confirmation"
             type="password"
             className="mt-1 block w-full"

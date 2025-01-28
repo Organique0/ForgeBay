@@ -5,8 +5,8 @@ import useRoute from '@/Hooks/useRoute';
 import AuthenticationCard from '@/Components/AuthenticationCard';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 interface Props {
   status: string;
@@ -42,7 +42,7 @@ export default function ForgotPassword({ status }: Props) {
       <form onSubmit={onSubmit}>
         <div>
           <InputLabel htmlFor="email">Email</InputLabel>
-          <TextInput
+          <Input
             id="email"
             type="email"
             className="mt-1 block w-full"

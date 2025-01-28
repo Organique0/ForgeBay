@@ -4,11 +4,11 @@ import FormSection from '@/Components/FormSection';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import { JetstreamTeamPermissions, Team, User } from '@/types';
 import { useForm } from '@inertiajs/react';
 import classNames from 'classnames';
 import React from 'react';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 interface Props {
   team: Team & { owner: User };
@@ -78,7 +78,7 @@ export default function UpdateTeamNameForm({ team, permissions }: Props) {
       <div className="col-span-6 sm:col-span-4">
         <InputLabel htmlFor="name" value="Team Name" />
 
-        <TextInput
+        <Input
           id="name"
           type="text"
           className="mt-1 block w-full"

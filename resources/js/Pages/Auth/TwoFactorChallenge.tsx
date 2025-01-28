@@ -5,8 +5,8 @@ import useRoute from '@/Hooks/useRoute';
 import AuthenticationCard from '@/Components/AuthenticationCard';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 export default function TwoFactorChallenge() {
   const route = useRoute();
@@ -53,7 +53,7 @@ export default function TwoFactorChallenge() {
         {recovery ? (
           <div>
             <InputLabel htmlFor="recovery_code">Recovery Code</InputLabel>
-            <TextInput
+            <Input
               id="recovery_code"
               type="text"
               className="mt-1 block w-full"
@@ -69,7 +69,7 @@ export default function TwoFactorChallenge() {
         ) : (
           <div>
             <InputLabel htmlFor="code">Code</InputLabel>
-            <TextInput
+            <Input
               id="code"
               type="text"
               inputMode="numeric"

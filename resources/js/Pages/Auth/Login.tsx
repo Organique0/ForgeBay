@@ -6,9 +6,8 @@ import AuthenticationCard from '@/Components/AuthenticationCard';
 import Checkbox from '@/Components/Checkbox';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
-
+import {Input} from '@/Components/Shadcn/ui/input';
 interface Props {
   canResetPassword: boolean;
   status: string;
@@ -42,7 +41,7 @@ export default function Login({ canResetPassword, status }: Props) {
       <form onSubmit={onSubmit}>
         <div>
           <InputLabel htmlFor="email">Email</InputLabel>
-          <TextInput
+          <Input
             id="email"
             type="email"
             className="mt-1 block w-full"
@@ -56,7 +55,7 @@ export default function Login({ canResetPassword, status }: Props) {
 
         <div className="mt-4">
           <InputLabel htmlFor="password">Password</InputLabel>
-          <TextInput
+          <Input
             id="password"
             type="password"
             className="mt-1 block w-full"

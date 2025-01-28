@@ -8,10 +8,10 @@ import FormSection from '@/Components/FormSection';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { User } from '@/types';
 import useTypedPage from '@/Hooks/useTypedPage';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 interface Props {
   user: User;
@@ -159,7 +159,7 @@ export default function UpdateProfileInformationForm({ user }: Props) {
       {/* <!-- Name --> */}
       <div className="col-span-6 sm:col-span-4">
         <InputLabel htmlFor="name" value="Name" />
-        <TextInput
+        <Input
           id="name"
           type="text"
           className="mt-1 block w-full"
@@ -173,7 +173,7 @@ export default function UpdateProfileInformationForm({ user }: Props) {
       {/* <!-- Email --> */}
       <div className="col-span-6 sm:col-span-4">
         <InputLabel htmlFor="email" value="Email" />
-        <TextInput
+        <Input
           id="email"
           type="email"
           className="mt-1 block w-full"
