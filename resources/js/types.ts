@@ -110,6 +110,7 @@ export type User = {
 	profile_photo_url?: string;
 	two_factor_confirmed_at?: string;
 	updated_at: string;
+	bio: string;
 }
 
 export type Tag = {

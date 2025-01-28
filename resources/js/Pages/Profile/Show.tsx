@@ -8,6 +8,7 @@ import useTypedPage from '@/Hooks/useTypedPage';
 import SectionBorder from '@/Components/SectionBorder';
 import AppLayout from '@/Layouts/AppLayout';
 import { Session } from '@/types';
+import UpdateApplicationDataForm from '@/Pages/Profile/Partials/UpdateApplicationDataForm';
 
 interface Props {
   sessions: Session[];
@@ -38,6 +39,11 @@ export default function Show({
               <SectionBorder />
             </div>
           ) : null}
+
+					<div>
+						<UpdateApplicationDataForm user={page.props.auth.user!} />
+						<SectionBorder />
+					</div>
 
           {page.props.jetstream.canUpdatePassword ? (
             <div className="mt-10 sm:mt-0">
