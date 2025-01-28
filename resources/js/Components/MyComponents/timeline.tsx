@@ -9,7 +9,7 @@ const Timeline = React.forwardRef<
 	<ol
 		ref={ref}
 		className={cn(
-			"relative border-s border-gray-200 dark:border-gray-700",
+			"relative border-s border-zinc-400 dark:border-gray-700",
 			className
 		)}
 		{...props}
@@ -42,7 +42,7 @@ const TimelineIcon = React.forwardRef<
 	<span
 		ref={ref}
 		className={cn(
-			"absolute flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full -start-4 dark:bg-blue-900",
+			"absolute flex items-center justify-center w-8 h-8 bg-zinc rounded-full -start-4 dark:bg-blue-900",
 			className
 		)}
 		{...props}
@@ -87,7 +87,7 @@ const TimelineBody = React.forwardRef<
 	<p
 		ref={ref}
 		className={cn(
-			"mb-4 text-base font-normal text-gray-500 dark:text-gray-400",
+			"mb-4 text-base font-normal text-black dark:text-gray-300",
 			className
 		)}
 		{...props}
@@ -118,7 +118,7 @@ const TimelineLink = React.forwardRef<
 		href={href}
 		ref={ref}
 		className={cn(
-			"inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-100 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700",
+			"inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-zinc border border-gray-200 rounded-lg hover:bg-indigo-200/80 hover:text-indigo-500 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-100 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700",
 			className
 		)}
 		{...props}
