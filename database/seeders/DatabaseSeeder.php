@@ -8,6 +8,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\RolesEnum;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -20,10 +21,7 @@ class DatabaseSeeder extends Seeder
        // User::factory(10)->withPersonalTeam()->create();
 
         $this->call(RoleSeeder::class);
-				$this->call(IdeaSeeder::class);
-				$this->call(TaskSeeder::class);
-				$this->call(ApplicationSeeder::class);
-				$this->call(TagSeeder::class);
+
 
         User::factory()->create([
             'name' => 'admin',
@@ -33,19 +31,42 @@ class DatabaseSeeder extends Seeder
 					'name' => 'superAdmin',
 					'email' => 'superAdmin@example.com',
 				])->assignRole(RolesEnum::SuperAdmin->value);
-        User::factory()->withPersonalTeam()->create([
+        $lukaUser = User::factory()->withPersonalTeam()->create([
           'name' => 'user',
           'email' => 'user@example.com',
+					'bio' => 'hello, my name is Luka',
         ])->assignRole(RolesEnum::User->value);
 
         $testUser = new user([
 					'name' => config('test.user_login'),
 					'email' => config('test.user_email'),
 					'password' => bcrypt(config('test.user_password')),
+					'bio' => 'hello, my name is Test User',
 					'email_verified_at' => now(),
 					'remember_token' => Str::random(10),
 				]);
         $testUser->save();
+
+
+
+			$this->call(TagSeeder::class);
+			$this->call(IdeaSeeder::class);
+			$this->call(TaskSeeder::class);
+			$this->call(ApplicationSeeder::class);
+
+			$userTags = [
+				$lukaUser->id => [1, 2, 3],
+				$testUser->id => [2, 4, 5],
+			];
+
+			foreach ($userTags as $userId => $tags) {
+				foreach ($tags as $tagId) {
+					DB::table('tags_users')->insert([
+						'user_id' => $userId,
+						'tag_id' => $tagId,
+					]);
+				}
+			}
 
         // Create a personal access token for the user and display it in the console
         $token = $testUser->createToken('auth_token');

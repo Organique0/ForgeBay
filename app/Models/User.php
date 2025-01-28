@@ -35,7 +35,8 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
-		'active',
+				'active',
+				'bio',
     ];
 
     /**
@@ -85,5 +86,10 @@ class User extends Authenticatable implements FilamentUser
 	public function applications(): HasMany
 	{
 		return $this->hasMany(Application::class);
+	}
+
+	public function tags()
+	{
+		return $this->hasMany(Tag::class);
 	}
 }
