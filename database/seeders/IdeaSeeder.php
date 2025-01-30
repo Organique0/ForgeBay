@@ -2,55 +2,28 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Idea;
+use App\Models\Tag;
 
 class IdeaSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+	/**
+	 * Run the database seeds.
+	 */
 	public function run(): void
 	{
-		// Insert ideas
-		$idea1 = DB::table('ideas')->insertGetId([
-			'title' => 'Idea 1',
-			'description' => 'Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1Description 1',
-			'user_id' => 1,
-		]);
+		// Ensure there are enough tags
+		$tagIds = Tag::pluck('id')->toArray();
 
-		$idea2 = DB::table('ideas')->insertGetId([
-			'title' => 'Idea 2',
-			'description' => 'Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2Description 2',
-			'user_id' => 1,
-		]);
-
-		$idea3 = DB::table('ideas')->insertGetId([
-			'title' => 'Idea 3',
-			'description' => 'Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3Description 3',
-			'user_id' => 1,
-		]);
-		$idea4 = DB::table('ideas')->insertGetId([
-			'title' => 'Idea 4',
-			'description' => 'Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4Description 4',
-			'user_id' => 1,
-		]);
-
-		$ideaTags = [
-			$idea1 => [1, 2, 3],
-			$idea2 => [2, 4, 5],
-			$idea3 => [1, 5, 6],
-			$idea4 => [3, 4, 6],
-		];
-
-		foreach ($ideaTags as $ideaId => $tags) {
-			foreach ($tags as $tagId) {
-				DB::table('idea_tag')->insert([
-					'idea_id' => $ideaId,
-					'tag_id' => $tagId,
-				]);
-			}
-		}
+		// Generate 2000 ideas
+		Idea::factory()
+			->count(2000)
+			->create()
+			->each(function ($idea) use ($tagIds) {
+				// Attach 3 random tags to each idea
+				$randomTags = array_rand(array_flip($tagIds), 3);
+				$idea->tags()->attach($randomTags);
+			});
 	}
 }

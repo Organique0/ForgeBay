@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Idea } from '@/types';
 import { Badge } from '@/Components/Shadcn/ui/badge';
 
@@ -11,34 +11,31 @@ type StatusValue = "success" | "error" | "warning" | "info";
 type TaskStatus = "to_do" | "in_progress" | "done" | "No Tasks";
 
 const StatusPretty: React.FC<Props> = ({ idea, initialStatus, ...rest }) => {
-	const startStatus: TaskStatus =  initialStatus || (idea && idea.tasks.length > 0 ? idea.tasks[idea.tasks.length - 1].status : 'No Tasks');
-	const [status, setStatus] = useState<string>('');
-	const [value, setValue] = useState<StatusValue | undefined>(undefined);
+	const startStatus: TaskStatus = initialStatus || (idea && idea.tasks.length > 0 ? idea.tasks[idea.tasks.length - 1].status : 'No Tasks');
 
-	const className = rest.className;
+	let status: string;
+	let value: StatusValue;
 
-	useEffect(() => {
-		switch (startStatus) {
-			case 'to_do':
-				setStatus('To Do');
-				setValue('error');
-				break;
-			case 'in_progress':
-				setStatus('In Progress');
-				setValue('warning');
-				break;
-			case 'done':
-				setStatus('Done');
-				setValue('success');
-				break;
-			default:
-				setStatus('No Tasks');
-				setValue('info');
-		}
-	}, [startStatus]);
+	switch (startStatus) {
+		case 'to_do':
+			status = 'To Do';
+			value = 'error';
+			break;
+		case 'in_progress':
+			status = 'In Progress';
+			value = 'warning';
+			break;
+		case 'done':
+			status = 'Done';
+			value = 'success';
+			break;
+		default:
+			status = 'No Tasks';
+			value = 'info';
+	}
 
 	return (
-		<Badge variant={value} className={className}>
+		<Badge variant={value} className={rest.className}>
 			{status}
 		</Badge>
 	);

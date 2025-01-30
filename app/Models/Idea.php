@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-
+use Illuminate\Support\Facades\Cache;
 
 class Idea extends Model
 {
@@ -20,6 +20,19 @@ class Idea extends Model
 		'title',
 		'description',
 	];
+
+	protected static function boot()
+	{
+		parent::boot();
+
+		static::updated(function ($idea) {
+			Cache::tags(["idea.{$idea->id}", 'ideas'])->flush();
+		});
+
+		static::deleted(function ($idea) {
+			Cache::tags(["idea.{$idea->id}", 'ideas'])->flush();
+		});
+	}
 
 	public function tasks(): HasMany
 	{

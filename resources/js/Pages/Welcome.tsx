@@ -7,35 +7,37 @@ import AppLayout from '@/Layouts/AppLayout';
 import Ideas from '@/Components/MyComponents/Ideas';
 
 interface Props {
-  canLogin: boolean;
-  canRegister: boolean;
-  laravelVersion: string;
-  phpVersion: string;
-  ideas: any;
+	canLogin: boolean;
+	canRegister: boolean;
+	laravelVersion: string;
+	phpVersion: string;
+	ideas: any;
+	theme: string; // Receive the theme prop
 }
 
 export default function Welcome({
-  canLogin,
-  canRegister,
-  laravelVersion,
-  phpVersion,
-  ideas,
+	canLogin,
+	canRegister,
+	laravelVersion,
+	phpVersion,
+	ideas,
+	theme,
 }: Props) {
-  const route = useRoute();
-  const page = useTypedPage();
+	const route = useRoute();
+	const page = useTypedPage();
 
-  return (
-    <AppLayout title={'Welcome'}>
-      <Head title="Welcome to ForgeHub" />
+	return (
+		<AppLayout title={'Welcome'}>
+			<Head title="Welcome to ForgeHub" />
 
-      <HeroeSection />
+			<HeroeSection />
 
-      <div>{/*<Messages/>*/}</div>
+			<div>{/*<Messages/>*/}</div>
 
-      <div className={'templateWidth mx-auto'}>
-        <h1 className={'text-3xl my-4'}>Latest Ideas</h1>
-        <Ideas ideas={ideas} />
-      </div>
-    </AppLayout>
-  );
+			<div className={'templateWidth mx-auto'}>
+				<h1 className={'text-3xl my-4'}>Latest Ideas</h1>
+				<Ideas ideas={ideas} />
+			</div>
+		</AppLayout>
+	);
 }

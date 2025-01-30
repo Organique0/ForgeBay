@@ -7,9 +7,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
-Route::domain('localhost')->group(function () {
+Route::domain(config('app.url'))->group(function () {
 	Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
 	Route::get('/idea/{id}', [\App\Http\Controllers\IdeaController::class, 'show'])->name('idea.show');
+	Route::get('/ideas', [\App\Http\Controllers\IdeaController::class, 'index'])->name('ideas.index');
 
 	Route::middleware([
 		'auth:sanctum',
@@ -25,15 +26,11 @@ Route::domain('localhost')->group(function () {
 		Route::post('/skills', function (Request $request) {
 			$request->validate([
 				'bio' => 'required|string',
-				'skills' => 'required|array',
+				'skills' => 'array',
 			]);
 
-			foreach ($request->skills as $skill) {
-				//how way I ever supposed to know this was a thing?
-				//how did people know to do this before AI?
-				auth()->user()->tags()->sync($request->skills);
-			}
-
+			// Sync user skills with the provided tags
+			auth()->user()->tags()->sync($request->skills);
 		});
 
 		Route::post('/messages', function (Request $request) {
@@ -49,6 +46,4 @@ Route::domain('localhost')->group(function () {
 			);
 		})->name('messages.send');
 	});
-
-
 });
