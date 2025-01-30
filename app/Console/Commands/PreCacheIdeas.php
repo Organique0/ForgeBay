@@ -15,7 +15,7 @@ class PreCacheIdeas extends Command
 	{
 		Cache::tags(['ideas'])->flush();
 
-		Cache::tags(['ideas'])->remember('all_ideas', 3600, function () {
+		Cache::tags(['ideas'])->remember('all_ideas', 600, function () {
 			return Idea::with(['user', 'tags', 'applications.users'])
 				->with(['tasks' => function ($query) {
 					$query->orderByRaw("CASE status

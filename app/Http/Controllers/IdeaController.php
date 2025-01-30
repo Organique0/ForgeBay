@@ -6,6 +6,7 @@ use App\Models\Idea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class IdeaController extends Controller
 {
@@ -26,10 +27,23 @@ class IdeaController extends Controller
 		});
 	}
 
-	public function index()
+	public function index(Request $request)
 	{
+		$cachedIdeas = $this->getCachedIdeas();
+		$perPage = 20;
+		$currentPage = $request->input('page', 1);
+		$currentPageItems = $cachedIdeas->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+		$paginatedIdeas = new LengthAwarePaginator(
+			$currentPageItems,
+			$cachedIdeas->count(),
+			$perPage,
+			$currentPage,
+			['path' => $request->url(), 'query' => $request->query()]
+		);
+
 		return Inertia::render('Ideas/Index', [
-			'ideas' => $this->getCachedIdeas(),
+			'ideas' => $paginatedIdeas,
 		]);
 	}
 
