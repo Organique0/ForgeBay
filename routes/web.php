@@ -25,15 +25,11 @@ Route::domain(config('app.url'))->group(function () {
 		Route::post('/skills', function (Request $request) {
 			$request->validate([
 				'bio' => 'required|string',
-				'skills' => 'required|array',
+				'skills' => 'array',
 			]);
 
-			foreach ($request->skills as $skill) {
-				//how way I ever supposed to know this was a thing?
-				//how did people know to do this before AI?
-				auth()->user()->tags()->sync($request->skills);
-			}
-
+			// Sync user skills with the provided tags
+			auth()->user()->tags()->sync($request->skills);
 		});
 
 		Route::post('/messages', function (Request $request) {
@@ -49,6 +45,4 @@ Route::domain(config('app.url'))->group(function () {
 			);
 		})->name('messages.send');
 	});
-
-
 });
