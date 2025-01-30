@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import ActionMessage from '@/Components/ActionMessage';
 import FormSection from '@/Components/FormSection';
 import InputError from '@/Components/InputError';
@@ -10,14 +10,15 @@ import { User } from '@/types';
 import { Textarea } from '@/Components/Shadcn/ui/textarea';
 import Tag from '@/Components/MyComponents/Tag';
 import useTypedPage from '@/Hooks/useTypedPage';
+import { Input } from '@/Components/Shadcn/ui/input';
 
 interface Props {
 	user: User;
-	allTags: any;
-	skills: any;
+	allTags: CleanTag[];
+	skills: CleanTag[];
 }
 
-type CleanTag = {
+export type CleanTag = {
 	id: number;
 	name: string;
 };
@@ -32,6 +33,7 @@ export default function UpdateApplicationDataForm({
 	const [skillIds, setSkillIds] = useState<number[]>(
 		skills.map((skill: any) => skill.id),
 	);
+	const [query, setQuery] = useState("");
 
 	const typedPage = useTypedPage();
 
@@ -50,7 +52,6 @@ export default function UpdateApplicationDataForm({
 	useEffect(() => {
 		const newSkillIds = selectedTags.map(tag => tag.id);
 		setSkillIds(newSkillIds);
-		console.log(newSkillIds);
 
 		form.setData('skills', newSkillIds);
 	}, [selectedTags]);
@@ -64,6 +65,15 @@ export default function UpdateApplicationDataForm({
 			setAvailableTags(prev => prev.filter(t => t.id !== tag.id));
 		}
 	};
+
+	function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
+		const search = event.target.value.toLocaleLowerCase();
+		setQuery(search);
+
+		const filteredItems = allTags.filter((tag) => tag.name.toLocaleLowerCase().includes(search))
+
+		setAvailableTags(filteredItems);
+	}
 
 	return (
 		<FormSection
@@ -119,6 +129,12 @@ export default function UpdateApplicationDataForm({
 
 					<div>
 						<InputLabel htmlFor="tags" value="Available skills" />
+						<Input
+							value={query}
+							onChange={handleInputChange}
+							className='mt-1 max-w-xs'
+							placeholder='Search...'
+						/>
 						<div className="min-h-16 p-4 rounded-lg flex flex-wrap gap-2">
 							{availableTags.map(tag => (
 								<Tag
