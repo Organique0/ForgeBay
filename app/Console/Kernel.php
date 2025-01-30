@@ -13,6 +13,6 @@ class Kernel extends ConsoleKernel
 
 	protected function schedule(Schedule $schedule)
 	{
-		$schedule->command('cache:ideas')->hourly();
+		$schedule->command('cache:ideas')->everyTenMinutes();
 	}
 }

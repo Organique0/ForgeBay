@@ -19,6 +19,10 @@ class WelcomeController extends Controller
 	{
 		$ideas = Cache::tags(['ideas'])->get('all_ideas');
 
+		if (!is_null($ideas)) {
+			$ideas = $ideas->take(10);
+		}
+
 		if (is_null($ideas)) {
 			$ideas = Idea::with(['user', 'tags', 'applications.users'])
 				->with(['tasks' => function ($query) {
@@ -30,6 +34,7 @@ class WelcomeController extends Controller
 					END");
 				}])
 				->orderBy('created_at', 'desc')
+				->limit(20)
 				->get();
 
 			Cache::tags(['ideas'])->put('all_ideas', $ideas, 3600);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\MessageSent;
+use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +30,6 @@ Route::domain(config('app.url'))->group(function () {
 				'skills' => 'array',
 			]);
 
-			// Sync user skills with the provided tags
 			auth()->user()->tags()->sync($request->skills);
 		});
 
