@@ -1,7 +1,11 @@
 <?php
+
+use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Events\MessageSent;
+use Inertia\Inertia;
 
 Route::get('/user', function (Request $request) {
 	return $request->user();
@@ -17,9 +21,6 @@ Route::post('/messages', function (Request $request) {
 	return response()->json(['status' => 'Message sent!']);
 })->middleware('auth:sanctum');
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
 Route::post('/messages', function (Request $request) {
 		$request->validate([
@@ -30,3 +31,4 @@ Route::post('/messages', function (Request $request) {
 
 		return response()->json(['status' => 'Message sent!']);
 })->middleware('auth:sanctum');
+

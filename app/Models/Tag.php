@@ -15,8 +15,8 @@ class Tag extends Model
 		return $this->belongsToMany(Idea::class, 'idea_tag');
 	}
 
-	public function user(): BelongsToMany
+	public function users()
 	{
-		return $this->belongsToMany(User::class, 'user_tag');
+		return $this->belongsToMany(User::class, 'tags_users');
 	}
 }

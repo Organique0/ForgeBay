@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\MessageSent;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -21,6 +22,19 @@ Route::domain('localhost')->group(function () {
       return Inertia::render('Dashboard');
     })->name('dashboard');
 
+		Route::post('/skills', function (Request $request) {
+			$request->validate([
+				'bio' => 'required|string',
+				'skills' => 'required|array',
+			]);
+
+		foreach ($request->skills as $skill) {
+			//how way I ever supposed to know this was a thing?
+			//how did people know to do this before AI?
+			auth()->user()->tags()->sync($request->skills);
+		}
+
+		});
 
 		Route::post('/messages', function (Request $request) {
 			$request->validate([
@@ -35,11 +49,6 @@ Route::domain('localhost')->group(function () {
 			);
 		})->name('messages.send');
   });
+
+
 });
-
-
-/*Route::domain(config('ADMIN_URL'))->group(function () {
-  Route::get('/', function () {
-    return Inertia::render('Dashboard');
-  })->name('dashboard');
-});*/

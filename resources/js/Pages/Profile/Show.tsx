@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm';
 import LogoutOtherBrowserSessions from '@/Pages/Profile/Partials/LogoutOtherBrowserSessionsForm';
 import TwoFactorAuthenticationForm from '@/Pages/Profile/Partials/TwoFactorAuthenticationForm';
@@ -13,13 +13,21 @@ import UpdateApplicationDataForm from '@/Pages/Profile/Partials/UpdateApplicatio
 interface Props {
   sessions: Session[];
   confirmsTwoFactorAuthentication: boolean;
+	allTags: any;
+	skills: any;
 }
 
 export default function Show({
   sessions,
   confirmsTwoFactorAuthentication,
+	allTags,
+	skills,
 }: Props) {
   const page = useTypedPage();
+
+	useEffect(() => {
+		console.log(allTags);
+	},[]);
 
   return (
     <AppLayout
@@ -41,7 +49,7 @@ export default function Show({
           ) : null}
 
 					<div>
-						<UpdateApplicationDataForm user={page.props.auth.user!} />
+						<UpdateApplicationDataForm user={page.props.auth.user!} allTags={allTags} skills={skills}/>
 						<SectionBorder />
 					</div>
 

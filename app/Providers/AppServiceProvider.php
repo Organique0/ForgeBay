@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\UserProfileController;
 use App\RolesEnum;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-
+use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController as JetstreamUserProfileController;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -13,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+			$this->app->bind(JetstreamUserProfileController::class, UserProfileController::class);
     }
 
     /**
