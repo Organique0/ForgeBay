@@ -2,7 +2,7 @@
 
 namespace App;
 
-enum PermissionsEnum :string
+enum PermissionsEnum: string
 {
-   case ModifyAdmins = 'modify-admins';
+	case ModifyAdmins = 'modify-admins';
 }

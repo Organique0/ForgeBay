@@ -21,7 +21,7 @@ class UserProfileController extends JetstreamUserProfileController
 			'sessions' => $this->sessions($request)->all(),
 			'allTags' => Tag::select('id', 'name')->whereNotIn('id', $request->user()->tags->pluck('id'))->get(),
 			'skills' => User::find($request->user()->id)->tags->map(function ($tag) {
-			    return ['id' => $tag->id, 'name' => $tag->name];
+				return ['id' => $tag->id, 'name' => $tag->name];
 			})->toArray(),
 		]);
 	}

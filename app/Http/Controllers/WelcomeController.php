@@ -16,8 +16,8 @@ class WelcomeController extends Controller
 	 */
 	public function __invoke()
 	{
-		$ideas = Idea::with('user','tags')
-			->with('tasks', function($query) {
+		$ideas = Idea::with('user', 'tags')
+			->with('tasks', function ($query) {
 				$query->orderByRaw("CASE status
 					WHEN 'to_do' THEN 3
 					WHEN 'in_progress' THEN 2

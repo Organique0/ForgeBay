@@ -11,7 +11,7 @@ class IdeaController extends Controller
 	public function show(string $id): \Inertia\Response
 	{
 		$idea = Idea::with(['user', 'tags', 'applications.users'])
-			->with(['tasks' => function($query) {
+			->with(['tasks' => function ($query) {
 				$query->orderByRaw("CASE status
 					WHEN 'to_do' THEN 3
 					WHEN 'in_progress' THEN 2

@@ -8,5 +8,5 @@ use Illuminate\Support\Facades\Broadcast;
 
 //as long as you are logged in you can listen to the messages channel
 Broadcast::channel('messages', function ($user) {
-		return true;
+	return true;
 });

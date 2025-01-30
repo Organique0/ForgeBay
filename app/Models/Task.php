@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Task extends Model
 {
-    /** @use HasFactory<\Database\Factories\TaskFactory> */
-    use HasFactory;
+	/** @use HasFactory<\Database\Factories\TaskFactory> */
+	use HasFactory;
 
 	protected $fillable = [
 		'name',

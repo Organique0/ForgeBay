@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Idea extends Model
 {
-    /** @use HasFactory<\Database\Factories\IdeaFactory> */
-    use HasFactory;
+	/** @use HasFactory<\Database\Factories\IdeaFactory> */
+	use HasFactory;
 
 	protected $fillable = [
 		'title',

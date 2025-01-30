@@ -83,62 +83,62 @@ export interface TeamInvitation {
 }
 
 export interface IdeasProps {
-	ideas: Idea[];
+  ideas: Idea[];
 }
 
 export type Idea = {
-	created_at: string;
-	description: string;
-	id: number;
-	title: string;
-	updated_at: string;
-	user: User;
-	user_id: number;
-	tags: Tag[];
-	tasks: Task[];
-}
+  created_at: string;
+  description: string;
+  id: number;
+  title: string;
+  updated_at: string;
+  user: User;
+  user_id: number;
+  tags: Tag[];
+  tasks: Task[];
+};
 
 export type User = {
-	active: boolean;
-	created_at: string;
-	current_team_id: number;
-	email: string;
-	email_verified_at?: string;
-	id: number;
-	name: string;
-	profile_photo_path?: string;
-	profile_photo_url?: string;
-	two_factor_confirmed_at?: string;
-	updated_at: string;
-	bio: string;
-}
+  active: boolean;
+  created_at: string;
+  current_team_id: number;
+  email: string;
+  email_verified_at?: string;
+  id: number;
+  name: string;
+  profile_photo_path?: string;
+  profile_photo_url?: string;
+  two_factor_confirmed_at?: string;
+  updated_at: string;
+  bio: string;
+};
 
 export type Tag = {
-	created_at?: string;
-	id: number;
-	name: string;
-	updated_at?: string;
-}
+  created_at?: string;
+  id: number;
+  name: string;
+  updated_at?: string;
+};
 
 export type Task = {
-	created_at?: string;
-	description: string;
-	id: number;
-	idea_id: number;
-	updated_at?: string;
-	value: number;
-	status: Status;
-	applications: Application[];
-	name: string;
-}
+  created_at?: string;
+  description: string;
+  id: number;
+  idea_id: number;
+  updated_at?: string;
+  value: number;
+  status: Status;
+  applications: Application[];
+  name: string;
+};
 
 export type Application = {
-	id: number,
-	task_id: number,
-	description: string,
-	status: boolean,
-	created_at?: string,
-	updated_at?: string,
-}
+  id: number;
+  task_id: number;
+  description: string;
+  status: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
 
 export type Status = 'to_do' | 'in_progress' | 'done';

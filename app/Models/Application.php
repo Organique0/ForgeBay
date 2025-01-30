@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Application extends Model
 {
-    /** @use HasFactory<\Database\Factories\ApplicationFactory> */
-    use HasFactory;
+	/** @use HasFactory<\Database\Factories\ApplicationFactory> */
+	use HasFactory;
 
 	protected $fillable = [
 		'status',

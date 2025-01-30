@@ -13,21 +13,21 @@ import UpdateApplicationDataForm from '@/Pages/Profile/Partials/UpdateApplicatio
 interface Props {
   sessions: Session[];
   confirmsTwoFactorAuthentication: boolean;
-	allTags: any;
-	skills: any;
+  allTags: any;
+  skills: any;
 }
 
 export default function Show({
   sessions,
   confirmsTwoFactorAuthentication,
-	allTags,
-	skills,
+  allTags,
+  skills,
 }: Props) {
   const page = useTypedPage();
 
-	useEffect(() => {
-		console.log(allTags);
-	},[]);
+  useEffect(() => {
+    console.log(allTags);
+  }, []);
 
   return (
     <AppLayout
@@ -48,10 +48,14 @@ export default function Show({
             </div>
           ) : null}
 
-					<div>
-						<UpdateApplicationDataForm user={page.props.auth.user!} allTags={allTags} skills={skills}/>
-						<SectionBorder />
-					</div>
+          <div>
+            <UpdateApplicationDataForm
+              user={page.props.auth.user!}
+              allTags={allTags}
+              skills={skills}
+            />
+            <SectionBorder />
+          </div>
 
           {page.props.jetstream.canUpdatePassword ? (
             <div className="mt-10 sm:mt-0">

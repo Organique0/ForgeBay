@@ -2,7 +2,7 @@ import React from 'react';
 import useRoute from '@/Hooks/useRoute';
 import useTypedPage from '@/Hooks/useTypedPage';
 import { Head } from '@inertiajs/react';
-import HeroeSection from "@/Components/Heroes/HeroeSection";
+import HeroeSection from '@/Components/Heroes/HeroeSection';
 import AppLayout from '@/Layouts/AppLayout';
 import Ideas from '@/Components/MyComponents/Ideas';
 
@@ -11,7 +11,7 @@ interface Props {
   canRegister: boolean;
   laravelVersion: string;
   phpVersion: string;
-	ideas: any;
+  ideas: any;
 }
 
 export default function Welcome({
@@ -19,26 +19,23 @@ export default function Welcome({
   canRegister,
   laravelVersion,
   phpVersion,
-	ideas
+  ideas,
 }: Props) {
   const route = useRoute();
   const page = useTypedPage();
 
   return (
     <AppLayout title={'Welcome'}>
-			<Head title="Welcome to ForgeHub" />
+      <Head title="Welcome to ForgeHub" />
 
-			<HeroeSection />
+      <HeroeSection />
 
-			<div>
-				{/*<Messages/>*/}
-			</div>
+      <div>{/*<Messages/>*/}</div>
 
-			<div className={'templateWidth mx-auto'}>
-				<h1 className={'text-3xl my-4'}>Latest Ideas</h1>
-				<Ideas ideas={ideas} />
-			</div>
-
+      <div className={'templateWidth mx-auto'}>
+        <h1 className={'text-3xl my-4'}>Latest Ideas</h1>
+        <Ideas ideas={ideas} />
+      </div>
     </AppLayout>
   );
 }
