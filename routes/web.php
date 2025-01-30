@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 Route::domain(config('app.url'))->group(function () {
 	Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
 	Route::get('/idea/{id}', [\App\Http\Controllers\IdeaController::class, 'show'])->name('idea.show');
+	Route::get('/ideas', [\App\Http\Controllers\IdeaController::class, 'index'])->name('ideas.index');
 
 	Route::middleware([
 		'auth:sanctum',
