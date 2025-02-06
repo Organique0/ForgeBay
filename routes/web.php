@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 Route::domain('localhost')->group(function () {
   Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
-	Route::get('/idea/{id}', [\App\Http\Controllers\IdeaController::class, 'show'])->name('idea.show');
+	Route::get('/idea/{id}', [\App\Http\Controllers\IdeaController::class, 'show'])->name('ideas.show');
+	Route::get('/idea', [\App\Http\Controllers\IdeaController::class, 'index'])->name('ideas.index');
 
   Route::middleware([
     'auth:sanctum',
@@ -36,10 +37,3 @@ Route::domain('localhost')->group(function () {
 		})->name('messages.send');
   });
 });
-
-
-/*Route::domain(config('ADMIN_URL'))->group(function () {
-  Route::get('/', function () {
-    return Inertia::render('Dashboard');
-  })->name('dashboard');
-});*/

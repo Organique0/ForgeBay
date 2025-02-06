@@ -18,26 +18,36 @@ class DatabaseSeeder extends Seeder
 	 */
 	public function run(): void
 	{
-		User::factory(500)->withPersonalTeam()->create();
+		User::factory(500)->withPersonalTeam()->create()->each(function ($user) {
+			$user->current_team_id = $user->ownedTeams()->first()->id;
+			$user->save();
+		});
 
 		$this->call(RoleSeeder::class);
 
-
-		User::factory()->create([
+		$admin = User::factory()->withPersonalTeam()->create([
 			'name' => 'admin',
 			'email' => 'admin@example.com',
 		])->assignRole(RolesEnum::Admin->value);
-		User::factory()->create([
+		$admin->current_team_id = $admin->ownedTeams()->first()->id;
+		$admin->save();
+
+		$superAdmin = User::factory()->withPersonalTeam()->create([
 			'name' => 'superAdmin',
 			'email' => 'superAdmin@example.com',
 		])->assignRole(RolesEnum::SuperAdmin->value);
+		$superAdmin->current_team_id = $superAdmin->ownedTeams()->first()->id;
+		$superAdmin->save();
+
 		$lukaUser = User::factory()->withPersonalTeam()->create([
 			'name' => 'user',
 			'email' => 'user@example.com',
 			'bio' => 'hello, my name is Luka',
 		])->assignRole(RolesEnum::User->value);
+		$lukaUser->current_team_id = $lukaUser->ownedTeams()->first()->id;
+		$lukaUser->save();
 
-		$testUser = new user([
+		$testUser = new User([
 			'name' => config('test.user_login'),
 			'email' => config('test.user_email'),
 			'password' => bcrypt(config('test.user_password')),
@@ -46,7 +56,16 @@ class DatabaseSeeder extends Seeder
 			'remember_token' => Str::random(10),
 		]);
 		$testUser->save();
-		$lukaUser->save();
+
+		$testTeam = new Team([
+			'name' => $testUser->name . '\'s Team',
+			'user_id' => $testUser->id,
+			'personal_team' => true,
+		]);
+		$testTeam->save();
+
+		$testUser->current_team_id = $testTeam->id;
+		$testUser->save();
 
 		$this->call([
 			TagSeeder::class
