@@ -1,37 +1,26 @@
 <?php
 
 use App\Events\MessageSent;
-use App\Http\Controllers\IdeaController;
-use App\Http\Controllers\UserProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
-Route::domain(config('app.url'))->group(function () {
-	Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
+Route::domain('localhost')->group(function () {
+  Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
 	Route::get('/idea/{id}', [\App\Http\Controllers\IdeaController::class, 'show'])->name('idea.show');
-	Route::get('/ideas', [\App\Http\Controllers\IdeaController::class, 'index'])->name('ideas.index');
 
-	Route::middleware([
-		'auth:sanctum',
-		config('jetstream.auth_session'),
-		'verified',
-	])->group(function () {
+  Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+  ])->group(function () {
 
 
-		Route::get('/dashboard', function () {
-			return Inertia::render('Dashboard');
-		})->name('dashboard');
+    Route::get('/dashboard', function () {
+      return Inertia::render('Dashboard');
+    })->name('dashboard');
 
-		Route::post('/skills', function (Request $request) {
-			$request->validate([
-				'bio' => 'required|string',
-				'skills' => 'array',
-			]);
-
-			auth()->user()->tags()->sync($request->skills);
-		});
 
 		Route::post('/messages', function (Request $request) {
 			$request->validate([
@@ -45,5 +34,12 @@ Route::domain(config('app.url'))->group(function () {
 				]
 			);
 		})->name('messages.send');
-	});
+  });
 });
+
+
+/*Route::domain(config('ADMIN_URL'))->group(function () {
+  Route::get('/', function () {
+    return Inertia::render('Dashboard');
+  })->name('dashboard');
+});*/
