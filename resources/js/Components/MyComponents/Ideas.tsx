@@ -19,8 +19,8 @@ const Ideas: React.FC<IdeasProps> = ({ ideas }) => {
 						<Link href={`/idea/${idea.id}`}>
 							<Card className={'min-h-[25em] flex flex-col'}>
 								<CardHeader>
+									<StatusPretty idea={idea} />
 									<div className={'text-2xl font-semibold'}>{idea.title}</div>
-									<StatusPretty idea={idea} className={"absolute top-6 right-6"} />
 									<p>${totalValue}</p>
 								</CardHeader>
 								<CardContent className={'grow'}>
