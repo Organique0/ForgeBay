@@ -42,7 +42,7 @@ const TimelineIcon = React.forwardRef<
 	<span
 		ref={ref}
 		className={cn(
-			"absolute flex items-center justify-center w-8 h-8 bg-zinc rounded-full -start-4 dark:bg-blue-900",
+			"absolute flex items-center justify-center w-12 h-12 bg-indigo-100 rounded-full -start-6 dark:bg-blue-900",
 			className
 		)}
 		{...props}
@@ -57,7 +57,7 @@ const TimelineTitle = React.forwardRef<
 	<h3
 		ref={ref}
 		className={cn(
-			"flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white",
+			"flex items-center mb-1 text-2xl font-semibold text-gray-900 dark:text-white",
 			className
 		)}
 		{...props}
@@ -72,7 +72,7 @@ const TimelineDescription = React.forwardRef<
 	<div
 		ref={ref}
 		className={cn(
-			"block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500",
+			"block mb-2 text-lg font-normal leading-none text-gray-400 dark:text-gray-500",
 			className
 		)}
 		{...props}
@@ -87,7 +87,7 @@ const TimelineBody = React.forwardRef<
 	<p
 		ref={ref}
 		className={cn(
-			"mb-4 text-base font-normal text-black dark:text-gray-300",
+			"mb-4 text-lg font-normal text-black dark:text-gray-300",
 			className
 		)}
 		{...props}

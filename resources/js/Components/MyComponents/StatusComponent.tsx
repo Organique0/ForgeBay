@@ -6,17 +6,17 @@ type Props = {
 	status: Status;
 };
 
-const StatusComponent: React.FC<Props> = ({status})  => {
-		switch (status) {
-			case 'to_do':
-				return <LuBadgeX color={'red'} size={19}/>
-			case 'in_progress':
-				return <LuShip color={'orange'} size={19}/>
-			case 'done':
-				return <LuBadgeCheck color={'green'} size={19}/>
-			default:
-				return <LuBadgeCheck size={20}/>
-		}
+const StatusComponent: React.FC<Props> = ({ status }) => {
+	switch (status) {
+		case 'to_do':
+			return <LuBadgeX color={'red'} size={28} />
+		case 'in_progress':
+			return <LuShip color={'orange'} size={28} />
+		case 'done':
+			return <LuBadgeCheck color={'green'} size={28} />
+		default:
+			return <LuBadgeCheck size={28} />
+	}
 
 };
 

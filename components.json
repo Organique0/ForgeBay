@@ -4,7 +4,7 @@
   "rsc": false,
   "tsx": true,
   "tailwind": {
-    "config": "tailwind.config.js",
+    "config": "resources/css/app.css",
     "css": "resources/css/app.css",
     "baseColor": "gray",
     "cssVariables": true,

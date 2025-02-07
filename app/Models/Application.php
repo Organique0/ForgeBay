@@ -14,7 +14,11 @@ class Application extends Model
 	use HasFactory;
 
 	protected $fillable = [
-		'status',
+		'include_profile',
+		'user_id',
+		'task_id',
+		'description',
+		'status'
 	];
 
 	public function task(): BelongsTo

@@ -1,26 +1,27 @@
 <?php
 
 use App\Events\MessageSent;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 Route::domain('localhost')->group(function () {
-  Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
+	Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
 	Route::get('/idea/{id}', [\App\Http\Controllers\IdeaController::class, 'show'])->name('ideas.show');
 	Route::get('/idea', [\App\Http\Controllers\IdeaController::class, 'index'])->name('ideas.index');
+	Route::post('/application', [\App\Http\Controllers\ApplicationController::class, 'new'])->name('application.new');
 
-  Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-  ])->group(function () {
+	Route::middleware([
+		'auth:sanctum',
+		config('jetstream.auth_session'),
+		'verified',
+	])->group(function () {
 
 
-    Route::get('/dashboard', function () {
-      return Inertia::render('Dashboard');
-    })->name('dashboard');
+		Route::get('/dashboard', function () {
+			return Inertia::render('Dashboard');
+		})->name('dashboard');
 
 
 		Route::post('/messages', function (Request $request) {
@@ -35,5 +36,5 @@ Route::domain('localhost')->group(function () {
 				]
 			);
 		})->name('messages.send');
-  });
+	});
 });
