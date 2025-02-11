@@ -469,7 +469,7 @@ export default function AppLayout({
 				) : null}
 
 				{/* <!-- Page Content --> */}
-				<main>{children}</main>
+				<main className='templateWidth mx-auto'>{children}</main>
 			</div>
 		</div>
 	);

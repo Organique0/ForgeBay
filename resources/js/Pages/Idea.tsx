@@ -70,28 +70,37 @@ const Idea = ({ idea }: { idea: IdeaType }) => {
 										<TimelineBody>{task.description}</TimelineBody>
 									</div>
 
-									{task.status === 'to_do' &&
+									{
+										//this is so complicated I have no idea how it works anymore
+										task.status === 'to_do' &&
 										task.id === idea.tasks[firstToDoIndex].id && (
 											page.props.auth.user ? (
-												<TimelineFooter className='ml-4'>
-													<Accordion type='single' collapsible className='w-full'>
-														<AccordionItem value='item-1' className='border-none'>
-															<Button className='text-xl max-w-1/5' asChild>
-																<AccordionTrigger>
-																	<LuPencilRuler size={'18'} className={'mr-2'} />
-																	<span className='mr-1'>Apply</span>
-																</AccordionTrigger>
-															</Button>
-															<AccordionContent className='bg-indigo-100 mt-4 p-4 rounded-lg'>
-																<ApplicationForm idea={idea} task={task} />
-															</AccordionContent>
-														</AccordionItem>
-													</Accordion>
-												</TimelineFooter>
-											) :
+												task.applications?.some(app => app.user_id === page.props.auth.user.id) ? (
+													<TimelineFooter className='ml-4'>
+														<Button disabled>Already Applied</Button>
+													</TimelineFooter>
+												) : (
+													<TimelineFooter className='ml-4'>
+														<Accordion type='single' collapsible className='w-full'>
+															<AccordionItem value='item-1' className='border-none'>
+																<Button className='text-xl max-w-1/5' asChild>
+																	<AccordionTrigger>
+																		<LuPencilRuler size={'18'} className={'mr-2'} />
+																		<span className='mr-1'>Apply</span>
+																	</AccordionTrigger>
+																</Button>
+																<AccordionContent className='bg-indigo-100 mt-4 p-4 rounded-lg'>
+																	<ApplicationForm idea={idea} task={task} />
+																</AccordionContent>
+															</AccordionItem>
+														</Accordion>
+													</TimelineFooter>
+												)
+											) : (
 												<Link href='/login'>
 													<Button>Login to apply</Button>
 												</Link>
+											)
 										)}
 								</TimelineItem>
 							))}
@@ -99,6 +108,7 @@ const Idea = ({ idea }: { idea: IdeaType }) => {
 					</div>
 				</div>
 			</div>
+
 		</AppLayout>
 	);
 };
