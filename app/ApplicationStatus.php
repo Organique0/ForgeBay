@@ -4,7 +4,7 @@ namespace App;
 
 enum ApplicationStatus: string
 {
-	case Review = 'review';
+	case Sent = 'sent';
 	case Approved = 'approved';
 	case Declined = 'declined';
 }

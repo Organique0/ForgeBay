@@ -23,7 +23,7 @@ class ApplicationController extends Controller
 			'include_profile' => $validatedData['include_profile'],
 			'user_id' => $validatedData['userId'],
 			'task_id' => $validatedData['taskId'],
-			'status' => ApplicationStatus::Review
+			'status' => ApplicationStatus::Sent
 		]);
 
 		return response()->json($application, 201);

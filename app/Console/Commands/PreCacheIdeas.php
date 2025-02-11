@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Idea;
+use App\Models\Task;
 
 class PreCacheIdeas extends Command
 {
@@ -15,20 +16,45 @@ class PreCacheIdeas extends Command
 	{
 		Cache::tags(['ideas'])->flush();
 
-		Cache::tags(['ideas'])->remember('all_ideas', 600, function () {
-			return Idea::with(['user', 'tags', 'applications.users'])
-				->with(['tasks' => function ($query) {
-					$query->orderByRaw("CASE status
-                        WHEN 'to_do' THEN 3
-                        WHEN 'in_progress' THEN 2
-                        WHEN 'done' THEN 1
-                        ELSE 4
-                    END");
-				}])
-				->orderBy('created_at', 'desc')
-				->get();
+		$ideas = Idea::with(['user', 'tags', 'tasks'])
+			->orderBy('created_at', 'desc')
+			->get();
+
+		$ideaIds = [];
+
+		foreach ($ideas as $idea) {
+			$cacheKey = 'idea_data_' . $idea->id;
+
+			// Cache idea data
+			Cache::tags(['ideas'])->rememberForever($cacheKey, function () use ($idea) {
+				$ideaData = $idea->toArray();
+				return $ideaData;
+			});
+
+			$ideaIds[] = $idea->id;
+
+			// Cache tasks for each idea
+			$taskIds = [];
+			foreach ($idea->tasks as $task) {
+				$taskCacheKey = 'task_data_' . $task->id;
+				Cache::tags(['tasks'])->rememberForever($taskCacheKey, function () use ($task) {
+					return $task->toArray();
+				});
+				$taskIds[] = $task->id;
+			}
+
+			// Cache the list of task IDs for each idea
+			$ideaTaskIdsKey = 'idea_task_ids_' . $idea->id;
+			Cache::tags(['ideas', 'tasks'])->rememberForever($ideaTaskIdsKey, function () use ($taskIds) {
+				return $taskIds;
+			});
+		}
+
+		// Cache the list of all idea IDs
+		Cache::tags(['ideas'])->rememberForever('all_idea_ids', function () use ($ideaIds) {
+			return $ideaIds;
 		});
 
-		$this->info('All ideas have been cached.');
+		$this->info('All ideas, tasks, and task IDs have been cached separately.');
 	}
 }

@@ -29,7 +29,7 @@ class Task extends Model
 		return $this->belongsTo(Idea::class);
 	}
 
-	public function application(): HasMany
+	public function applications(): HasMany
 	{
 		return $this->hasMany(Application::class);
 	}

@@ -17,21 +17,21 @@ class ApplicationSeeder extends Seeder
 			'task_id' => 1,
 			'user_id' => 3,
 			'description' => 'Description 1',
-			'status' => 0,
+			'status' => 'sent',
 			'include_profile' => true
 		]);
 		DB::table('applications')->insert([
 			'task_id' => 2,
 			'user_id' => 3,
 			'description' => 'Description 1',
-			'status' => 0,
+			'status' => 'approved',
 			'include_profile' => true
 		]);
 		DB::table('applications')->insert([
 			'task_id' => 3,
 			'user_id' => 3,
 			'description' => 'Description 1',
-			'status' => 1,
+			'status' => 'declined',
 			'include_profile' => false
 		]);
 	}

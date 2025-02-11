@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Idea;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -19,7 +20,6 @@ class IdeaController extends Controller
                         WHEN 'to_do' THEN 3
                         WHEN 'in_progress' THEN 2
                         WHEN 'done' THEN 1
-                        ELSE 4
                     END");
 				}])
 				->orderBy('created_at', 'desc')
@@ -49,11 +49,31 @@ class IdeaController extends Controller
 
 	public function show(string $id): \Inertia\Response
 	{
-		$idea = $this->getCachedIdeas()->where('id', $id)->first();
+		$cacheKey = 'idea_data_' . $id;
+		$idea = Cache::tags(['ideas'])->get($cacheKey);
 
 		if (!$idea) {
-			abort(404);
+			$idea = Idea::with(['user', 'tags', 'applications.users'])
+				->find($id);
+
+			if (!$idea) {
+				abort(404);
+			}
+
+			Cache::tags(['ideas'])->put($cacheKey, $idea->toArray(), 3600);
 		}
+
+		// Fetch task IDs from cache
+		$ideaTaskIdsKey = 'idea_task_ids_' . $id;
+		$taskIds = Cache::tags(['ideas', 'tasks'])->get($ideaTaskIdsKey, []);
+
+		// Fetch tasks from cache using task IDs
+		$tasks = collect($taskIds)->map(function ($taskId) {
+			$taskCacheKey = 'task_data_' . $taskId;
+			return Cache::tags(['tasks'])->get($taskCacheKey);
+		})->filter();
+
+		$idea['tasks'] = $tasks;
 
 		return Inertia::render('Idea', [
 			'idea' => $idea,
