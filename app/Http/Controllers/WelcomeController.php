@@ -23,7 +23,7 @@ class WelcomeController extends Controller
 		$ideas = collect();
 
 		if ($ideaIds) {
-			$ideas = $this->getCachedIdeas($ideaIds);
+			$ideas = $this->getCachedIdeas($ideaIds, 10);
 		}
 
 		if ($ideas->isEmpty()) {

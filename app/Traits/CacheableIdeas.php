@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Cache;
 
 trait CacheableIdeas
 {
-	public function getCachedIdeas($ideaIds)
+	public function getCachedIdeas($ideaIds, $take = null)
 	{
-		$ideas = collect($ideaIds)->take(10)->map(function ($ideaId) {
+		$ideas = collect($ideaIds)->take($take)->map(function ($ideaId) {
 			$idea = Cache::tags(['ideas'])->get('idea_data_' . $ideaId);
 			if ($idea) {
 				// Fetch task IDs from cache

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Idea as IdeaType } from '@/types';
+import React, { useEffect, useState } from 'react';
+import { Idea as IdeaType, Task as TaskType } from '@/types';
 import AppLayout from '@/Layouts/AppLayout';
 import {
 	Timeline,
@@ -25,9 +25,36 @@ import ApplicationForm from '@/Components/MyComponents/ApplicationForm';
 import useTypedPage from '@/Hooks/useTypedPage';
 import { Link } from '@inertiajs/react';
 
-const Idea = ({ idea }: { idea: IdeaType }) => {
+const Idea = ({ idea: initialIdea }: { idea: IdeaType }) => {
+	const [idea, setIdea] = useState<IdeaType>(initialIdea);
 	const firstToDoIndex = idea.tasks.findIndex(task => task.status === 'to_do');
 	const page = useTypedPage();
+
+	useEffect(() => {
+		// Listen for the ApplicationStatusUpdated event
+		window.Echo.channel(`task.updates`)
+			.listen('TaskStatusUpdated', (event: any) => {
+				console.log('Received TaskStatusUpdated event:', event);
+				// Check if the event is for this idea
+				if (event.ideaId === idea.id) {
+					// Update the task status in the component's data
+					setIdea(prevIdea => ({
+						...prevIdea,
+						tasks: prevIdea.tasks.map(task => {
+							if (task.id === event.taskId) {
+								return { ...task, status: event.status };
+							}
+							return task;
+						})
+					}));
+				}
+			});
+
+		// Cleanup function to remove the listener when the component unmounts
+		return () => {
+			window.Echo.channel(`task.updates`).stopListening('TaskStatusUpdated');
+		};
+	}, [idea.id]);
 
 	return (
 		<AppLayout title={'Idea'}>
@@ -41,7 +68,7 @@ const Idea = ({ idea }: { idea: IdeaType }) => {
 					<div className={'p-0'}>
 						<Timeline className={'max-w-7xl mx-auto'}>
 							{idea.tasks.map((task, index) => (
-								<TimelineItem>
+								<TimelineItem key={task.id}>
 									<TimelineIcon>
 										<StatusComponent status={task.status} />
 									</TimelineIcon>
@@ -108,7 +135,6 @@ const Idea = ({ idea }: { idea: IdeaType }) => {
 					</div>
 				</div>
 			</div>
-
 		</AppLayout>
 	);
 };

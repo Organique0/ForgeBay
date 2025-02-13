@@ -20,7 +20,10 @@ export default function ApplicationForm({ idea, task }: { idea: IdeaType, task: 
 		application: "",
 		include_profile: true,
 		userId: page.props.auth.user!.id,
-		taskId: task.id
+		taskId: task.id,
+		ideaId: idea.id,
+		applicationStatus: 'sent',
+		taskStatus: 'in_progress',
 	});
 
 	function onSubmit(e: React.FormEvent) {

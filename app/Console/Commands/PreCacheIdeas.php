@@ -15,7 +15,7 @@ class PreCacheIdeas extends Command
 	{
 		Cache::tags(['ideas'])->flush();
 
-		$ideas = Idea::with(['user', 'tags', 'tasks'])
+		$ideas = Idea::with(['user', 'tags', 'tasks', 'applications'])
 			->orderBy('created_at', 'desc')
 			->get();
 
