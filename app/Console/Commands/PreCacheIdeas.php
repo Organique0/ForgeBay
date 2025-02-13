@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Idea;
-use App\Models\Task;
 
 class PreCacheIdeas extends Command
 {

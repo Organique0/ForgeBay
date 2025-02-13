@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Idea;
-use App\Models\Task;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Cache; // Add Cache facade
+use Illuminate\Support\Facades\Cache;
+use App\Traits\CacheableIdeas;
 
 class WelcomeController extends Controller
 {
+	use CacheableIdeas;
 	/**
 	 * Handle the incoming request.
 	 *
@@ -22,13 +23,7 @@ class WelcomeController extends Controller
 		$ideas = collect();
 
 		if ($ideaIds) {
-			$ideas = collect($ideaIds)->take(10)->map(function ($ideaId) {
-				$idea = Cache::tags(['ideas'])->get('idea_data_' . $ideaId);
-				if ($idea) {
-					$idea['tasks'] = Task::where('idea_id', $ideaId)->get()->toArray();
-				}
-				return $idea;
-			})->filter();
+			$ideas = $this->getCachedIdeas($ideaIds);
 		}
 
 		if ($ideas->isEmpty()) {

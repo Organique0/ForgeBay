@@ -3,33 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Idea;
-use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Traits\CacheableIdeas;
 
 class IdeaController extends Controller
 {
-	private function getCachedIdeas()
-	{
-		return Cache::tags(['ideas'])->remember('all_ideas', 3600, function () {
-			return Idea::with(['user', 'tags', 'applications.users'])
-				->with(['tasks' => function ($query) {
-					$query->orderByRaw("CASE status
-                        WHEN 'to_do' THEN 3
-                        WHEN 'in_progress' THEN 2
-                        WHEN 'done' THEN 1
-                    END");
-				}])
-				->orderBy('created_at', 'desc')
-				->get();
-		});
-	}
-
+	use CacheableIdeas;
 	public function index(Request $request)
 	{
-		$cachedIdeas = $this->getCachedIdeas();
+		$ideaIds = Cache::tags(['ideas'])->get('all_idea_ids');
+		$cachedIdeas = $this->getCachedIdeas($ideaIds);
 		$perPage = 20;
 		$currentPage = $request->input('page', 1);
 		$currentPageItems = $cachedIdeas->slice(($currentPage - 1) * $perPage, $perPage)->values();
