@@ -38,9 +38,3 @@ Route::domain('localhost')->group(function () {
 		})->name('messages.send');
 	});
 });
-
-Route::domain('sse.localhost')->group(function () {
-	Route::get('/application-stream', [StreamsController::class, 'applicationStream'])
-		->name('application.stream')
-		->withoutMiddleware([\Illuminate\Session\Middleware\StartSession::class]);
-});
