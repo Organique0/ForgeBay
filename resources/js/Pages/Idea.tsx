@@ -34,18 +34,15 @@ const Idea = ({ idea: initialIdea }: { idea: IdeaType }) => {
 	useEffect(() => {
 		const eventSource = new EventSource(`http://sse.localhost/api/application-stream?idea=${initialIdea.id}`);
 
-		// Remove IdeaUpdates listener since we're only getting task status updates now
 		eventSource.addEventListener('TaskStatusUpdates', (event) => {
 			const { idea_id, tasks } = JSON.parse(event.data);
 
 			if (idea_id == initialIdea.id) {
-				console.log("match");
 				setIdea(prevIdea => ({
 					...prevIdea,
 					tasks: prevIdea.tasks.map(task => {
 						const updatedTask = tasks.find(t => t.id === task.id);
 						if (updatedTask) {
-							console.log('Updating task:', task.id, 'to status:', updatedTask.status); // Debug log
 							return { ...task, status: updatedTask.status };
 						}
 						return task;
