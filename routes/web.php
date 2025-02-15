@@ -4,12 +4,14 @@ use App\Events\MessageSent;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Http\Controllers\StreamsController;
 
 Route::domain('localhost')->group(function () {
 	Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
 	Route::get('/idea/{id}', [\App\Http\Controllers\IdeaController::class, 'show'])->name('ideas.show');
 	Route::get('/idea', [\App\Http\Controllers\IdeaController::class, 'index'])->name('ideas.index');
 	Route::post('/application', [\App\Http\Controllers\ApplicationController::class, 'new'])->name('application.new');
+
 
 	Route::middleware([
 		'auth:sanctum',
@@ -35,4 +37,10 @@ Route::domain('localhost')->group(function () {
 			);
 		})->name('messages.send');
 	});
+});
+
+Route::domain('sse.localhost')->group(function () {
+	Route::get('/application-stream', [StreamsController::class, 'applicationStream'])
+		->name('application.stream')
+		->withoutMiddleware([\Illuminate\Session\Middleware\StartSession::class]);
 });

@@ -41,8 +41,8 @@ class ApplicationController extends Controller
 		Cache::tags(['tasks'])->put($id, $cachedData);
 
 		Task::where('id', $validatedData['taskId'])->update(['status' => $validatedData['taskStatus']]);
-		ApplicationStatusUpdated::dispatch($validatedData['taskId'], $validatedData['applicationStatus'], $validatedData['ideaId']);
-		TaskStatusUpdated::dispatch($validatedData['taskId'], $validatedData['taskStatus'], $validatedData['ideaId']);
+		//ApplicationStatusUpdated::dispatch($validatedData['taskId'], $validatedData['applicationStatus'], $validatedData['ideaId']);
+		//TaskStatusUpdated::dispatch($validatedData['taskId'], $validatedData['taskStatus'], $validatedData['ideaId']);
 
 		// return redirect()->route('ideas.show', ['id' => $validatedData['ideaId']])
 		// 	->with('success', 'Application created successfully');

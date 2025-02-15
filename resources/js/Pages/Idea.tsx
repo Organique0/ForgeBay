@@ -32,27 +32,45 @@ const Idea = ({ idea: initialIdea }: { idea: IdeaType }) => {
 
 	useEffect(() => {
 		// Listen for the ApplicationStatusUpdated event
-		window.Echo.channel(`task.updates`)
-			.listen('TaskStatusUpdated', (event: any) => {
-				console.log('Received TaskStatusUpdated event:', event);
-				// Check if the event is for this idea
-				if (event.ideaId === idea.id) {
-					// Update the task status in the component's data
-					setIdea(prevIdea => ({
-						...prevIdea,
-						tasks: prevIdea.tasks.map(task => {
-							if (task.id === event.taskId) {
-								return { ...task, status: event.status };
-							}
-							return task;
-						})
-					}));
-				}
-			});
+		// window.Echo.channel(`task.updates`)
+		// 	.listen('TaskStatusUpdated', (event: any) => {
+		// 		console.log('Received TaskStatusUpdated event:', event);
+		// 		// Check if the event is for this idea
+		// 		if (event.ideaId === idea.id) {
+		// 			// Update the task status in the component's data
+		// 			setIdea(prevIdea => ({
+		// 				...prevIdea,
+		// 				tasks: prevIdea.tasks.map(task => {
+		// 					if (task.id === event.taskId) {
+		// 						return { ...task, status: event.status };
+		// 					}
+		// 					return task;
+		// 				})
+		// 			}));
+		// 		}
+		// 	});
+
+		const eventSource = new EventSource(`http://sse.localhost/application-stream?idea=${idea.id}`);
+
+		eventSource.onmessage = (event) => {
+			const data = JSON.parse(event.data);
+			if (data.ideaId === idea.id) {
+				setIdea((prevIdea) => ({
+					...prevIdea,
+					tasks: prevIdea.tasks.map((task) => ({
+						...task,
+						applications: data.applications.filter((app: any) => app.task_id === task.id)
+					})),
+				}));
+			}
+		};
+
+		return () => eventSource.close();
+
 
 		// Cleanup function to remove the listener when the component unmounts
 		return () => {
-			window.Echo.channel(`task.updates`).stopListening('TaskStatusUpdated');
+			//window.Echo.channel(`task.updates`).stopListening('TaskStatusUpdated');
 		};
 	}, [idea.id]);
 
