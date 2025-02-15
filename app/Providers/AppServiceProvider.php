@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Http\Controllers\UserProfileController;
 use App\RolesEnum;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController as JetstreamUserProfileController;
 
@@ -30,5 +31,9 @@ class AppServiceProvider extends ServiceProvider
 		Gate::define('viewPulse', function ($user) {
 			return $user->hasRole(RolesEnum::SuperAdmin->value) ? true : false;
 		});
+
+		if (config('cache.default') === 'redis') {
+			Cache::tags(['ideas_pages'])->flush();
+		}
 	}
 }
