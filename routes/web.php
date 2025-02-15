@@ -3,7 +3,6 @@
 use App\Events\MessageSent;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 Route::domain('localhost')->group(function () {
@@ -19,9 +18,8 @@ Route::domain('localhost')->group(function () {
 	])->group(function () {
 
 
-		Route::get('/dashboard', function () {
-			return Inertia::render('Dashboard');
-		})->name('dashboard');
+		Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
 
 
 		Route::post('/messages', function (Request $request) {
