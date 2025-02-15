@@ -31,30 +31,25 @@ const Idea = ({ idea: initialIdea }: { idea: IdeaType }) => {
 	const page = useTypedPage();
 
 	useEffect(() => {
-		// Listen for the ApplicationStatusUpdated event
-		window.Echo.channel(`task.updates`)
-			.listen('TaskStatusUpdated', (event: any) => {
-				console.log('Received TaskStatusUpdated event:', event);
-				// Check if the event is for this idea
-				if (event.ideaId === idea.id) {
-					// Update the task status in the component's data
-					setIdea(prevIdea => ({
-						...prevIdea,
-						tasks: prevIdea.tasks.map(task => {
-							if (task.id === event.taskId) {
-								return { ...task, status: event.status };
-							}
-							return task;
-						})
-					}));
-				}
-			});
-
-		// Cleanup function to remove the listener when the component unmounts
-		return () => {
-			window.Echo.channel(`task.updates`).stopListening('TaskStatusUpdated');
+		const handler = (e: Event) => {
+			const event = (e as CustomEvent).detail;
+			if (event.ideaId === initialIdea.id) {
+				setIdea(prevIdea => ({
+					...prevIdea,
+					tasks: prevIdea.tasks.map(task => {
+						if (task.id === event.taskId) {
+							return { ...task, status: event.status };
+						}
+						return task;
+					})
+				}));
+			}
 		};
-	}, [idea.id]);
+		window.addEventListener('taskStatusUpdate', handler);
+		return () => {
+			window.removeEventListener('taskStatusUpdate', handler);
+		};
+	}, [initialIdea.id]);
 
 	return (
 		<AppLayout title={'Idea'}>

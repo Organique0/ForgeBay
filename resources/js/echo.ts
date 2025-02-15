@@ -28,6 +28,11 @@ window.Echo.channel('messages').listen('MessageSent', (e: any) => {
 window.Echo.channel(`task.updates`)
 	.listen('ApplicationStatusUpdated', (event: any) => {
 		console.log('Received ApplicationStatusUpdated event:', event);
-		// Check if the event is for this idea
 
+
+	});
+window.Echo.channel('task.updates')
+	.listen('TaskStatusUpdated', (event: any) => {
+		window.dispatchEvent(new CustomEvent('taskStatusUpdate', { detail: event }));
+		console.log('Global task update dispatched:', event);
 	});

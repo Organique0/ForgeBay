@@ -43,7 +43,6 @@ const Index: React.FC<Props> = ({ ideas: initialIdeas }) => {
 	const [ideas, setIdeas] = useState<PaginatedIdeas>(initialIdeas);
 
 	useEffect(() => {
-		console.log(ideas);
 		const activeIndex = ideas.links.findIndex(link => link.active);
 		if (activeIndex !== -1) {
 			const start = Math.max(0, activeIndex - 1);
@@ -52,36 +51,32 @@ const Index: React.FC<Props> = ({ ideas: initialIdeas }) => {
 			const filtered = sliced.filter(link => link.url !== null);
 			setThreeLinks(filtered);
 		}
-
-		// Listen on the global channel for ApplicationStatusUpdated event
-		window.Echo.channel('task.updates')
-			.listen('TaskStatusUpdated', (event: any) => {
-				console.log(event);
-				// Find the idea that needs to be updated
-				setIdeas(prevIdeas => {
-					const updatedData = prevIdeas.data.map(idea => {
-						if (idea.id === event.ideaId) {
-							// Update the task status in the component's data
-							const updatedTasks = idea.tasks.map(task => {
-								if (task.id === event.taskId) {
-									return { ...task, status: event.status };
-								}
-								return task;
-							});
-							return { ...idea, tasks: updatedTasks };
-						}
-						return idea;
-					});
-
-					return { ...prevIdeas, data: updatedData };
-				});
-			});
-
-		// Cleanup function to remove the listener when the component unmounts
-		return () => {
-			window.Echo.channel('task.updates').stopListening('TaskStatusUpdated');
-		};
 	}, [ideas.links]);
+
+	useEffect(() => {
+		const handler = (e: Event) => {
+			const event = (e as CustomEvent).detail;
+			setIdeas(prevIdeas => {
+				const updatedData = prevIdeas.data.map(idea => {
+					if (idea.id === event.ideaId) {
+						const updatedTasks = idea.tasks.map(task => {
+							if (task.id === event.taskId) {
+								return { ...task, status: event.status };
+							}
+							return task;
+						});
+						return { ...idea, tasks: updatedTasks };
+					}
+					return idea;
+				});
+				return { ...prevIdeas, data: updatedData };
+			});
+		};
+		window.addEventListener('taskStatusUpdate', handler);
+		return () => {
+			window.removeEventListener('taskStatusUpdate', handler);
+		};
+	}, []);
 
 	const nextUrl = ideas.next_page_url ?? ideas.first_page_url;
 	const prevUrl = ideas.prev_page_url ?? ideas.last_page_url;

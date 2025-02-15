@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IdeasProps, Idea, Tag } from '@/types';
 import { Link } from '@inertiajs/react';
 
@@ -6,9 +6,34 @@ import StatusPretty from '@/Components/MyComponents/StatusPretty';
 import { Card, CardContent, CardFooter, CardHeader } from '@/Components/Shadcn/ui/card';
 import { Badge } from '@/Components/Shadcn/ui/badge';
 import axios from 'axios';
+import { PaginatedIdeas } from '@/Pages/Ideas/Index';
 
-const Ideas: React.FC<IdeasProps> = ({ ideas }) => {
 
+const Ideas: React.FC<IdeasProps> = ({ ideas: initialIdeas }) => {
+	const [ideas, setIdeas] = useState<Idea[]>(initialIdeas);
+
+	useEffect(() => {
+		const handler = (e: Event) => {
+			const event = (e as CustomEvent).detail;
+			setIdeas(prevIdeas => {
+				return prevIdeas.map(idea => {
+					if (idea.id === event.ideaId) {
+						return {
+							...idea,
+							tasks: idea.tasks.map(task =>
+								task.id === event.taskId ? { ...task, status: event.status } : task
+							)
+						};
+					}
+					return idea;
+				});
+			});
+		};
+		window.addEventListener('taskStatusUpdate', handler);
+		return () => {
+			window.removeEventListener('taskStatusUpdate', handler);
+		};
+	}, []);
 
 	return (
 		<div className={''}>
