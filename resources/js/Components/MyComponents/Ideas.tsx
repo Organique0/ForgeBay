@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IdeasProps, Idea, Tag } from '@/types';
 import { Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 
 import StatusPretty from '@/Components/MyComponents/StatusPretty';
 import { Card, CardContent, CardFooter, CardHeader } from '@/Components/Shadcn/ui/card';
@@ -17,9 +18,18 @@ const Ideas: React.FC<IdeasProps> = ({ ideas }) => {
 		const handler = (e: Event) => {
 			const event = (e as CustomEvent).detail;
 			console.log(ideas);
+			console.log(ideas);
 			setIdeas(prevIdeas => {
 				const updatedData = prevIdeas.map(idea => {
+				const updatedData = prevIdeas.map(idea => {
 					if (idea.id === event.ideaId) {
+						const updatedTasks = idea.tasks.map(task => {
+							if (task.id === event.taskId) {
+								return { ...task, status: event.status };
+							}
+							return task;
+						});
+						return { ...idea, tasks: updatedTasks };
 						const updatedTasks = idea.tasks.map(task => {
 							if (task.id === event.taskId) {
 								return { ...task, status: event.status };
@@ -30,6 +40,7 @@ const Ideas: React.FC<IdeasProps> = ({ ideas }) => {
 					}
 					return idea;
 				});
+				return { ...prevIdeas, data: updatedData };
 				return { ...prevIdeas, data: updatedData };
 			});
 		};
@@ -98,8 +109,13 @@ const Ideas: React.FC<IdeasProps> = ({ ideas }) => {
 				return (
 					<div key={idea.id} className='my-6'>
 						<Link href={`/idea/${idea.id}`} onClick={() => handleIdeaClick(idea.id)}>
+					<div key={idea.id} className='my-6'>
+						<Link href={`/idea/${idea.id}`} onClick={() => handleIdeaClick(idea.id)}>
 							<Card className={'min-h-[25em] flex flex-col'}>
 								<CardHeader>
+									<div className={'flex justify-between'}>
+										<h1 className='text-3xl font-semibold f'>{idea.title}</h1>
+										<StatusPretty idea={idea} className={'text-lg'} />
 									<div className={'flex justify-between'}>
 										<h1 className='text-3xl font-semibold f'>{idea.title}</h1>
 										<StatusPretty idea={idea} className={'text-lg'} />
