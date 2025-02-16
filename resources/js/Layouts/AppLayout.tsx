@@ -1,7 +1,7 @@
 import { router } from '@inertiajs/core';
 import { Link, Head } from '@inertiajs/react';
 import classNames from 'classnames';
-import React, { JSX, PropsWithChildren, useState } from 'react';
+import React, { JSX, PropsWithChildren, useEffect, useState } from 'react';
 import useRoute from '@/Hooks/useRoute';
 import useTypedPage from '@/Hooks/useTypedPage';
 import ApplicationMark from '@/Components/ApplicationMark';
@@ -52,6 +52,13 @@ export default function AppLayout({
 		router.post(route('logout'));
 	}
 
+	useEffect(() => {
+		const savedPosition = localStorage.getItem('ideasScrollPosition');
+		if (savedPosition) {
+			window.scrollTo(0, parseInt(savedPosition));
+		}
+	}, []);
+
 	return (
 		<div>
 			<Head title={title} />
@@ -67,7 +74,12 @@ export default function AppLayout({
 							<div className="flex">
 								{/* <!-- Logo --> */}
 								<div className="shrink-0 flex items-center">
-									<Link href={route('home')}>
+									<Link
+										href={route('home')}
+										onClick={() => {
+											localStorage.removeItem('ideasScrollPosition');
+										}}
+									>
 										<ApplicationMark className="block h-9 w-auto" />
 									</Link>
 								</div>
@@ -77,6 +89,9 @@ export default function AppLayout({
 									<NavLink
 										href={route('ideas.index')}
 										active={route().current('ideas.index')}
+										onClick={() => {
+											localStorage.removeItem('ideasScrollPosition');
+										}}
 									>
 										Ideas
 									</NavLink>

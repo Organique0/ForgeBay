@@ -78,13 +78,7 @@ const Index: React.FC<Props> = ({ ideas: initialIdeas }) => {
 	// 	};
 	// }, []);
 
-	useEffect(() => {
-		const savedPosition = localStorage.getItem('ideasScrollPosition');
-		if (savedPosition) {
-			window.scrollTo(0, parseInt(savedPosition));
-			localStorage.removeItem('ideasScrollPosition');
-		}
-	}, []);
+
 
 	const nextUrl = ideas.next_page_url ?? ideas.first_page_url;
 	const prevUrl = ideas.prev_page_url ?? ideas.last_page_url;
