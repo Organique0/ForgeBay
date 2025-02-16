@@ -53,29 +53,37 @@ const Index: React.FC<Props> = ({ ideas: initialIdeas }) => {
 		}
 	}, [ideas.links]);
 
+	// useEffect(() => {
+	// 	const handler = (e: Event) => {
+	// 		const event = (e as CustomEvent).detail;
+	// 		setIdeas(prevIdeas => {
+	// 			const updatedData = prevIdeas.data.map(idea => {
+	// 				if (idea.id === event.ideaId) {
+	// 					const updatedTasks = idea.tasks.map(task => {
+	// 						if (task.id === event.taskId) {
+	// 							return { ...task, status: event.status };
+	// 						}
+	// 						return task;
+	// 					});
+	// 					return { ...idea, tasks: updatedTasks };
+	// 				}
+	// 				return idea;
+	// 			});
+	// 			return { ...prevIdeas, data: updatedData };
+	// 		});
+	// 	};
+	// 	window.addEventListener('taskStatusUpdate', handler);
+	// 	return () => {
+	// 		window.removeEventListener('taskStatusUpdate', handler);
+	// 	};
+	// }, []);
+
 	useEffect(() => {
-		const handler = (e: Event) => {
-			const event = (e as CustomEvent).detail;
-			setIdeas(prevIdeas => {
-				const updatedData = prevIdeas.data.map(idea => {
-					if (idea.id === event.ideaId) {
-						const updatedTasks = idea.tasks.map(task => {
-							if (task.id === event.taskId) {
-								return { ...task, status: event.status };
-							}
-							return task;
-						});
-						return { ...idea, tasks: updatedTasks };
-					}
-					return idea;
-				});
-				return { ...prevIdeas, data: updatedData };
-			});
-		};
-		window.addEventListener('taskStatusUpdate', handler);
-		return () => {
-			window.removeEventListener('taskStatusUpdate', handler);
-		};
+		const savedPosition = localStorage.getItem('ideasScrollPosition');
+		if (savedPosition) {
+			window.scrollTo(0, parseInt(savedPosition));
+			localStorage.removeItem('ideasScrollPosition');
+		}
 	}, []);
 
 	const nextUrl = ideas.next_page_url ?? ideas.first_page_url;
