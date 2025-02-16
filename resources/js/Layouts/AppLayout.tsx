@@ -61,9 +61,12 @@ export default function AppLayout({
 		}
 	}, []);
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 02e74de (better preserve scroll and reset when needed)
 	return (
 		<div>
 			<Head title={title} />

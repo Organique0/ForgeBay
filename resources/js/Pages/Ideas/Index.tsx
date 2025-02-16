@@ -66,6 +66,7 @@ const Index: React.FC<Props> = () => {
 	// 		window.removeEventListener('taskStatusUpdate', handler);
 	// 	};
 	// }, []);
+<<<<<<< HEAD
 	useEffect(() => {
 		const savedPosition = localStorage.getItem('ideasScrollPosition');
 		if (savedPosition) {
@@ -73,6 +74,14 @@ const Index: React.FC<Props> = () => {
 			localStorage.removeItem('ideasScrollPosition');
 		}
 	}, []);
+=======
+
+
+
+	const nextUrl = ideas.next_page_url ?? ideas.first_page_url;
+	const prevUrl = ideas.prev_page_url ?? ideas.last_page_url;
+
+>>>>>>> 02e74de (better preserve scroll and reset when needed)
 	return (
 		<AppLayout title='Ideas'>
 			<h1>All Ideas</h1>
