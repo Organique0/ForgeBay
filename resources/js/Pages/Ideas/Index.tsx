@@ -6,6 +6,7 @@ import {
 	RefinementList,
 	SearchBox,
 	Pagination as InstantSearchPagination,
+	useInstantSearch,
 } from 'react-instantsearch';
 import { CustomHits } from '@/Components/MyComponents/CustomHits';
 import AppLayout from '@/Layouts/AppLayout';
@@ -83,16 +84,46 @@ const Index: React.FC<Props> = () => {
 				//@ts-expect-error
 				searchClient={searchClient}>
 				<SearchBox />
-				<div className="filters">
+				<div className="flex">
 					<RefinementList attribute="tags" />
 					<RefinementList attribute="task_status" />
 				</div>
-				<CustomHits />
-				{/* MeiliSearch pagination */}
+				<NoResultsBoundary fallback={<NoResults />}>
+					<CustomHits />
+				</NoResultsBoundary>
 				<InstantSearchPagination />
 			</InstantSearch>
 		</AppLayout>
 	);
 };
+
+function NoResults() {
+	const { indexUiState } = useInstantSearch();
+
+	return (
+		<div>
+			<p>
+				No results for <q>{indexUiState.query}</q>.
+			</p>
+		</div>
+	);
+}
+
+function NoResultsBoundary({ children, fallback }) {
+	const { results } = useInstantSearch();
+
+	// The `__isArtificial` flag makes sure not to display the No Results message
+	// when no hits have been returned.
+	if (!results.__isArtificial && results.nbHits === 0) {
+		return (
+			<>
+				{fallback}
+				<div hidden>{children}</div>
+			</>
+		);
+	}
+
+	return children;
+}
 
 export default Index;
