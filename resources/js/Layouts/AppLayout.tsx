@@ -61,19 +61,7 @@ export default function AppLayout({
 		}
 	}, []);
 
-	const { searchClient } = instantMeiliSearch(
-		'http://localhost:7700'
-	);
 
-	const Hit = ({ hit }) => (
-		<div key={hit.id} className=''>
-			<div className='bg-amber-300 p-4'>
-				<h1>{hit.title}</h1>
-				<p>{hit.tags}</p>
-				<p>{hit.task_status}</p>
-			</div>
-		</div>
-	);
 
 
 	return (
@@ -118,15 +106,6 @@ export default function AppLayout({
 
 
 							<div className={'flex'}>
-								<div>
-									<InstantSearch
-										indexName="ideas"
-										searchClient={searchClient}
-									>
-										<SearchBox />
-										<InfiniteHits hitComponent={Hit} />
-									</InstantSearch>
-								</div>
 								{page.props.auth.user && (
 									<div className="hidden sm:flex sm:items-center sm:ml-6">
 										<div className="ml-3 relative">

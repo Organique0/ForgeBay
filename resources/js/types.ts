@@ -87,15 +87,15 @@ export interface IdeasProps {
 }
 
 export type Idea = {
-	created_at: string;
-	description: string;
-	id: number;
 	title: string;
-	updated_at: string;
-	user: User;
-	user_id: number;
+	description: string;
 	tags: Tag[];
 	tasks: Task[];
+	user: User;
+	user_id: number;
+	id: number;
+	created_at: string;
+	updated_at: string;
 };
 
 export type Application = {

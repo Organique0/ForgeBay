@@ -11,7 +11,7 @@ type StatusValue = "success" | "error" | "warning" | "info";
 type TaskStatus = "to_do" | "in_progress" | "done" | "No Tasks";
 
 const StatusPretty: React.FC<Props> = ({ idea, initialStatus, ...rest }) => {
-	const startStatus: TaskStatus = initialStatus || (idea && idea.tasks.length > 0 ? idea.tasks[idea.tasks.length - 1].status : 'No Tasks');
+	const startStatus: TaskStatus = initialStatus || (idea && idea.task_status.length > 0 ? idea.task_status[idea.task_status.length - 1] : 'No Tasks');
 
 	let status: string;
 	let value: StatusValue;

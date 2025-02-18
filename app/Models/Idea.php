@@ -25,6 +25,7 @@ class Idea extends Model
 	{
 		parent::boot();
 
+
 		static::updated(function ($idea) {
 			Cache::tags(["idea.{$idea->id}", 'ideas'])->flush();
 		});
@@ -56,11 +57,19 @@ class Idea extends Model
 
 	public function toSearchableArray()
 	{
+		// Ensure relationships are loaded
+		$this->loadMissing(['tags', 'tasks', 'user']);
+
 		return [
+			'id'          => $this->id,
 			'title'       => $this->title,
 			'description' => $this->description,
 			'tags'        => $this->tags->pluck('name')->toArray(),
-			'task_status' => $this->tasks->pluck('status')->toArray(),
+			'tasks'       => $this->tasks->pluck('status')->toArray(),
+			'user'        => $this->user ? $this->user->only(['id', 'name']) : null,
+			'user_id'     => $this->getAttribute('user_id'),
+			'created_at'  => $this->created_at,
+			'updated_at'  => $this->updated_at,
 		];
 	}
 }
