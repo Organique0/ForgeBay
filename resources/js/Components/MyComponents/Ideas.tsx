@@ -28,7 +28,7 @@ const Ideas: React.FC<IdeasProps> = ({ ideas }) => {
 		< div className={''} >
 			{
 				ideas.map((idea: Idea) => {
-					const totalValue = idea.task_status.reduce((acc, task) => acc + task.value, 0);
+					const totalValue = idea.tasks.reduce((acc, task) => acc + task.value, 0);
 					return (
 						<div key={idea.id} className='my-6'>
 							<Link href={`/idea/${idea.id}`} onClick={() => handleIdeaClick(idea.id)}>
@@ -44,8 +44,8 @@ const Ideas: React.FC<IdeasProps> = ({ ideas }) => {
 										<p className={'grow'}>{idea.description}</p>
 									</CardContent>
 									<CardFooter className={'gap-2'}>
-										{idea.tags.map((tag: Tag) => (
-											<Badge key={tag.id} className='text-lg'>{tag.name}</Badge>
+										{idea.tags.map((tag) => (
+											<Badge key={tag} className='text-lg'>{tag}</Badge>
 										))}
 									</CardFooter>
 								</Card>

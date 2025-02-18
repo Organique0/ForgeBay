@@ -65,7 +65,7 @@ class Idea extends Model
 			'title'       => $this->title,
 			'description' => $this->description,
 			'tags'        => $this->tags->pluck('name')->toArray(),
-			'tasks'       => $this->tasks->pluck('status')->toArray(),
+			'tasks'       => $this->tasks->toArray(),
 			'user'        => $this->user ? $this->user->only(['id', 'name']) : null,
 			'user_id'     => $this->getAttribute('user_id'),
 			'created_at'  => $this->created_at,

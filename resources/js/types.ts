@@ -89,7 +89,7 @@ export interface IdeasProps {
 export type Idea = {
 	title: string;
 	description: string;
-	tags: Tag[];
+	tags: string[];
 	tasks: Task[];
 	user: User;
 	user_id: number;
@@ -126,12 +126,7 @@ export type User = {
 	bio: string;
 };
 
-export type Tag = {
-	created_at?: string;
-	id: number;
-	name: string;
-	updated_at?: string;
-};
+export type Tag = string[];
 
 export type Task = {
 	created_at?: string;
