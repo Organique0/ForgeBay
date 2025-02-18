@@ -61,11 +61,11 @@ class Idea extends Model
 		$this->loadMissing(['tags', 'tasks', 'user']);
 
 		return [
-			'id'          => $this->id,
 			'title'       => $this->title,
 			'description' => $this->description,
 			'tags'        => $this->tags->pluck('name')->toArray(),
 			'tasks'       => $this->tasks->toArray(),
+			'task_status' => $this->tasks->pluck('status')->last(),
 			'user'        => $this->user ? $this->user->only(['id', 'name']) : null,
 			'user_id'     => $this->getAttribute('user_id'),
 			'created_at'  => $this->created_at,

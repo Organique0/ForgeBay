@@ -9,20 +9,17 @@ import axios from 'axios';
 import { PaginatedIdeas } from '@/Pages/Ideas/Index';
 
 
-const Ideas: React.FC<IdeasProps> = ({ ideas }) => {
 
+const Ideas: React.FC<IdeasProps> = ({ ideas }) => {
 	const handleIdeaClick = (ideaId: number,) => {
 		localStorage.setItem('ideasScrollPosition', window.scrollY.toString());
 	};
 
 	useEffect(() => {
-		const shouldPreserve = localStorage.getItem('ideasScrollPosition');
-		if (shouldPreserve === 'true') {
-			const pos = localStorage.getItem('ideasScrollPosition');
-			if (pos) window.scrollTo(0, parseInt(pos));
-			localStorage.removeItem('ideasScrollPosition');
-		}
+		console.log(ideas);
+
 	}, []);
+
 
 	return (
 		< div className={''} >

@@ -1,5 +1,4 @@
-//// filepath: /home/lukag/Documents/WEB_DEVELOPMENT/LaravelProjects/ForgeBay/resources/js/components/CustomHits.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useConnector, AdditionalWidgetProperties } from 'react-instantsearch';
 import connectHits, {
 	HitsConnectorParams,
@@ -23,6 +22,38 @@ export function useHits(
 
 export function CustomHits() {
 	const { hits } = useHits({});
-	console.log(hits); // This should log an array of Idea objects
-	return <Ideas ideas={hits as Idea[]} />;
+	const [localHits, setLocalHits] = useState<Idea[]>([]);
+
+	// Update localHits whenever new hits arrive from MeiliSearch
+	useEffect(() => {
+		setLocalHits(hits as Idea[]);
+	}, [hits]);
+
+	// Listen for a custom event, then update the relevant item
+	useEffect(() => {
+		const handler = (e: Event) => {
+			const event = (e as CustomEvent).detail;
+			setLocalHits(prev =>
+				prev.map(idea => {
+					if (idea.id === event.ideaId) {
+						return {
+							...idea,
+							tasks: idea.tasks.map(task => {
+								if (task.id === event.taskId) {
+									return { ...task, status: event.status };
+								}
+								return task;
+							})
+						};
+					}
+					return idea;
+				})
+			);
+		};
+
+		window.addEventListener('taskStatusUpdate', handler);
+		return () => window.removeEventListener('taskStatusUpdate', handler);
+	}, []);
+
+	return <Ideas ideas={localHits} />;
 }

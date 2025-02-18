@@ -143,9 +143,12 @@ return [
 		'key' => env('MEILISEARCH_MASTER_KEY'),
 		'index-settings' => [
 			Idea::class => [
-				'filterableAttributes' => ['task_status', 'tags']
-			]
+				'filterableAttributes' => ['task_status', 'tags'],
+			],
 		],
+		'settings' => [
+			'hitsPerPage' => 20
+		]
 	],
 
 	/*
