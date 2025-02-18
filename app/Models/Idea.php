@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Scout\Searchable;
 
 class Idea extends Model
 {
 	/** @use HasFactory<\Database\Factories\IdeaFactory> */
-	use HasFactory;
+	use HasFactory, Searchable;
 
 	protected $fillable = [
 		'title',
@@ -52,5 +52,15 @@ class Idea extends Model
 	public function applications(): HasManyThrough
 	{
 		return $this->hasManyThrough(Application::class, Task::class);
+	}
+
+	public function toSearchableArray()
+	{
+		return [
+			'title'       => $this->title,
+			'description' => $this->description,
+			'tags'        => $this->tags->pluck('name')->toArray(),
+			'task_status' => $this->tasks->pluck('status')->toArray(),
+		];
 	}
 }
