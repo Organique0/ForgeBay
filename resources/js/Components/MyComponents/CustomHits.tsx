@@ -1,59 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { useConnector, AdditionalWidgetProperties } from 'react-instantsearch';
-import connectHits, {
-	HitsConnectorParams,
-	HitsWidgetDescription,
-} from 'instantsearch.js/es/connectors/hits/connectHits';
+import { connectHits } from 'react-instantsearch-dom';
 import Ideas from '@/Components/MyComponents/Ideas';
+import axios from 'axios';
 import { Idea } from '@/types';
+import { useHits } from 'react-instantsearch';
 
-export function useHits(
-	props: HitsConnectorParams,
-	additionalWidgetProperties: AdditionalWidgetProperties = {
-		$$widgetType: 'custom.hits',
-	}
-) {
-	return useConnector<HitsConnectorParams, HitsWidgetDescription>(
-		connectHits,
-		props,
-		additionalWidgetProperties
-	);
-}
+function CustomHitsBase() {
+	const { hits } = useHits();
+	// localHits will eventually hold the merged search results with statuses
+	const [localHits, setLocalHits] = useState<Idea[]>(hits);
 
-export function CustomHits() {
-	const { hits } = useHits({});
-	const [localHits, setLocalHits] = useState<Idea[]>([]);
-
-	// Update localHits whenever new hits arrive from MeiliSearch
+	// Whenever new search results arrive, update localHits
 	useEffect(() => {
-		setLocalHits(hits as Idea[]);
+		setLocalHits(hits);
 	}, [hits]);
 
-	// Listen for a custom event, then update the relevant item
+	// Async load status data for each idea and update localHits accordingly
 	useEffect(() => {
-		const handler = (e: Event) => {
-			const event = (e as CustomEvent).detail;
-			setLocalHits(prev =>
-				prev.map(idea => {
-					if (idea.id === event.ideaId) {
-						return {
-							...idea,
-							tasks: idea.tasks.map(task => {
-								if (task.id === event.taskId) {
-									return { ...task, status: event.status };
-								}
-								return task;
-							})
-						};
+		const fetchStatuses = async () => {
+			const updatedHits = await Promise.all(
+				hits.map(async (idea) => {
+					try {
+						const response = await axios.get(`/api/cached-task-statuses/${idea.id}`);
+						const statuses = response.data;
+						const updatedTasks = idea.tasks.map(task => {
+							const cached = statuses.find((s: { id: number; status: string }) => s.id === task.id);
+							return cached ? { ...task, status: cached.status } : task;
+						});
+						return { ...idea, tasks: updatedTasks };
+					} catch (error) {
+						console.error('Error fetching statuses for idea:', idea.id, error);
+						return idea;
 					}
-					return idea;
 				})
 			);
+			// Always update state with a new array to trigger re-render
+			setLocalHits(updatedHits);
 		};
 
-		window.addEventListener('taskStatusUpdate', handler);
-		return () => window.removeEventListener('taskStatusUpdate', handler);
-	}, []);
+		fetchStatuses();
+	}, [hits]);
 
 	return <Ideas ideas={localHits} />;
 }
+
+export default CustomHitsBase;

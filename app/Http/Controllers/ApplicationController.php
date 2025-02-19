@@ -6,6 +6,7 @@ use App\ApplicationStatus;
 use App\Events\ApplicationStatusUpdated;
 use App\Events\TaskStatusUpdated;
 use App\Models\Application;
+use App\Models\Idea;
 use App\Models\Task;
 use App\TaskStatus;
 use Illuminate\Http\Request;
@@ -33,18 +34,17 @@ class ApplicationController extends Controller
 			'status' => $validatedData['applicationStatus'],
 		]);
 
-		$newStatus = $validatedData['taskStatus'];
-		$id = 'task_data_' . $validatedData['taskId'];
-		#$cachedStatus = Cache::tags(['tasks'])->get($id);
-		$cachedData = Cache::tags(['tasks'])->get($id, []);
-		$cachedData['status'] = $newStatus;
-		Cache::tags(['tasks'])->put($id, $cachedData);
+		// Update task status
+		$task = Task::find($validatedData['taskId']);
+		$task->update(['status' => $validatedData['taskStatus']]);
 
-		Task::where('id', $validatedData['taskId'])->update(['status' => $validatedData['taskStatus']]);
+		// Load the idea with relationships
+		$idea = Idea::with(['tasks', 'tags', 'user'])->find($validatedData['ideaId']);
+
+		// Update the MeiliSearch index
+		$idea->updateSearchableDocument();
+
 		ApplicationStatusUpdated::dispatch($validatedData['taskId'], $validatedData['applicationStatus'], $validatedData['ideaId']);
 		TaskStatusUpdated::dispatch($validatedData['taskId'], $validatedData['taskStatus'], $validatedData['ideaId']);
-
-		// return redirect()->route('ideas.show', ['id' => $validatedData['ideaId']])
-		// 	->with('success', 'Application created successfully');
 	}
 }

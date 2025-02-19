@@ -8,7 +8,7 @@ import {
 	Pagination as InstantSearchPagination,
 	useInstantSearch,
 } from 'react-instantsearch';
-import { CustomHits } from '@/Components/MyComponents/CustomHits';
+import CustomHitsBase, { CustomHits } from '@/Components/MyComponents/CustomHits';
 import AppLayout from '@/Layouts/AppLayout';
 import { Idea, InertiaSharedProps } from '@/types';
 
@@ -89,7 +89,7 @@ const Index: React.FC<Props> = () => {
 					<RefinementList attribute="task_status" />
 				</div>
 				<NoResultsBoundary fallback={<NoResults />}>
-					<CustomHits />
+					<CustomHitsBase />
 				</NoResultsBoundary>
 				<InstantSearchPagination />
 			</InstantSearch>
