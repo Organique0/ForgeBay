@@ -146,6 +146,24 @@ return [
 				'filterableAttributes' => ['task_status', 'tags']
 			]
 		],
+<<<<<<< HEAD
+=======
+		'settings' => [
+			'hitsPerPage' => 20,
+			// 'embedders' => [
+			// 	'openai' => [
+			// 		'source' => 'openAi',
+			// 		'apiKey' => env('OPENAI_SECRET_KEY'),
+			// 		'dimensions' => 1536,
+			// 		'documentTemplate' => 'An idea for a project with 3 tags {{idea.tags}}
+			// 		representing tehnologies used,
+			// 		idea title {{idea.title}},
+			// 		idea description {{ idea.description }} and has 1 of 3 statuses {{idea.task_status}}',
+			// 		'model' => 'text-embedding-3-small',
+			// 	],
+			// ],
+		],
+>>>>>>> 1ddccd1 (I guess mielisearch is not feasible)
 	],
 
 	/*
