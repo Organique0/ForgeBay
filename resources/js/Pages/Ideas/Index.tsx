@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+<<<<<<< HEAD
 	Pagination,
 	PaginationContent,
 	PaginationEllipsis,
@@ -8,6 +9,17 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/Components/Shadcn/ui/pagination";
+=======
+	Configure,
+	InstantSearch,
+	RefinementList,
+	SearchBox,
+	Pagination as InstantSearchPagination,
+	useInstantSearch,
+} from 'react-instantsearch';
+import CustomHitsBase, { CustomHits } from '@/Components/MyComponents/CustomHits';
+import AppLayout from '@/Layouts/AppLayout';
+>>>>>>> 1ddccd1 (I guess mielisearch is not feasible)
 import { Idea, InertiaSharedProps } from '@/types';
 import AppLayout from '@/Layouts/AppLayout';
 import Ideas from '@/Components/MyComponents/Ideas';
@@ -87,6 +99,7 @@ const Index: React.FC<Props> = ({ ideas: initialIdeas }) => {
 	return (
 		<AppLayout title='Ideas'>
 			<h1>All Ideas</h1>
+<<<<<<< HEAD
 			<Ideas ideas={ideas.data} />
 
 			<Pagination>
@@ -136,6 +149,25 @@ const Index: React.FC<Props> = ({ ideas: initialIdeas }) => {
 					</PaginationItem>
 				</PaginationContent>
 			</Pagination>
+=======
+			<InstantSearch
+				indexName='ideas'
+				//stalledSearchDelay={1000}
+				preserveSharedStateOnUnmount
+				routing={true}
+				//@ts-expect-error
+				searchClient={searchClient}>
+				<SearchBox />
+				<div className="flex">
+					<RefinementList attribute="tags" />
+					<RefinementList attribute="task_status" />
+				</div>
+				<NoResultsBoundary fallback={<NoResults />}>
+					<CustomHitsBase />
+				</NoResultsBoundary>
+				<InstantSearchPagination />
+			</InstantSearch>
+>>>>>>> 1ddccd1 (I guess mielisearch is not feasible)
 		</AppLayout>
 	);
 };

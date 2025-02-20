@@ -34,30 +34,16 @@ class ApplicationController extends Controller
 			'status' => $validatedData['applicationStatus'],
 		]);
 
-		// Update task status in DB
-		Task::where('id', $validatedData['taskId'])->update(['status' => $validatedData['taskStatus']]);
 
-		// Update cache for task data if used
-		$taskCacheKey = 'task_data_' . $validatedData['taskId'];
-		$cachedData = Cache::tags(['tasks'])->get($taskCacheKey, []);
-		$cachedData['status'] = $validatedData['taskStatus'];
-		Cache::tags(['tasks'])->put($taskCacheKey, $cachedData);
+		// Update task status
+		$task = Task::find($validatedData['taskId']);
+		$task->update(['status' => $validatedData['taskStatus']]);
 
-		// Update cached idea (if it exists) so it reflects the new task status
-		$ideaCacheKey = 'idea_data_' . $validatedData['ideaId'];
-		if (Cache::tags(['ideas'])->has($ideaCacheKey)) {
-			$cachedIdea = Cache::tags(['ideas'])->get($ideaCacheKey);
-			if (isset($cachedIdea['tasks']) && is_array($cachedIdea['tasks'])) {
-				$cachedIdea['tasks'] = array_map(function ($task) use ($validatedData) {
-					if ($task['id'] == $validatedData['taskId']) {
-						$task['status'] = $validatedData['taskStatus'];
-					}
-					return $task;
-				}, $cachedIdea['tasks']);
-			}
-			// Update the cached idea with a new expiration time if needed
-			Cache::tags(['ideas'])->put($ideaCacheKey, $cachedIdea, 3600);
-		}
+		// Load the idea with relationships
+		$idea = Idea::with(['tasks', 'tags', 'user'])->find($validatedData['ideaId']);
+
+		// Update the MeiliSearch index
+		$idea->updateSearchableDocument();
 
 		ApplicationStatusUpdated::dispatch($validatedData['taskId'], $validatedData['applicationStatus'], $validatedData['ideaId']);
 		TaskStatusUpdated::dispatch($validatedData['taskId'], $validatedData['taskStatus'], $validatedData['ideaId']);
