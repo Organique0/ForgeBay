@@ -49,30 +49,31 @@ class IdeaController extends Controller
 
 	public function show(string $id): \Inertia\Response
 	{
-		$cacheKey = 'idea_data_' . $id;
-		$idea = Cache::tags(['ideas'])->get($cacheKey);
+		// $cacheKey = 'idea_data_' . $id;
+		// $idea = Cache::tags(['ideas'])->get($cacheKey);
 
-		if (!$idea) {
-			$idea = Idea::with(['user', 'tags', 'applications.users'])
-				->find($id);
+		// if (!$idea) {
+		// 	$idea = Idea::with(['user', 'tags', 'applications.users'])
+		// 		->find($id);
 
-			if (!$idea) {
-				abort(404);
-			}
+		// 	if (!$idea) {
+		// 		abort(404);
+		// 	}
 
-			Cache::tags(['ideas'])->put($cacheKey, $idea->toArray(), 3600);
-		}
+		// 	Cache::tags(['ideas'])->put($cacheKey, $idea->toArray(), 3600);
+		// }
 
-		$ideaTaskIdsKey = 'idea_task_ids_' . $id;
-		$taskIds = Cache::tags(['ideas', 'tasks'])->get($ideaTaskIdsKey, []);
+		// $ideaTaskIdsKey = 'idea_task_ids_' . $id;
+		// $taskIds = Cache::tags(['ideas', 'tasks'])->get($ideaTaskIdsKey, []);
 
-		$tasks = collect($taskIds)->map(function ($taskId) {
-			$taskCacheKey = 'task_data_' . $taskId;
-			return Cache::tags(['tasks'])->get($taskCacheKey);
-		})->filter();
+		// $tasks = collect($taskIds)->map(function ($taskId) {
+		// 	$taskCacheKey = 'task_data_' . $taskId;
+		// 	return Cache::tags(['tasks'])->get($taskCacheKey);
+		// })->filter();
 
-		$idea['tasks'] = $tasks;
-
+		// $idea['tasks'] = $tasks;
+		$idea = Idea::with(['user', 'tags', 'applications.users', 'tasks'])
+			->find($id);
 		return Inertia::render('Idea', [
 			'idea' => $idea,
 		]);

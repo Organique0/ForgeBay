@@ -6,6 +6,7 @@ use App\ApplicationStatus;
 use App\Events\ApplicationStatusUpdated;
 use App\Events\TaskStatusUpdated;
 use App\Models\Application;
+use App\Models\Idea;
 use App\Models\Task;
 use App\TaskStatus;
 use Illuminate\Http\Request;
@@ -33,18 +34,32 @@ class ApplicationController extends Controller
 			'status' => $validatedData['applicationStatus'],
 		]);
 
-		$newStatus = $validatedData['taskStatus'];
-		$id = 'task_data_' . $validatedData['taskId'];
-		#$cachedStatus = Cache::tags(['tasks'])->get($id);
-		$cachedData = Cache::tags(['tasks'])->get($id, []);
-		$cachedData['status'] = $newStatus;
-		Cache::tags(['tasks'])->put($id, $cachedData);
-
+		// Update task status in DB
 		Task::where('id', $validatedData['taskId'])->update(['status' => $validatedData['taskStatus']]);
+
+		// Update cache for task data if used
+		$taskCacheKey = 'task_data_' . $validatedData['taskId'];
+		$cachedData = Cache::tags(['tasks'])->get($taskCacheKey, []);
+		$cachedData['status'] = $validatedData['taskStatus'];
+		Cache::tags(['tasks'])->put($taskCacheKey, $cachedData);
+
+		// Update cached idea (if it exists) so it reflects the new task status
+		$ideaCacheKey = 'idea_data_' . $validatedData['ideaId'];
+		if (Cache::tags(['ideas'])->has($ideaCacheKey)) {
+			$cachedIdea = Cache::tags(['ideas'])->get($ideaCacheKey);
+			if (isset($cachedIdea['tasks']) && is_array($cachedIdea['tasks'])) {
+				$cachedIdea['tasks'] = array_map(function ($task) use ($validatedData) {
+					if ($task['id'] == $validatedData['taskId']) {
+						$task['status'] = $validatedData['taskStatus'];
+					}
+					return $task;
+				}, $cachedIdea['tasks']);
+			}
+			// Update the cached idea with a new expiration time if needed
+			Cache::tags(['ideas'])->put($ideaCacheKey, $cachedIdea, 3600);
+		}
+
 		ApplicationStatusUpdated::dispatch($validatedData['taskId'], $validatedData['applicationStatus'], $validatedData['ideaId']);
 		TaskStatusUpdated::dispatch($validatedData['taskId'], $validatedData['taskStatus'], $validatedData['ideaId']);
-
-		// return redirect()->route('ideas.show', ['id' => $validatedData['ideaId']])
-		// 	->with('success', 'Application created successfully');
 	}
 }

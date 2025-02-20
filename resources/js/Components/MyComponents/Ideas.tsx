@@ -16,21 +16,19 @@ const Ideas: React.FC<IdeasProps> = ({ ideas: initialIdeas }) => {
 		const handler = (e: Event) => {
 			const event = (e as CustomEvent).detail;
 			console.log(ideas);
-			setIdeas(prevIdeas => {
-				const updatedData = prevIdeas.map(idea => {
+			setIdeas(prevIdeas =>
+				prevIdeas.map(idea => {
 					if (idea.id === event.ideaId) {
-						const updatedTasks = idea.tasks.map(task => {
-							if (task.id === event.taskId) {
-								return { ...task, status: event.status };
-							}
-							return task;
-						});
-						return { ...idea, tasks: updatedTasks };
+						return {
+							...idea,
+							tasks: idea.tasks.map(task =>
+								task.id === event.taskId ? { ...task, status: event.status } : task
+							)
+						};
 					}
 					return idea;
-				});
-				return { ...prevIdeas, data: updatedData };
-			});
+				})
+			);
 		};
 		window.addEventListener('taskStatusUpdate', handler);
 		return () => {
@@ -53,7 +51,7 @@ const Ideas: React.FC<IdeasProps> = ({ ideas: initialIdeas }) => {
 
 	return (
 		<div className={''}>
-			{ideas.map((idea: Idea) => {
+			{ideas ? ideas.map((idea: Idea) => {
 				const totalValue = idea.tasks.reduce((acc, task) => acc + task.value, 0);
 				return (
 					<div key={idea.id} className='my-6'>
@@ -78,7 +76,7 @@ const Ideas: React.FC<IdeasProps> = ({ ideas: initialIdeas }) => {
 						</Link>
 					</div>
 				)
-			})}
+			}) : <p>no ideas</p>}
 		</div>
 	);
 };

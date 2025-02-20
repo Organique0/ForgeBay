@@ -43,6 +43,7 @@ const Index: React.FC<Props> = ({ ideas: initialIdeas }) => {
 	const [ideas, setIdeas] = useState<PaginatedIdeas>(initialIdeas);
 
 	useEffect(() => {
+
 		const activeIndex = ideas.links.findIndex(link => link.active);
 		if (activeIndex !== -1) {
 			const start = Math.max(0, activeIndex - 1);
