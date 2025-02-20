@@ -71,8 +71,8 @@ return [
     */
 
 	'chunk' => [
-		'searchable' => 500,
-		'unsearchable' => 500,
+		'searchable' => 20000,   // Increase this value as needed
+		'unsearchable' => 20000,
 	],
 
 	/*
@@ -143,8 +143,23 @@ return [
 		'key' => env('MEILISEARCH_MASTER_KEY'),
 		'index-settings' => [
 			Idea::class => [
-				'filterableAttributes' => ['task_status', 'tags']
-			]
+				'filterableAttributes' => ['task_status', 'tags'],
+			],
+		],
+		'settings' => [
+			'hitsPerPage' => 20,
+			// 'embedders' => [
+			// 	'openai' => [
+			// 		'source' => 'openAi',
+			// 		'apiKey' => env('OPENAI_SECRET_KEY'),
+			// 		'dimensions' => 1536,
+			// 		'documentTemplate' => 'An idea for a project with 3 tags {{idea.tags}}
+			// 		representing tehnologies used,
+			// 		idea title {{idea.title}},
+			// 		idea description {{ idea.description }} and has 1 of 3 statuses {{idea.task_status}}',
+			// 		'model' => 'text-embedding-3-small',
+			// 	],
+			// ],
 		],
 <<<<<<< HEAD
 =======

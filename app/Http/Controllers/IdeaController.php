@@ -47,6 +47,7 @@ class IdeaController extends Controller
 
 	public function show(string $id): \Inertia\Response
 	{
+
 		$idea = Idea::with(['user', 'tags', 'applications.users', 'tasks'])
 			->find($id);
 

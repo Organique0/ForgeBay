@@ -19,8 +19,6 @@ import {
 } from "@/Components/Shadcn/ui/dropdown-menu";
 import { Button } from '@/Components/Shadcn/ui/button';
 import NavLink from '@/Components/NavLink';
-import { InfiniteHits, InstantSearch, SearchBox } from 'react-instantsearch';
-import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
 interface Props {
 	title: string;
 	renderHeader?(): JSX.Element;
@@ -60,21 +58,6 @@ export default function AppLayout({
 			window.scrollTo(0, parseInt(savedPosition));
 		}
 	}, []);
-
-	const { searchClient } = instantMeiliSearch(
-		'http://localhost:7700'
-	);
-
-	const Hit = ({ hit }) => (
-		<div key={hit.id} className=''>
-			<div className='bg-amber-300 p-4'>
-				<h1>{hit.title}</h1>
-				<p>{hit.tags}</p>
-				<p>{hit.task_status}</p>
-			</div>
-		</div>
-	);
-
 
 	return (
 		<div>
@@ -116,23 +99,12 @@ export default function AppLayout({
 								</div>
 							</div>
 
-
 							<div className={'flex'}>
-								<div>
-									<InstantSearch
-										indexName="ideas"
-										searchClient={searchClient}
-									>
-										<SearchBox />
-										<InfiniteHits hitComponent={Hit} />
-									</InstantSearch>
-								</div>
 								{page.props.auth.user && (
 									<div className="hidden sm:flex sm:items-center sm:ml-6">
 										<div className="ml-3 relative">
 											{/* <!-- Teams Dropdown --> */}
 											{page.props.jetstream.hasTeamFeatures ? (
-
 												<DropdownMenu>
 													<span className="inline-flex rounded-md">
 														<DropdownMenuTrigger
@@ -220,8 +192,6 @@ export default function AppLayout({
 											) : null}
 										</div>
 
-
-
 										{/* <!-- Settings Dropdown --> */}
 										<div className="ml-3 relative z-100">
 											<DropdownMenu>
@@ -300,7 +270,6 @@ export default function AppLayout({
 										</div>
 									</div>
 								)}
-
 
 								<div className="p-6 text-right hidden sm:block">
 									{!page.props.auth.user && (

@@ -9,13 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Cache;
+
 use Laravel\Scout\EngineManager;
 use Laravel\Scout\Searchable;
 
 class Idea extends Model
 {
 	/** @use HasFactory<\Database\Factories\IdeaFactory> */
-	use HasFactory, Searchable;
+	use HasFactory;
 
 	protected $fillable = [
 		'title',
@@ -75,6 +76,7 @@ class Idea extends Model
 	{
 		return $this->hasManyThrough(Application::class, Task::class);
 	}
+
 
 	public function toSearchableArray()
 	{

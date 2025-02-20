@@ -34,6 +34,7 @@ class ApplicationController extends Controller
 			'status' => $validatedData['applicationStatus'],
 		]);
 
+
 		// Update task status
 		$task = Task::find($validatedData['taskId']);
 		$task->update(['status' => $validatedData['taskStatus']]);
