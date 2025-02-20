@@ -161,8 +161,6 @@ return [
 			// 	],
 			// ],
 		],
-<<<<<<< HEAD
-=======
 		'settings' => [
 			'hitsPerPage' => 20,
 			// 'embedders' => [
@@ -178,7 +176,6 @@ return [
 			// 	],
 			// ],
 		],
->>>>>>> 1ddccd1 (I guess mielisearch is not feasible)
 	],
 
 	/*
