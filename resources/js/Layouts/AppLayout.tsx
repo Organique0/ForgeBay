@@ -2,7 +2,6 @@ import { router } from '@inertiajs/core';
 import { Link, Head } from '@inertiajs/react';
 import classNames from 'classnames';
 import React, { JSX, PropsWithChildren, useEffect, useState } from 'react';
-import React, { JSX, PropsWithChildren, useEffect, useState } from 'react';
 import useRoute from '@/Hooks/useRoute';
 import useTypedPage from '@/Hooks/useTypedPage';
 import ApplicationMark from '@/Components/ApplicationMark';
@@ -20,8 +19,6 @@ import {
 } from "@/Components/Shadcn/ui/dropdown-menu";
 import { Button } from '@/Components/Shadcn/ui/button';
 import NavLink from '@/Components/NavLink';
-import { InfiniteHits, InstantSearch, SearchBox } from 'react-instantsearch';
-import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
 interface Props {
 	title: string;
 	renderHeader?(): JSX.Element;
@@ -62,19 +59,6 @@ export default function AppLayout({
 		}
 	}, []);
 
-	useEffect(() => {
-		const savedPosition = localStorage.getItem('ideasScrollPosition');
-		if (savedPosition) {
-			window.scrollTo(0, parseInt(savedPosition));
-		}
-	}, []);
-
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> 02e74de (better preserve scroll and reset when needed)
 	return (
 		<div>
 			<Head title={title} />
@@ -96,14 +80,8 @@ export default function AppLayout({
 											localStorage.removeItem('ideasScrollPosition');
 										}}
 									>
-										<Link
-											href={route('home')}
-											onClick={() => {
-												localStorage.removeItem('ideasScrollPosition');
-											}}
-										>
-											<ApplicationMark className="block h-9 w-auto" />
-										</Link>
+										<ApplicationMark className="block h-9 w-auto" />
+									</Link>
 								</div>
 
 								{/* <!-- Navigation Links --> */}
@@ -114,9 +92,6 @@ export default function AppLayout({
 										onClick={() => {
 											localStorage.removeItem('ideasScrollPosition');
 										}}
-										onClick={() => {
-											localStorage.removeItem('ideasScrollPosition');
-										}}
 									>
 										Ideas
 									</NavLink>
@@ -124,14 +99,12 @@ export default function AppLayout({
 								</div>
 							</div>
 
-
 							<div className={'flex'}>
 								{page.props.auth.user && (
 									<div className="hidden sm:flex sm:items-center sm:ml-6">
 										<div className="ml-3 relative">
 											{/* <!-- Teams Dropdown --> */}
 											{page.props.jetstream.hasTeamFeatures ? (
-
 												<DropdownMenu>
 													<span className="inline-flex rounded-md">
 														<DropdownMenuTrigger
@@ -219,8 +192,6 @@ export default function AppLayout({
 											) : null}
 										</div>
 
-
-
 										{/* <!-- Settings Dropdown --> */}
 										<div className="ml-3 relative z-100">
 											<DropdownMenu>
@@ -299,7 +270,6 @@ export default function AppLayout({
 										</div>
 									</div>
 								)}
-
 
 								<div className="p-6 text-right hidden sm:block">
 									{!page.props.auth.user && (
