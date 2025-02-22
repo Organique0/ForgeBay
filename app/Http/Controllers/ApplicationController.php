@@ -40,10 +40,7 @@ class ApplicationController extends Controller
 		$task->update(['status' => $validatedData['taskStatus']]);
 
 		// Load the idea with relationships
-		$idea = Idea::with(['tasks', 'tags', 'user'])->find($validatedData['ideaId']);
-
-		// Update the MeiliSearch index
-		$idea->updateSearchableDocument();
+		//$idea = Idea::with(['tasks', 'tags', 'user'])->find($validatedData['ideaId']);
 
 		ApplicationStatusUpdated::dispatch($validatedData['taskId'], $validatedData['applicationStatus'], $validatedData['ideaId']);
 		TaskStatusUpdated::dispatch($validatedData['taskId'], $validatedData['taskStatus'], $validatedData['ideaId']);

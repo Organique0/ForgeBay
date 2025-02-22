@@ -18,7 +18,7 @@ class IdeaSeeder extends Seeder
 
 		// Generate 2000 ideas
 		Idea::factory()
-			->count(10000)
+			->count(1000)
 			->create()
 			->each(function ($idea) use ($tagIds) {
 				// Attach 3 random tags to each idea

@@ -37,7 +37,6 @@ export default function ApplicationForm({ idea, task }: { idea: IdeaType, task: 
 		reset();
 	}
 
-
 	return (
 		<>
 			{displayForm ? (

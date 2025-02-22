@@ -4,7 +4,6 @@ import useTypedPage from '@/Hooks/useTypedPage';
 import { Head } from '@inertiajs/react';
 import HeroeSection from '@/Components/Heroes/HeroeSection';
 import AppLayout from '@/Layouts/AppLayout';
-import Ideas from '@/Components/MyComponents/Ideas';
 
 interface Props {
 	canLogin: boolean;
@@ -36,7 +35,6 @@ export default function Welcome({
 
 			<div className={'templateWidth mx-auto'}>
 				<h1 className={'text-3xl my-4'}>Latest Ideas</h1>
-				<Ideas ideas={ideas} />
 			</div>
 		</AppLayout>
 	);

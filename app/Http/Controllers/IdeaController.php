@@ -79,7 +79,7 @@ class IdeaController extends Controller
 			abort(404);
 		}
 
-		return Inertia::render('Idea', [
+		return Inertia::render('IdeaPage', [
 			'idea' => $idea,
 		]);
 	}

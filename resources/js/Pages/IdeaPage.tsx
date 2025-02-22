@@ -25,31 +25,31 @@ import ApplicationForm from '@/Components/MyComponents/ApplicationForm';
 import useTypedPage from '@/Hooks/useTypedPage';
 import { Link } from '@inertiajs/react';
 
-const Idea = ({ idea: initialIdea }: { idea: IdeaType }) => {
+const IdeaPage = ({ idea: initialIdea }: { idea: IdeaType }) => {
 	const [idea, setIdea] = useState<IdeaType>(initialIdea);
 	const firstToDoIndex = idea.tasks.findIndex(task => task.status === 'to_do');
 	const page = useTypedPage();
 
-	useEffect(() => {
-		const handler = (e: Event) => {
-			const event = (e as CustomEvent).detail;
-			if (event.ideaId === initialIdea.id) {
-				setIdea(prevIdea => ({
-					...prevIdea,
-					tasks: prevIdea.tasks.map(task => {
-						if (task.id === event.taskId) {
-							return { ...task, status: event.status };
-						}
-						return task;
-					})
-				}));
-			}
-		};
-		window.addEventListener('taskStatusUpdate', handler);
-		return () => {
-			window.removeEventListener('taskStatusUpdate', handler);
-		};
-	}, [initialIdea.id]);
+	// useEffect(() => {
+	// 	const handler = (e: Event) => {
+	// 		const event = (e as CustomEvent).detail;
+	// 		if (event.ideaId === initialIdea.id) {
+	// 			setIdea(prevIdea => ({
+	// 				...prevIdea,
+	// 				tasks: prevIdea.tasks.map(task => {
+	// 					if (task.id === event.taskId) {
+	// 						return { ...task, status: event.status };
+	// 					}
+	// 					return task;
+	// 				})
+	// 			}));
+	// 		}
+	// 	};
+	// 	window.addEventListener('taskStatusUpdate', handler);
+	// 	return () => {
+	// 		window.removeEventListener('taskStatusUpdate', handler);
+	// 	};
+	// }, [initialIdea.id]);
 
 	return (
 		<AppLayout title={'Idea'}>
@@ -131,4 +131,4 @@ const Idea = ({ idea: initialIdea }: { idea: IdeaType }) => {
 	);
 };
 
-export default Idea;
+export default IdeaPage;

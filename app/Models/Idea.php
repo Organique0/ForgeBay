@@ -8,31 +8,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Support\Facades\Cache;
-
-use Laravel\Scout\EngineManager;
 use Laravel\Scout\Searchable;
 
 class Idea extends Model
 {
 	/** @use HasFactory<\Database\Factories\IdeaFactory> */
-	use HasFactory;
+	use HasFactory, Searchable;
 
 	protected $fillable = [
 		'title',
 		'description',
+		'active'
 	];
-
-	public function updateSearchableDocument()
-	{
-		$searchableArray = $this->toSearchableArray();
-
-		$index = app(EngineManager::class)
-			->engine()
-			->index($this->searchableAs());
-
-		$index->addDocuments([$searchableArray]);
-	}
 
 	protected static function boot()
 	{
@@ -80,17 +67,19 @@ class Idea extends Model
 
 	public function toSearchableArray()
 	{
-		return [
-			'id'          => $this->id,
+		$this->load(['tags', 'tasks']);
+
+		$array = [
+			'id'					=> $this->id,
 			'title'       => $this->title,
 			'description' => $this->description,
 			'tags'        => $this->tags->pluck('name')->toArray(),
-			'tasks'       => $this->tasks->toArray(),
-			'task_status' => $this->tasks->pluck('status')->last(),
-			'user'        => $this->user ? $this->user->only(['id', 'name']) : null,
-			'user_id'     => $this->getAttribute('user_id'),
+			'active'      => $this->active,
 			'created_at'  => $this->created_at,
 			'updated_at'  => $this->updated_at,
+			'value'       => $this->tasks->sum('value')
 		];
+
+		return $array;
 	}
 }

@@ -52,13 +52,6 @@ export default function AppLayout({
 		router.post(route('logout'));
 	}
 
-	useEffect(() => {
-		const savedPosition = localStorage.getItem('ideasScrollPosition');
-		if (savedPosition) {
-			window.scrollTo(0, parseInt(savedPosition));
-		}
-	}, []);
-
 	return (
 		<div>
 			<Head title={title} />

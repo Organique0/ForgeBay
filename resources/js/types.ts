@@ -94,6 +94,7 @@ export type Idea = {
 	user: User;
 	user_id: number;
 	id: number;
+	value: number;
 	created_at: string;
 	updated_at: string;
 };
