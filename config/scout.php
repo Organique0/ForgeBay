@@ -143,9 +143,9 @@ return [
 		'key' => env('MEILISEARCH_MASTER_KEY'),
 		'index-settings' => [
 			Idea::class => [
-				'sortableAttributes' => ['created_at', 'updated_at'],
+				'sortableAttributes' => ['created_at', 'updated_at', 'value'],
 				'filterableAttributes' => ['tags', 'active'],
-				'displayedAttributes' => ['id', 'title', 'description', 'tags', 'active', 'created_at', 'updated_at', 'value']
+				'displayedAttributes' => ['id', 'title', 'description', 'tags', 'active', 'created_at', 'updated_at', 'value', 'user']
 			],
 		],
 		'settings' => [
@@ -162,6 +162,16 @@ return [
 			// 		'model' => 'text-embedding-3-small',
 			// 	],
 			// ],
+		],
+		'replicas' => [
+			'ideas' => [
+				'ideas:created_at:desc',
+				'ideas:created_at:asc',
+				'ideas:updated_at:desc',
+				'ideas:updated_at:asc',
+				'ideas:value:desc',
+				'ideas:value:asc'
+			],
 		],
 	],
 

@@ -179,6 +179,19 @@
   }
 
   .templateWidth {
-    @apply max-w-[80%];
+    @apply max-w-full px-3 md:max-w-[80%];
+  }
+}
+
+/*
+  ---break---
+*/
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

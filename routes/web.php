@@ -2,6 +2,7 @@
 
 use App\Events\MessageSent;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\PublicUserProfile;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -10,6 +11,7 @@ Route::domain('localhost')->group(function () {
 	Route::get('/idea/{id}', [\App\Http\Controllers\IdeaController::class, 'show'])->name('ideas.show');
 	Route::get('/idea', [\App\Http\Controllers\IdeaController::class, 'index'])->name('ideas.index');
 	Route::post('/application', [\App\Http\Controllers\ApplicationController::class, 'new'])->name('application.new');
+	Route::get('/user/{id}', [PublicUserProfile::class, 'show'])->name('publicProfile.show');
 
 	Route::middleware([
 		'auth:sanctum',

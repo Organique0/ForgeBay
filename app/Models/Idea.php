@@ -67,7 +67,7 @@ class Idea extends Model
 
 	public function toSearchableArray()
 	{
-		$this->load(['tags', 'tasks']);
+		$this->load(['tags', 'tasks', 'user']);
 
 		$array = [
 			'id'					=> $this->id,
@@ -77,7 +77,8 @@ class Idea extends Model
 			'active'      => $this->active,
 			'created_at'  => $this->created_at,
 			'updated_at'  => $this->updated_at,
-			'value'       => $this->tasks->sum('value')
+			'value'       => $this->tasks->sum('value'),
+			'user'				=> $this->user->only(['id', 'name']),
 		];
 
 		return $array;
