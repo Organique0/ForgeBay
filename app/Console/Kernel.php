@@ -8,11 +8,11 @@ use Illuminate\Console\Scheduling\Schedule;
 class Kernel extends ConsoleKernel
 {
 	protected $commands = [
-		\App\Console\Commands\PreCacheIdeas::class,
+		//\App\Console\Commands\PreCacheIdeas::class,
 	];
 
 	protected function schedule(Schedule $schedule)
 	{
-		$schedule->command('cache:ideas')->everyTenMinutes();
+		//$schedule->command('cache:ideas')->everyTenMinutes();
 	}
 }

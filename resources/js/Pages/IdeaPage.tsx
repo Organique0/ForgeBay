@@ -59,7 +59,7 @@ const IdeaPage = ({ idea: initialIdea }: { idea: IdeaType }) => {
 					<p className={'mb-12 text-lg'}>{idea.description}</p>
 				</div>
 
-				<div className={'p-0'}>
+				<div className={'px-6'}>
 					<Timeline className={'max-w-7xl mx-auto'}>
 						{idea.tasks.map((task, index) => (
 							<TimelineItem key={task.id}>

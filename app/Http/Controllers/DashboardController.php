@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
 	public function index(Request $request)
 	{
-		$userApplications = Application::with(['users', 'task', 'idea'])
+		$userApplications = Application::with(['task.idea'])
 			->where('user_id', auth()->id())
 			->get();
 

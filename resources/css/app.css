@@ -120,6 +120,9 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --chart-1: 240 5% 64%; /* Gray for sent */
+    --chart-2: 142 72% 29%; /* Green for approved */
+    --chart-3: 0 84% 60%; /* Red for declined */
   }
   .dark {
     --background: 224 71.4% 4.1%;

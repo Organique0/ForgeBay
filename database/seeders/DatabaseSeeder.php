@@ -18,12 +18,21 @@ class DatabaseSeeder extends Seeder
 	 */
 	public function run(): void
 	{
-		User::factory(500)->withPersonalTeam()->create()->each(function ($user) {
+
+		echo "Initial user count: " . User::count() . "\n";
+
+		$this->call(RoleSeeder::class);
+
+		$users = User::factory(500)->withPersonalTeam()->create();
+		echo "After bulk creation: " . User::count() . "\n";
+		$users->each(function ($user) {
 			$user->current_team_id = $user->ownedTeams()->first()->id;
 			$user->save();
 		});
 
-		$this->call(RoleSeeder::class);
+		foreach ($users as $user) {
+			$user->assignRole(RolesEnum::User->value);
+		}
 
 		$admin = User::factory()->withPersonalTeam()->create([
 			'name' => 'admin',
@@ -67,15 +76,16 @@ class DatabaseSeeder extends Seeder
 		$testUser->current_team_id = $testTeam->id;
 		$testUser->save();
 
+		echo "After additional " . User::count() . "\n";
+
 		$this->call([
 			TagSeeder::class
 		]);
 
-		// Assign 3 random tags to each user
 		$tags = DB::table('tags')->pluck('id')->toArray();
 
 		User::all()->each(function ($user) use ($tags) {
-			$selectedTags = array_rand(array_flip($tags), 3);
+			$selectedTags = array_rand(array_flip($tags), rand(3, 10));
 			foreach ($selectedTags as $tagId) {
 				DB::table('tags_users')->insert([
 					'user_id' => $user->id,
@@ -84,15 +94,21 @@ class DatabaseSeeder extends Seeder
 			}
 		});
 
+		echo "After tags: " . User::count() . "\n";
+
 		$this->call([
 			IdeaSeeder::class,
 			TaskSeeder::class,
 			ApplicationSeeder::class,
 		]);
 
+		echo "After other seeders: " . User::count() . "\n";
+
 		// Create a personal access token for the user and display it in the console
 		$token = $testUser->createToken('auth_token');
 		echo 'TEST_AUTHENTICATION_BEARER_TOKEN: ' . $token->plainTextToken . PHP_EOL . PHP_EOL;
+
+		echo "Final user count: " . User::count() . "\n";
 
 		$testTeam = new Team([
 			'name' => $testUser->name . '\'s Team',

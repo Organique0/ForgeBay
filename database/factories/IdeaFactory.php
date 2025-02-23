@@ -20,7 +20,8 @@ class IdeaFactory extends Factory
 		return [
 			'title' => $this->faker->sentence(6, true),
 			'description' => $this->faker->paragraphs(3, true),
-			'user_id' => User::factory(), // Assumes Idea belongs to a User
+			'user_id' => User::inRandomOrder()->first()->id,
+			'expires' => $this->faker->dateTimeBetween('now', '+3 months'),
 		];
 	}
 }

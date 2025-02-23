@@ -2,7 +2,7 @@ import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 
 export default function Dashboard({ userApplications }: any) {
-	console.log(userApplications);
+
 	return (
 		<AppLayout
 			title="Dashboard"

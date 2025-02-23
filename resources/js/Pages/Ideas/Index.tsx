@@ -28,7 +28,6 @@ const Index: React.FC = () => {
 				//@ts-expect-error
 				searchClient={searchClient}>
 				<Configure
-					//@ts-expect-error
 					filters="active = true" />
 				<div className="md:flex mt-2 mb-4 gap-6">
 					<SearchBox className='flex-grow' />
@@ -41,8 +40,7 @@ const Index: React.FC = () => {
 							{ label: 'Highest Value', value: 'ideas:value:desc' },
 							{ label: 'Lowest Value', value: 'ideas:value:asc' },
 						]}
-						//@ts-expect-error
-						defaultRefinement="ideas:created_at:desc"
+					//defaultRefinement="ideas:created_at:desc"
 					/>
 				</div>
 				<div className='flex'>

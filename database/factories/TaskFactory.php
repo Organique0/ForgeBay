@@ -25,7 +25,7 @@ class TaskFactory extends Factory
 			'description' => $this->faker->text(500),
 			'value' => $this->faker->numberBetween(10, 1000),
 			'status' => \App\TaskStatus::cases()[array_rand(\App\TaskStatus::cases())]->value,
-			'user_id' => User::factory(),
+			'user_id' => User::inRandomOrder()->first()->id,
 			'idea_id' => $this->faker->numberBetween(1, 1000)
 		];
 	}

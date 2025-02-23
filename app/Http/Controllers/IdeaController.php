@@ -72,7 +72,8 @@ class IdeaController extends Controller
 
 		// $idea['tasks'] = $tasks;
 
-		$idea = Idea::with(['user', 'tags', 'applications.users', 'tasks'])
+		$idea = Idea::withCount('applications')
+			->with(['tasks'])
 			->find($id);
 
 		if (!$idea) {

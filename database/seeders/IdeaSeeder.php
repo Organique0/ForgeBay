@@ -13,16 +13,14 @@ class IdeaSeeder extends Seeder
 	 */
 	public function run(): void
 	{
-		// Ensure there are enough tags
 		$tagIds = Tag::pluck('id')->toArray();
 
-		// Generate 2000 ideas
 		Idea::factory()
 			->count(1000)
 			->create()
 			->each(function ($idea) use ($tagIds) {
 				// Attach 3 random tags to each idea
-				$randomTags = array_rand(array_flip($tagIds), 3);
+				$randomTags = array_rand(array_flip($tagIds), rand(3, 10));
 				$idea->tags()->attach($randomTags);
 			});
 	}

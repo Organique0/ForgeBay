@@ -17,6 +17,7 @@ return new class extends Migration
 			$table->text('description');
 			$table->foreignId('user_id')->constrained()->onDelete('cascade');
 			$table->boolean('active')->default(true);
+			$table->dateTime('expires');
 			$table->timestamps();
 		});
 	}

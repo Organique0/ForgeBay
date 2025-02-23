@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Laravel\Scout\Searchable;
+use Meilisearch\Client;
 
 class Idea extends Model
 {
@@ -18,8 +19,28 @@ class Idea extends Model
 	protected $fillable = [
 		'title',
 		'description',
-		'active'
+		'active',
+		'expires'
 	];
+
+	public function updateSearchIndex()
+	{
+		$client = new Client('http://localhost:7700');
+		$index = $client->index('ideas');
+
+		$this->load(['tags', 'tasks', 'user']);
+		$document = $this->toSearchableArray();
+
+		return $index->updateDocuments([$document]);
+	}
+
+	public static function deactivateExpiredIdeas()
+	{
+		return static::query()
+			->where('expires', '<=', now())
+			->where('active', true)
+			->update(['active' => false]);
+	}
 
 	protected static function boot()
 	{
@@ -33,14 +54,18 @@ class Idea extends Model
 		// 	Cache::tags(["idea.{$idea->id}", 'ideas'])->flush();
 		// });
 
-		// static::updated(function ($idea) {
-		// 	$idea->searchable();
-		// });
+		static::updated(function ($idea) {
+			$idea->searchable();
+		});
 
 		// // When tasks are updated, update the parent idea
 		// static::updated(function ($idea) {
 		// 	$idea->load(['tasks', 'tags', 'user']); // Ensure relationships are loaded
 		// 	$idea->searchable();
+		// });
+
+		// static::updated(function ($idea) {
+		// 	$idea->updateSearchIndex();
 		// });
 	}
 

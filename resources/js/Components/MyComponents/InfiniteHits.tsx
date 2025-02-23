@@ -11,7 +11,7 @@ export default function InfiniteHits(props) {
 	useImmediateScrollRestoration('ideasScrollPosition', items.length > 0);
 
 
-
+	//infinite pagination
 	useEffect(() => {
 		if (sentinelRef.current !== null) {
 			const observer = new IntersectionObserver((entries) => {
