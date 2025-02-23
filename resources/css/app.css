@@ -195,3 +195,64 @@
     @apply bg-background text-foreground;
   }
 }
+
+.ais-RefinementList {
+}
+
+.ais-RefinementList-list {
+  @apply flex gap-4 flex-wrap;
+}
+
+.ais-RefinementList-item {
+  @apply min-w-[12em];
+}
+
+.ais-RefinementList-label {
+  @apply mx-2;
+}
+
+.ais-RefinementList-labelText {
+  @apply mx-1 text-lg! md:text-base!;
+}
+
+.ais-RefinementList-checkbox {
+  @apply rounded-sm checked:bg-black ring-0 h-8 w-8 md:h-4 md:w-4;
+}
+
+.ais-RefinementList-labelText {
+}
+
+.ais-RefinementList-count {
+}
+
+.ais-SearchBox-input {
+  @apply text-xl! h-[2em];
+}
+
+.ais-SearchBox-form {
+  @apply h-full!;
+}
+
+.ais-SearchBox {
+  @apply h-12! md:h-10!;
+}
+
+.ais-SearchBox-input {
+  @apply h-full;
+}
+
+.ais-SortBy-select {
+  @apply text-xl h-full! w-full! py-0!;
+}
+
+.ais-SortBy {
+  @apply mt-2 md:mt-0 h-12! md:h-10! block;
+}
+
+.ais-SortBy-option {
+  @apply text-xl;
+}
+
+.ais-SearchBox-submitIcon {
+  @apply h-4! w-4!;
+}

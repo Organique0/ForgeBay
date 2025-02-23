@@ -4,6 +4,7 @@ import {
 	InstantSearch,
 	RefinementList,
 	SearchBox,
+	SortBy,
 	useInstantSearch,
 } from 'react-instantsearch';
 import AppLayout from '@/Layouts/AppLayout';
@@ -19,17 +20,34 @@ const Index: React.FC = () => {
 
 	return (
 		<AppLayout title='Ideas'>
-			<h1>All Ideas</h1>
+			<h1 className='mt-4'>Search by title, description, tags, user, date ...</h1>
 			<InstantSearch
 				indexName='ideas'
 				preserveSharedStateOnUnmount
 				routing={true}
 				//@ts-expect-error
 				searchClient={searchClient}>
-				<Configure filters="active = true" />
-				<SearchBox />
-				<div className="flex">
-					<RefinementList attribute="tags" />
+				<Configure
+					//@ts-expect-error
+					filters="active = true" />
+				<div className="md:flex mt-2 mb-4 gap-6">
+					<SearchBox className='flex-grow' />
+					<SortBy
+						items={[
+							{ label: 'Latest', value: 'ideas:created_at:desc' },
+							{ label: 'Oldest', value: 'ideas:created_at:asc' },
+							{ label: 'Recently Updated', value: 'ideas:updated_at:desc' },
+							{ label: 'Least Recently Updated', value: 'ideas:updated_at:asc' },
+							{ label: 'Highest Value', value: 'ideas:value:desc' },
+							{ label: 'Lowest Value', value: 'ideas:value:asc' },
+						]}
+						//@ts-expect-error
+						defaultRefinement="ideas:created_at:desc"
+					/>
+				</div>
+				<div className='flex'>
+					<RefinementList attribute="tags" className='' />
+					<div className='flex-grow w-full' />
 				</div>
 				<NoResultsBoundary fallback={<NoResults />}>
 					<InfiniteHits />
@@ -50,7 +68,7 @@ function NoResults() {
 	);
 }
 
-function NoResultsBoundary({ children, fallback }) {
+function NoResultsBoundary({ children, fallback }: { children: React.ReactNode; fallback: React.ReactNode }) {
 	const { results } = useInstantSearch();
 	if (!results.__isArtificial && results.nbHits === 0) {
 		return (
