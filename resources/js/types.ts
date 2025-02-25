@@ -140,6 +140,7 @@ export type Task = {
 	status: Status;
 	applications: Application[];
 	name: string;
+	has_applied: boolean;
 };
 
 export type Status = 'to_do' | 'in_progress' | 'done';

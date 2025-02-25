@@ -19,12 +19,10 @@ class DatabaseSeeder extends Seeder
 	public function run(): void
 	{
 
-		echo "Initial user count: " . User::count() . "\n";
 
 		$this->call(RoleSeeder::class);
 
 		$users = User::factory(500)->withPersonalTeam()->create();
-		echo "After bulk creation: " . User::count() . "\n";
 		$users->each(function ($user) {
 			$user->current_team_id = $user->ownedTeams()->first()->id;
 			$user->save();
@@ -76,7 +74,6 @@ class DatabaseSeeder extends Seeder
 		$testUser->current_team_id = $testTeam->id;
 		$testUser->save();
 
-		echo "After additional " . User::count() . "\n";
 
 		$this->call([
 			TagSeeder::class
@@ -94,7 +91,6 @@ class DatabaseSeeder extends Seeder
 			}
 		});
 
-		echo "After tags: " . User::count() . "\n";
 
 		$this->call([
 			IdeaSeeder::class,
@@ -102,13 +98,11 @@ class DatabaseSeeder extends Seeder
 			ApplicationSeeder::class,
 		]);
 
-		echo "After other seeders: " . User::count() . "\n";
 
 		// Create a personal access token for the user and display it in the console
 		$token = $testUser->createToken('auth_token');
 		echo 'TEST_AUTHENTICATION_BEARER_TOKEN: ' . $token->plainTextToken . PHP_EOL . PHP_EOL;
 
-		echo "Final user count: " . User::count() . "\n";
 
 		$testTeam = new Team([
 			'name' => $testUser->name . '\'s Team',

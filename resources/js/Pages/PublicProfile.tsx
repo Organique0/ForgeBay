@@ -29,7 +29,6 @@ interface Application {
 export default function PublicProfile() {
 	const { props } = useTypedPage<PublicProfileProps>();
 	const { name, email, profile_photo_url, bio, ideas, tags, applications } = props;
-	console.log(ideas);
 
 	const totalApplications = React.useMemo(() => {
 		return applications.length;
@@ -133,7 +132,7 @@ export default function PublicProfile() {
 								Ideas
 							</h2>
 							{ideas.map((idea, index) => (
-								<Link href={`/idea/${idea.id}`}>
+								<Link href={`/idea/${idea.id}`} key={index}>
 									<Card key={index} className="transition-all hover:shadow-lg">
 										<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 											<CardTitle className="text-lg font-semibold">{idea.title}</CardTitle>

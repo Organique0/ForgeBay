@@ -23,16 +23,16 @@ class Idea extends Model
 		'expires'
 	];
 
-	public function updateSearchIndex()
-	{
-		$client = new Client('http://localhost:7700');
-		$index = $client->index('ideas');
+	// public function updateSearchIndex()
+	// {
+	// 	$client = new Client('http://localhost:7700');
+	// 	$index = $client->index('ideas');
 
-		$this->load(['tags', 'tasks', 'user']);
-		$document = $this->toSearchableArray();
+	// 	$this->load(['tags', 'tasks', 'user']);
+	// 	$document = $this->toSearchableArray();
 
-		return $index->updateDocuments([$document]);
-	}
+	// 	return $index->updateDocuments([$document]);
+	// }
 
 	public static function deactivateExpiredIdeas()
 	{
@@ -102,6 +102,7 @@ class Idea extends Model
 			'active'      => $this->active,
 			'created_at'  => $this->created_at,
 			'updated_at'  => $this->updated_at,
+			'expires' 		=> $this->exipires,
 			'value'       => $this->tasks->sum('value'),
 			'user'				=> $this->user->only(['id', 'name']),
 		];

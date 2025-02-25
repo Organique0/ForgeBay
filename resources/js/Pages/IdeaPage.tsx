@@ -93,11 +93,13 @@ const IdeaPage = ({ idea: initialIdea }: { idea: IdeaType }) => {
 								</div>
 
 								{
-									//this is so complicated I have no idea how it works anymore
+									//if task's status is to_od and it is the first task with that status
+									//then check if has_applied is true and display different ui based on that condition
+									//has_applied is calculated on the server and is unique to each user and task.
 									task.status === 'to_do' &&
 									task.id === idea.tasks[firstToDoIndex].id && (
 										page.props.auth.user ? (
-											task.applications?.some(app => app.user_id === page.props.auth.user.id) ? (
+											task.has_applied ? (
 												<TimelineFooter className='ml-4'>
 													<Button disabled>Already Applied</Button>
 												</TimelineFooter>

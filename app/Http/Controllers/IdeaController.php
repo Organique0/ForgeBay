@@ -72,9 +72,11 @@ class IdeaController extends Controller
 
 		// $idea['tasks'] = $tasks;
 
-		$idea = Idea::withCount('applications')
-			->with(['tasks'])
-			->find($id);
+		$idea = Idea::with(['tasks' => function ($query) {
+			$query->withCount('applications');
+		}])
+			->findOrFail($id)
+			->setHidden(['user_id']);
 
 		if (!$idea) {
 			abort(404);
