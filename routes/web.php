@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 Route::domain('localhost')->group(function () {
-	Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
+	Route::get('/', [App\Http\Controllers\LandingPageController::class, 'index'])->name('home');
 	Route::get('/idea/{id}', [\App\Http\Controllers\IdeaController::class, 'show'])->name('ideas.show');
 	Route::get('/idea', [\App\Http\Controllers\IdeaController::class, 'index'])->name('ideas.index');
 	Route::post('/application', [\App\Http\Controllers\ApplicationController::class, 'new'])->name('application.new');

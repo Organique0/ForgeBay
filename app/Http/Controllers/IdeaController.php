@@ -72,11 +72,19 @@ class IdeaController extends Controller
 
 		// $idea['tasks'] = $tasks;
 
-		$idea = Idea::with(['tasks' => function ($query) {
-			$query->withCount('applications');
-		}])
-			->findOrFail($id)
-			->setHidden(['user_id']);
+		// $idea = Idea::with(['tasks' => function ($query) {
+		// 	$query->withCount('applications');
+		// }])
+		// 	->findOrFail($id)
+		// 	->setHidden(['user_id']);
+
+		$idea = Cache::tags(['ideas', "idea.{$id}"])
+			->remember("idea.{$id}", 3600, function () use ($id) {
+				return Idea::with(['tasks' => function ($query) {
+					$query->withCount('applications');
+				}, 'user', 'tags'])
+					->findOrFail($id);
+			});
 
 		if (!$idea) {
 			abort(404);

@@ -120,9 +120,6 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    --chart-1: 240 5% 64%; /* Gray for sent */
-    --chart-2: 142 72% 29%; /* Green for approved */
-    --chart-3: 0 84% 60%; /* Red for declined */
   }
   .dark {
     --background: 224 71.4% 4.1%;
@@ -197,6 +194,33 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Landing page banner animation */
+.bg-gradient-to-r {
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Card hover effects */
+.hover\:shadow-lg {
+  transition: all 0.3s ease;
+}
+
+.hover\:shadow-lg:hover {
+  transform: translateY(-3px);
 }
 
 .ais-RefinementList {

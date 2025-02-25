@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use Meilisearch\Client;
 
@@ -56,6 +57,18 @@ class Idea extends Model
 
 		static::updated(function ($idea) {
 			$idea->searchable();
+		});
+		// When idea is updated, flush its cache
+		static::updated(function ($idea) {
+			Cache::tags(["idea.{$idea->id}", 'ideas'])->flush();
+			$idea->searchable();
+		});
+
+		// When tasks related to idea change
+		static::saved(function ($idea) {
+			$idea->tasks->each(function ($task) use ($idea) {
+				Cache::tags(["idea.{$idea->id}", 'ideas'])->flush();
+			});
 		});
 
 		// // When tasks are updated, update the parent idea
