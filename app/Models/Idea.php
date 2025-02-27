@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
 use Meilisearch\Client;
 
@@ -106,6 +107,10 @@ class Idea extends Model
 	public function toSearchableArray()
 	{
 		$this->load(['tags', 'tasks', 'user']);
+		$applicationsCount = DB::table('applications')
+			->join('tasks', 'applications.task_id', '=', 'tasks.id')
+			->where('tasks.idea_id', $this->id)
+			->count();
 
 		$array = [
 			'id'					=> $this->id,
@@ -115,9 +120,11 @@ class Idea extends Model
 			'active'      => $this->active,
 			'created_at'  => $this->created_at,
 			'updated_at'  => $this->updated_at,
-			'expires' 		=> $this->exipires,
+			'expires'     => $this->expires,
 			'value'       => $this->tasks->sum('value'),
 			'user'				=> $this->user->only(['id', 'name']),
+			'applications_count' => $applicationsCount,
+
 		];
 
 		return $array;

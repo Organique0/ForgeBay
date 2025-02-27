@@ -143,9 +143,9 @@ return [
 		'key' => env('MEILISEARCH_MASTER_KEY'),
 		'index-settings' => [
 			Idea::class => [
-				'sortableAttributes' => ['created_at', 'updated_at', 'value'],
+				'sortableAttributes' => ['created_at', 'updated_at', 'value', 'applications_count'],
 				'filterableAttributes' => ['tags', 'active'],
-				'displayedAttributes' => ['id', 'title', 'description', 'tags', 'active', 'created_at', 'updated_at', 'value', 'user']
+				'displayedAttributes' => ['id', 'title', 'description', 'tags', 'active', 'created_at', 'updated_at', 'value', 'user', 'expires', 'applications_count']
 			],
 		],
 		'settings' => [
