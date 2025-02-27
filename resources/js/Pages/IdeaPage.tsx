@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Idea as IdeaType, Task as TaskType } from '@/types';
+import { Idea, Idea as IdeaType, Task as TaskType } from '@/types';
 import AppLayout from '@/Layouts/AppLayout';
 import {
 	Timeline,
@@ -24,8 +24,9 @@ import { Button } from '@/Components/Shadcn/ui/button';
 import ApplicationForm from '@/Components/MyComponents/ApplicationForm';
 import useTypedPage from '@/Hooks/useTypedPage';
 import { Link } from '@inertiajs/react';
+import TrendingItems from '@/Components/MyComponents/TrendingItems';
 
-const IdeaPage = ({ idea: initialIdea }: { idea: IdeaType }) => {
+const IdeaPage = ({ idea: initialIdea, recommendations }: { idea: IdeaType, recommendations: Idea[] }) => {
 	const [idea, setIdea] = useState<IdeaType>(initialIdea);
 	const firstToDoIndex = idea.tasks.findIndex(task => task.status === 'to_do');
 	const page = useTypedPage();
@@ -128,6 +129,14 @@ const IdeaPage = ({ idea: initialIdea }: { idea: IdeaType }) => {
 						))}
 					</Timeline>
 				</div>
+				<TrendingItems
+					ideas={recommendations}
+					title='Similar ideas'
+					description='Ideas you might find relevant.'
+					orientation="horizontal"
+					className='mt-32'
+					itemClassName='basis-1/3'
+				/>
 			</div>
 		</AppLayout>
 	);
