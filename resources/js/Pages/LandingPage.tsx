@@ -13,9 +13,8 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ latestIdeas }: LandingPageProps) {
-	console.log(latestIdeas);
 	return (
-		<AppLayout title="Welcome to ForgeBay">
+		<AppLayout title="Welcome to ForgeBay" fullWidth>
 			{/* Hero Banner */}
 			<div className="relative bg-gradient-to-r from-primary/80 to-primary overflow-hidden">
 				<div className="absolute inset-0">
@@ -67,7 +66,7 @@ export default function LandingPage({ latestIdeas }: LandingPageProps) {
 						</Link>
 					</div>
 
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					<div className="grid grid-cols-1 lg:grid-cols-2 4xl:grid-cols-3 gap-6">
 						{latestIdeas.map((idea) => (
 							<Card key={idea.id} className="transition-all hover:shadow-lg">
 								<CardHeader>

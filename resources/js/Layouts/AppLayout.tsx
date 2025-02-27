@@ -22,12 +22,14 @@ import NavLink from '@/Components/NavLink';
 interface Props {
 	title: string;
 	renderHeader?(): JSX.Element;
+	fullWidth: boolean;
 }
 
 export default function AppLayout({
 	title,
 	renderHeader,
 	children,
+	fullWidth
 }: PropsWithChildren<Props>) {
 	const page = useTypedPage();
 	const route = useRoute();
@@ -477,7 +479,7 @@ export default function AppLayout({
 				) : null}
 
 				{/* <!-- Page Content --> */}
-				<main className='templateWidth mx-auto'>{children}</main>
+				<main className={fullWidth ? '' : 'templateWidth mx-auto'}>{children}</main>
 			</div>
 		</div>
 	);
