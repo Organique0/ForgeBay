@@ -86,12 +86,29 @@ class IdeaController extends Controller
 					->findOrFail($id);
 			});
 
+		$recommendations = Cache::tags(['recommendations', "idea.{$idea->id}"])
+			->remember("recommendations.{$idea->id}", 3600, function () use ($idea) {
+				$tagIds = $idea->tags->pluck('id');
+				return Idea::where('id', '!=', $idea->id)
+					->where('active', true)
+					->whereHas('tags', function ($query) use ($tagIds) {
+						$query->whereIn('tags.id', $tagIds);
+					})
+					->withCount(['tags' => function ($query) use ($tagIds) {
+						$query->whereIn('tags.id', $tagIds);
+					}])
+					->orderByDesc('tags_count')
+					->take(8)
+					->get();
+			});
+
 		if (!$idea) {
 			abort(404);
 		}
 
 		return Inertia::render('IdeaPage', [
 			'idea' => $idea,
+			'recommendations' => $recommendations,
 		]);
 	}
 }
