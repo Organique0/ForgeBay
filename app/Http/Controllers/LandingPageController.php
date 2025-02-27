@@ -12,7 +12,7 @@ class LandingPageController extends Controller
 	public function index(): Response
 	{
 		$latestIdeas = Cache::tags(['landing_page', 'latest_ideas'])
-			->remember('latest_ideas', 3600, function () {
+			->remember('latest_ideas', 600, function () {
 				return Idea::with(['tags:id,name', 'user'])
 					->where('active', true)
 					->orderBy('created_at', 'desc')

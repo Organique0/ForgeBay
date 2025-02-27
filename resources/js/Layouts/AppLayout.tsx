@@ -22,7 +22,7 @@ import NavLink from '@/Components/NavLink';
 interface Props {
 	title: string;
 	renderHeader?(): JSX.Element;
-	fullWidth: boolean;
+	fullWidth?: boolean;
 }
 
 export default function AppLayout({
@@ -90,6 +90,20 @@ export default function AppLayout({
 									>
 										Ideas
 									</NavLink>
+
+									{page.props.auth.user && (
+										<NavLink
+											href={route('ideas.create')}
+											active={route().current('ideas.create')}
+											onClick={() => {
+												localStorage.removeItem('ideasScrollPosition');
+											}}
+										>
+											Create
+										</NavLink>
+									)
+
+									}
 
 								</div>
 							</div>

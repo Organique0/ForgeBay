@@ -52,6 +52,7 @@ const IdeaPage = ({ idea: initialIdea, recommendations }: { idea: IdeaType, reco
 	// 	};
 	// }, [initialIdea.id]);
 
+	console.log(recommendations);
 	return (
 		<AppLayout title={'Idea'}>
 			<div className={'mt-12'}>
@@ -129,14 +130,14 @@ const IdeaPage = ({ idea: initialIdea, recommendations }: { idea: IdeaType, reco
 						))}
 					</Timeline>
 				</div>
-				<TrendingItems
+				{recommendations.length > 0 && <TrendingItems
 					ideas={recommendations}
 					title='Similar ideas'
 					description='Ideas you might find relevant.'
 					orientation="horizontal"
 					className='mt-32'
 					itemClassName='basis-1/3'
-				/>
+				/>}
 			</div>
 		</AppLayout>
 	);

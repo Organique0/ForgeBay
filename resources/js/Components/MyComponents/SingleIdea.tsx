@@ -22,24 +22,29 @@ export default function SingleIdea({ hit }: { hit: Idea }) {
 	return (
 		<Card className="transition-all hover:shadow-lg">
 			<CardHeader>
-				<CardTitle className="flex items-start gap-2">
-					<LightbulbIcon className="h-5 w-5 text-primary mt-1" />
-					<Link href={`/idea/${hit.id}`}>
-						{hit.title}
-					</Link>
-					<div className='items-center gap-4 ml-auto'>
-						<div className='flex gap-2'>
-							<Hammer className="h-5 w-5 text-primary mt-1" />
-							<div>
-								<span className='block text-left text-xl'>Created By: </span>
-								<Link href={`/user/${hit.user.id}`} className='text-xl underline' onClick={handleUserLinkClick}>
-									{hit.user.name}
-								</Link>
-							</div>
+				<CardTitle className="block lg:flex items-start gap-2">
+
+					<div className='flex gap-4'>
+						<LightbulbIcon className="h-5 w-5 text-primary mt-1" />
+						<Link href={`/idea/${hit.id}`} onClick={handleIdeaClick}>
+							{hit.title}
+						</Link>
+					</div>
+
+					<div className='gap-4 ml-auto flex'>
+						<Hammer className="h-4 w-4 text-primary mt-1" />
+						<div className='flex lg:block'>
+							<span className='block text-left text-lg lg:text-xl mr-1'>Created By: </span>
+							<Link href={`/user/${hit.user.id}`} className='text-lg lg:text-xl underline' onClick={handleUserLinkClick}>
+								{hit.user.name}
+							</Link>
 						</div>
 					</div>
-				</CardTitle>
 
+				</CardTitle>
+				<CardDescription className='text-extrabold text-lg'>
+					Total Value: {hit.value} $
+				</CardDescription>
 				<CardDescription className="flex items-center mt-2">
 					<CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
 					<span className='mr-1'>Created: </span>

@@ -48,29 +48,22 @@ class Idea extends Model
 	{
 		parent::boot();
 
-		// static::updated(function ($idea) {
-		// 	Cache::tags(["idea.{$idea->id}", 'ideas'])->flush();
-		// });
-
-		// static::deleted(function ($idea) {
-		// 	Cache::tags(["idea.{$idea->id}", 'ideas'])->flush();
-		// });
-
-		static::updated(function ($idea) {
+		static::deleted(function ($idea) {
 			$idea->searchable();
 		});
-		// When idea is updated, flush its cache
+		static::created(function ($idea) {
+			$idea->searchable();
+		});
 		static::updated(function ($idea) {
-			Cache::tags(["idea.{$idea->id}", 'ideas'])->flush();
 			$idea->searchable();
 		});
 
 		// When tasks related to idea change
-		static::saved(function ($idea) {
-			$idea->tasks->each(function ($task) use ($idea) {
-				Cache::tags(["idea.{$idea->id}", 'ideas'])->flush();
-			});
-		});
+		// static::saved(function ($idea) {
+		// 	$idea->tasks->each(function ($task) use ($idea) {
+		// 		Cache::tags(["idea.{$idea->id}", 'ideas'])->flush();
+		// 	});
+		// });
 
 		// // When tasks are updated, update the parent idea
 		// static::updated(function ($idea) {

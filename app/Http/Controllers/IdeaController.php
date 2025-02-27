@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Idea;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Traits\CacheableIdeas;
+use Illuminate\Http\Response;
 
 class IdeaController extends Controller
 {
@@ -110,5 +112,43 @@ class IdeaController extends Controller
 			'idea' => $idea,
 			'recommendations' => $recommendations,
 		]);
+	}
+
+	public function create(Request $request)
+	{
+		$tags = Tag::select('id', 'name')->get();
+		return Inertia::render('Ideas/create', [
+			'allTags' => $tags,
+		]);
+	}
+
+
+	public function new(Request $request)
+	{
+		$validated = $request->validate([
+			'title' => 'required|string|max:255',
+			'description' => 'required|string',
+			'tags' => 'array',
+			'tags.*' => 'exists:tags,id',
+		]);
+
+
+		$idea = new Idea();
+		$idea->title = $validated['title'];
+		$idea->description = $validated['description'];
+		$idea->user_id = auth()->id();
+		$idea->active = true;
+		$idea->expires = now()->addMonths(3);
+		$idea->save();
+
+		if (isset($validated['tags']) && !empty($validated['tags'])) {
+			$idea->tags()->attach($validated['tags']);
+		}
+
+		// Clear any cache related to ideas
+		//Cache::tags(['ideas', 'landing_page', 'latest_ideas'])->flush();
+
+		return redirect()->route('ideas.show', $idea->id)
+			->with('success', 'Idea created successfully!');
 	}
 }

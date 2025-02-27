@@ -6,7 +6,6 @@ use App\Models\Tag;
 use App\Models\User;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController as JetstreamUserProfileController;
-use Inertia\Response;
 use Illuminate\Http\Request;
 use Laravel\Jetstream\Jetstream;
 
