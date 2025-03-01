@@ -46,8 +46,8 @@ export default function TrendingItems({
 				</Link>
 			</div>
 			<div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
-				{ideas.map((idea) => (
-					<SingleIdea hit={idea} itemClassName={itemClassName} />
+				{ideas.map((idea, index) => (
+					<SingleIdea key={index} hit={idea} itemClassName={itemClassName} />
 				))}
 			</div>
 			{

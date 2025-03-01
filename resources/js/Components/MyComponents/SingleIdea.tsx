@@ -7,7 +7,7 @@ import { Button } from '../Shadcn/ui/button'
 import { CalendarIcon, ClipboardList, Hammer, LightbulbIcon, UsersIcon } from 'lucide-react'
 import { format, parseISO } from 'date-fns';
 
-export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClassName: string }) {
+export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClassName?: string }) {
 
 	const handleIdeaClick = () => {
 		localStorage.setItem('ideasScrollPosition', window.scrollY.toString());
@@ -20,7 +20,7 @@ export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClas
 	};
 
 	return (
-		<Card className={'transition-all hover:s`hadow-l ' + itemClassName}>
+		<Card className={'transition-all hover:s`hadow-l ' + itemClassName} id={hit.id + ""}>
 			<CardHeader>
 				<CardTitle className="block lg:flex items-start gap-2">
 
@@ -63,8 +63,8 @@ export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClas
 				<div className="flex flex-wrap gap-2 mt-4">
 					{
 						//@ts-ignore
-						hit.tags.map((tag: string) => (
-							<Badge key={tag} className='text-xs'>{tag}</Badge>
+						hit.tags.map((tag: string, index) => (
+							<Badge id={index + ""} key={tag} className='text-xs'>{tag}</Badge>
 						))
 					}
 				</div>
