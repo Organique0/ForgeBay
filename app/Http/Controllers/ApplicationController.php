@@ -11,6 +11,7 @@ use App\Models\Task;
 use App\TaskStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Inertia\Inertia;
 
 class ApplicationController extends Controller
 {
@@ -26,7 +27,7 @@ class ApplicationController extends Controller
 			'taskStatus' => 'required|string|in:' . implode(',', array_map(fn($case) => $case->value, TaskStatus::cases()))
 		]);
 
-		$application = Application::create([
+		Application::create([
 			'description' => $validatedData['application'],
 			'include_profile' => $validatedData['include_profile'],
 			'user_id' => $validatedData['userId'],
@@ -44,5 +45,16 @@ class ApplicationController extends Controller
 
 		ApplicationStatusUpdated::dispatch($validatedData['taskId'], $validatedData['applicationStatus'], $validatedData['ideaId']);
 		//TaskStatusUpdated::dispatch($validatedData['taskId'], $validatedData['taskStatus'], $validatedData['ideaId']);
+	}
+
+	public function show(Request $request)
+	{
+		$applications = Application::where('user_id', auth()->id())
+			->with('task.idea')
+			->get();
+
+		return Inertia::render('UserApplications', [
+			'applications' => $applications
+		]);
 	}
 }

@@ -92,15 +92,27 @@ export default function AppLayout({
 									</NavLink>
 
 									{page.props.auth.user && (
-										<NavLink
-											href={route('ideas.create')}
-											active={route().current('ideas.create')}
-											onClick={() => {
-												localStorage.removeItem('ideasScrollPosition');
-											}}
-										>
-											Create
-										</NavLink>
+										<>
+											<NavLink
+												href={route('ideas.create')}
+												active={route().current('ideas.create')}
+												onClick={() => {
+													localStorage.removeItem('ideasScrollPosition');
+												}}
+											>
+												Create
+											</NavLink>
+
+											<NavLink
+												href={route('applications.show')}
+												active={route().current('applications.show')}
+												onClick={() => {
+													localStorage.removeItem('ideasScrollPosition');
+												}}
+											>
+												My Applications
+											</NavLink>
+										</>
 									)
 
 									}
