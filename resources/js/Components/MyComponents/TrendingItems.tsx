@@ -1,6 +1,5 @@
 import React from 'react';
 import Autoplay from "embla-carousel-autoplay"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
 import { Badge } from '@/Components/Shadcn/ui/badge';
 import { Link } from '@inertiajs/react';
 import { Button } from '@/Components/Shadcn/ui/button';
@@ -8,7 +7,6 @@ import { CalendarIcon, ChartBarIcon, ChevronRightIcon, LightbulbIcon, TrendingUp
 import { format, parseISO } from 'date-fns';
 import { Idea } from '@/types';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../Shadcn/ui/carousel';
-import SingleRecommendedIdea from './SingleRecommendedIdea';
 import SingleIdea from './SingleIdea';
 
 
@@ -47,7 +45,15 @@ export default function TrendingItems({
 					</Button>
 				</Link>
 			</div>
-			<Carousel
+			<div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
+				{ideas.map((idea) => (
+					<SingleIdea hit={idea} itemClassName={itemClassName} />
+				))}
+			</div>
+			{
+				//Carousel is kinda problematic since all items don't have the same height
+			}
+			{/* <Carousel
 				opts={{
 					align: "start",
 					loop: true
@@ -67,7 +73,7 @@ export default function TrendingItems({
 
 				<CarouselPrevious />
 				<CarouselNext />
-			</Carousel>
+			</Carousel> */}
 		</div>
 	);
 }

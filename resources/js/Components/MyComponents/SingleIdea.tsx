@@ -7,20 +7,20 @@ import { Button } from '../Shadcn/ui/button'
 import { CalendarIcon, ClipboardList, Hammer, LightbulbIcon, UsersIcon } from 'lucide-react'
 import { format, parseISO } from 'date-fns';
 
-export default function SingleIdea({ hit }: { hit: Idea }) {
+export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClassName: string }) {
 
 	const handleIdeaClick = () => {
 		localStorage.setItem('ideasScrollPosition', window.scrollY.toString());
 	};
 
 	const handleUserLinkClick = (e: React.MouseEvent) => {
-		localStorage.setItem('ideasScrollPosition', window.scrollY.toString());
 		e.stopPropagation();
+		localStorage.setItem('ideasScrollPosition', window.scrollY.toString());
 		router.visit(`/user/${hit.user.id}`);
 	};
 
 	return (
-		<Card className="transition-all hover:shadow-lg">
+		<Card className={'transition-all hover:s`hadow-l ' + itemClassName}>
 			<CardHeader>
 				<CardTitle className="block lg:flex items-start gap-2">
 
@@ -64,7 +64,7 @@ export default function SingleIdea({ hit }: { hit: Idea }) {
 					{
 						//@ts-ignore
 						hit.tags.map((tag: string) => (
-							<Badge key={tag} className='text-sm'>{tag}</Badge>
+							<Badge key={tag} className='text-xs'>{tag}</Badge>
 						))
 					}
 				</div>

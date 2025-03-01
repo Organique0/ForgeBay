@@ -57,13 +57,14 @@ export default function LandingPage({ latestIdeas }: LandingPageProps) {
 
 			{/* Latest Ideas Section */}
 			<div className="py-16 px-6 lg:px-8 bg-background">
-				<div className="max-w-5xl mx-auto">
+				<div className="max-w-7xl mx-auto">
 					<TrendingItems
 						title='Latest ideas'
 						description='	Check out the newest opportunities for collaboration'
 						ideas={latestIdeas}
 						orientation='horizontal'
 						className=''
+						itemClassName=''
 
 					/>
 
