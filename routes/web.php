@@ -23,6 +23,7 @@ Route::domain('localhost')->group(function () {
 		Route::post('/ideas/new', [IdeaController::class, 'new'])->name('ideas.new');
 		Route::post('/application', [\App\Http\Controllers\ApplicationController::class, 'new'])->name('application.new');
 		Route::get('/applications', [ApplicationController::class, 'show'])->name('applications.show');
+		Route::post('/applications', [ApplicationController::class, 'search'])->name('applications.search');
 		Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 		Route::post('/skills', function (Request $request) {
 			$request->validate([

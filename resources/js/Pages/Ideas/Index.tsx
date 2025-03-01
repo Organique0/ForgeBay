@@ -22,7 +22,7 @@ const Index: React.FC = () => {
 		<AppLayout title='Ideas'>
 			<h1 className='mt-4'>Search by title, description, tags, user, date ...</h1>
 			<InstantSearch
-				indexName='ideas'
+				indexName='ideas:created_at:desc'
 				preserveSharedStateOnUnmount
 				routing={true}
 				//@ts-expect-error
@@ -40,7 +40,6 @@ const Index: React.FC = () => {
 							{ label: 'Highest Value', value: 'ideas:value:desc' },
 							{ label: 'Lowest Value', value: 'ideas:value:asc' },
 						]}
-					//defaultRefinement="ideas:created_at:desc"
 					/>
 				</div>
 				<div className='flex'>

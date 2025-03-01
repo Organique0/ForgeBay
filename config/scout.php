@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Application;
 use App\Models\Idea;
 
 return [
@@ -146,7 +147,7 @@ return [
 				'sortableAttributes' => ['created_at', 'updated_at', 'value', 'applications_count'],
 				'filterableAttributes' => ['tags', 'active'],
 				'displayedAttributes' => ['id', 'title', 'description', 'tags', 'active', 'created_at', 'updated_at', 'value', 'user', 'expires', 'applications_count', 'task_count']
-			],
+			]
 		],
 		'settings' => [
 			'hitsPerPage' => 16,

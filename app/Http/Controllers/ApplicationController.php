@@ -50,11 +50,22 @@ class ApplicationController extends Controller
 	public function show(Request $request)
 	{
 		$applications = Application::where('user_id', auth()->id())
-			->with('task.idea')
+			->with(['task', 'task.idea'])
 			->get();
 
 		return Inertia::render('UserApplications', [
 			'applications' => $applications
 		]);
+	}
+
+	public function search(Request $request)
+	{
+		$query = $request->input('query', '');
+
+		$applications = Application::search($query)
+			->where('user_id', auth()->id())
+			->get();
+
+		return $applications;
 	}
 }

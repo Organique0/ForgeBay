@@ -107,12 +107,10 @@ export type Application = {
 	description: string;
 	id: number;
 	include_profile: boolean;
-	laravel_through_key: number;
 	status: 'sent' | 'approved' | 'declined';
 	task_id: number;
-	updated_at: DateTime;
 	user_id: number;
-	user: User;
+	updated_at: DateTime;
 }
 
 export type User = {
