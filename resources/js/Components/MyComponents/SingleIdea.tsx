@@ -64,7 +64,7 @@ export default function SingleIdea({ hit }: { hit: Idea }) {
 					{
 						//@ts-ignore
 						hit.tags.map((tag: string) => (
-							<Badge key={tag} className='text-lg'>{tag}</Badge>
+							<Badge key={tag} className='text-sm'>{tag}</Badge>
 						))
 					}
 				</div>
