@@ -145,7 +145,7 @@ return [
 			Idea::class => [
 				'sortableAttributes' => ['created_at', 'updated_at', 'value', 'applications_count'],
 				'filterableAttributes' => ['tags', 'active'],
-				'displayedAttributes' => ['id', 'title', 'description', 'tags', 'active', 'created_at', 'updated_at', 'value', 'user', 'expires', 'applications_count']
+				'displayedAttributes' => ['id', 'title', 'description', 'tags', 'active', 'created_at', 'updated_at', 'value', 'user', 'expires', 'applications_count', 'task_count']
 			],
 		],
 		'settings' => [

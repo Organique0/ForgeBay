@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '../Shadcn/ui/badge'
 import { Idea } from '@/types'
 import { Button } from '../Shadcn/ui/button'
-import { CalendarIcon, Hammer, LightbulbIcon, UsersIcon } from 'lucide-react'
+import { CalendarIcon, ClipboardList, Hammer, LightbulbIcon, UsersIcon } from 'lucide-react'
 import { format, parseISO } from 'date-fns';
 
 export default function SingleIdea({ hit }: { hit: Idea }) {
@@ -31,8 +31,8 @@ export default function SingleIdea({ hit }: { hit: Idea }) {
 						</Link>
 					</div>
 
-					<div className='gap-4 ml-auto flex'>
-						<Hammer className="h-4 w-4 text-primary mt-1" />
+					<div className='gap-4 ml-auto flex mt-2 lg:mt-0'>
+						<Hammer className="h-5 w-5 text-primary mt-1" />
 						<div className='flex lg:block'>
 							<span className='block text-left text-lg lg:text-xl mr-1'>Created By: </span>
 							<Link href={`/user/${hit.user.id}`} className='text-lg lg:text-xl underline' onClick={handleUserLinkClick}>
@@ -43,7 +43,7 @@ export default function SingleIdea({ hit }: { hit: Idea }) {
 
 				</CardTitle>
 				<CardDescription className='text-extrabold text-lg'>
-					Total Value: {hit.value} $
+					Combined Value: {hit.value} $
 				</CardDescription>
 				<CardDescription className="flex items-center mt-2">
 					<CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
@@ -72,7 +72,9 @@ export default function SingleIdea({ hit }: { hit: Idea }) {
 			<CardFooter>
 				<div className="flex justify-between items-center w-full">
 					<div className="flex items-center text-sm text-muted-foreground">
-						<UsersIcon className="h-3.5 w-3.5 mr-1.5" />
+						<ClipboardList className="h-3.5 w-3.5 mx-1.5" />
+						{hit.task_count || 0} tasks
+						<UsersIcon className="h-3.5 w-3.5 mx-1.5 ml-3" />
 						{hit.applications_count || 0} applications
 					</div>
 					<Link href={`/idea/${hit.id}`}>

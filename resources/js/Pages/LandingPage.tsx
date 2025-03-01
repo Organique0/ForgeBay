@@ -7,12 +7,18 @@ import { Idea } from '@/types';
 import { CalendarIcon, ChevronRightIcon, LightbulbIcon, UsersIcon } from 'lucide-react';
 import AppLayout from '@/Layouts/AppLayout';
 import { format, parseISO } from 'date-fns';
+import SingleRecommendedIdea from '@/Components/MyComponents/SingleRecommendedIdea';
+import { Carousel } from 'react-instantsearch';
+import { CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/Shadcn/ui/carousel';
+import TrendingItems from '@/Components/MyComponents/TrendingItems';
 
 interface LandingPageProps {
 	latestIdeas: Idea[];
 }
 
+
 export default function LandingPage({ latestIdeas }: LandingPageProps) {
+	console.log("latest: ", latestIdeas);
 	return (
 		<AppLayout title="Welcome to ForgeBay" fullWidth>
 			{/* Hero Banner */}
@@ -52,66 +58,62 @@ export default function LandingPage({ latestIdeas }: LandingPageProps) {
 			{/* Latest Ideas Section */}
 			<div className="py-16 px-6 lg:px-8 bg-background">
 				<div className="max-w-5xl mx-auto">
-					<div className="flex justify-between items-center mb-10">
-						<div>
-							<h2 className="text-3xl font-bold tracking-tight">Latest Ideas</h2>
-							<p className="mt-2 text-muted-foreground">
-								Check out the newest opportunities for collaboration
-							</p>
-						</div>
-						<Link href="/idea">
-							<Button variant="outline">
-								View All <ChevronRightIcon className="ml-1 h-4 w-4" />
-							</Button>
-						</Link>
-					</div>
+					<TrendingItems
+						title='Latest ideas'
+						description='	Check out the newest opportunities for collaboration'
+						ideas={latestIdeas}
+						orientation='horizontal'
+						className=''
 
-					<div className="grid grid-cols-1 lg:grid-cols-2 4xl:grid-cols-3 gap-6">
+					/>
+
+					{/* <div className="grid grid-cols-1 lg:grid-cols-2 4xl:grid-cols-3 gap-6">
 						{latestIdeas.map((idea) => (
-							<Card key={idea.id} className="transition-all hover:shadow-lg">
-								<CardHeader>
-									<CardTitle className="flex items-start gap-2">
-										<LightbulbIcon className="h-5 w-5 text-primary mt-1" />
-										<Link href={`/idea/${idea.id}`} className="hover:text-primary transition-colors">
-											{idea.title}
-										</Link>
-									</CardTitle>
-									<CardDescription className="flex items-center mt-2">
-										<CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
-										{format(parseISO(idea.created_at), 'PPP')}
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<p className="line-clamp-3 text-sm text-muted-foreground">
-										{idea.description}
-									</p>
-									<div className="flex flex-wrap gap-2 mt-4">
-										{idea.tags?.slice(0, 3).map((tag, i) => (
-											<Badge key={i} variant="secondary" className="text-xs">
-												{tag.name}
-											</Badge>
-										))}
-										{idea.tags?.length > 3 && (
-											<Badge variant="outline" className="text-xs">
-												+{idea.tags.length - 3} more
-											</Badge>
-										)}
-									</div>
+							 <Card key={idea.id} className="transition-all hover:shadow-lg">
+							 	<CardHeader>
+							 		<CardTitle className="flex items-start gap-2">
+							 			<LightbulbIcon className="h-5 w-5 text-primary mt-1" />
+							 			<Link href={`/idea/${idea.id}`} className="hover:text-primary transition-colors">
+							 				{idea.title}
+							 			</Link>
+							 		</CardTitle>
+							 		<CardDescription className="flex items-center mt-2">
+							 			<CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
+							 			{format(parseISO(idea.created_at), 'PPP')}
+							 		</CardDescription>
+							 	</CardHeader>
+							 	<CardContent>
+							 		<p className="line-clamp-3 text-sm text-muted-foreground">
+							 			{idea.description}
+							 		</p>
+							 		<div className="flex flex-wrap gap-2 mt-4">
+							 			{idea.tags?.slice(0, 3).map((tag, i) => (
+							 				<Badge key={i} variant="secondary" className="text-xs">
+							 					{tag.name}
+							 				</Badge>
+							 			))}
+							 			{idea.tags?.length > 3 && (
+							 				<Badge variant="outline" className="text-xs">
+							 					+{idea.tags.length - 3} more
+							 				</Badge>
+							 			)}
+							 		</div>
 								</CardContent>
-								<CardFooter>
-									<div className="flex justify-between items-center w-full">
-										<div className="flex items-center text-sm text-muted-foreground">
-											<UsersIcon className="h-3.5 w-3.5 mr-1.5" />
-											{idea.applications_count || 0} applications
-										</div>
-										<Link href={`/idea/${idea.id}`}>
-											<Button size="sm" variant="ghost">Learn more</Button>
-										</Link>
-									</div>
-								</CardFooter>
-							</Card>
+							 	<CardFooter>
+							 		<div className="flex justify-between items-center w-full">
+							 			<div className="flex items-center text-sm text-muted-foreground">
+							 				<UsersIcon className="h-3.5 w-3.5 mr-1.5" />
+							 				{idea.applications_count || 0} applications
+							 			</div>
+							 			<Link href={`/idea/${idea.id}`}>
+							 				<Button size="sm" variant="ghost">Learn more</Button>
+							 			</Link>
+							 		</div>
+							 	</CardFooter>
+							 </Card>
+
 						))}
-					</div>
+					</div> */}
 				</div>
 			</div>
 		</AppLayout>

@@ -99,6 +99,7 @@ export type Idea = {
 	created_at: string;
 	updated_at: string;
 	applications_count: number;
+	task_count: number;
 };
 
 export type Application = {

@@ -117,6 +117,7 @@ class Idea extends Model
 			'value'       => $this->tasks->sum('value'),
 			'user'				=> $this->user->only(['id', 'name']),
 			'applications_count' => $applicationsCount,
+			'task_count' => $this->tasks->count(),
 
 		];
 

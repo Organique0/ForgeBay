@@ -9,11 +9,12 @@ use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Traits\CacheableIdeas;
+use App\Traits\TransformIdeas;
 use Illuminate\Http\Response;
 
 class IdeaController extends Controller
 {
-	use CacheableIdeas;
+	use CacheableIdeas, TransformIdeas;
 	public function index(Request $request)
 	{
 		// $currentPage = $request->input('page', 1);
@@ -91,18 +92,21 @@ class IdeaController extends Controller
 		$recommendations = Cache::tags(['recommendations', "idea.{$idea->id}"])
 			->remember("recommendations.{$idea->id}", 3600, function () use ($idea) {
 				$tagIds = $idea->tags->pluck('id');
-				return Idea::where('id', '!=', $idea->id)
+
+				$items = Idea::where('id', '!=', $idea->id)
 					->where('active', true)
-					->whereHas('tags', function ($query) use ($tagIds) {
-						$query->whereIn('tags.id', $tagIds);
-					})
-					->withCount(['tags' => function ($query) use ($tagIds) {
-						$query->whereIn('tags.id', $tagIds);
-					}])
-					->orderByDesc('tags_count')
+					->whereHas('tags', fn($q) => $q->whereIn('tags.id', $tagIds))
+					->with([
+						'tags',
+						'tasks' => fn($q) => $q->withCount('applications'),
+						'user'
+					])
 					->take(8)
 					->get();
+
+				return $this->transformIdeas($items);
 			});
+
 
 		if (!$idea) {
 			abort(404);
