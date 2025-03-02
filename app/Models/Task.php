@@ -35,6 +35,7 @@ class Task extends Model
 		'name',
 		'description',
 		'value',
+		'status'
 	];
 
 	protected $casts = [

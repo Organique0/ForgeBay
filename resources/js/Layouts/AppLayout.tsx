@@ -112,6 +112,16 @@ export default function AppLayout({
 											>
 												My Applications
 											</NavLink>
+
+											<NavLink
+												href={route('ideas.mine')}
+												active={route().current('ideas.mine')}
+												onClick={() => {
+													localStorage.removeItem('ideasScrollPosition');
+												}}
+											>
+												My Ideas
+											</NavLink>
 										</>
 									)
 

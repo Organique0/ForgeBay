@@ -64,12 +64,12 @@ export default function Create({ allTags }: { allTags: CleanTag[] }) {
 			})
 			.then((response) => {
 				// Handle successful submission
-				// if (response.data.redirect) {
-				//   window.location.href = response.data.redirect;
-				// } else {
-				//   // Redirect to the ideas list or show success message
-				//   window.location.href = route('ideas.index');
-				// }
+				if (response.data.redirect) {
+					window.location.href = response.data.redirect;
+				} else {
+					// Redirect to the ideas list or show success message
+					window.location.href = route('ideas.index');
+				}
 			})
 			.catch((error) => {
 				// Handle validation errors

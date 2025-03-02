@@ -152,7 +152,23 @@ class IdeaController extends Controller
 		// Clear any cache related to ideas
 		//Cache::tags(['ideas', 'landing_page', 'latest_ideas'])->flush();
 
-		return redirect()->route('ideas.show', $idea->id)
-			->with('success', 'Idea created successfully!');
+		return response()->json(['redirect' => route('tasks.index', $idea->id)]);
+	}
+
+	public function myIdeas(Request $request)
+	{
+		$ideas = Idea::where('user_id', auth()->id())
+			->with([
+				'tags',
+				'tasks' => function ($query) {
+					$query->withCount('applications');
+				}
+			])
+			->latest()
+			->get();
+
+		return Inertia::render('Ideas/mine', [
+			'ideas' => $ideas,
+		]);
 	}
 }

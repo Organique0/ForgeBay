@@ -100,6 +100,7 @@ export type Idea = {
 	updated_at: string;
 	applications_count: number;
 	task_count: number;
+	expires: string;
 };
 
 export type Application = {
