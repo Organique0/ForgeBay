@@ -25,6 +25,7 @@
     "laravel/reverb": "^1.0",
     "laravel/sanctum": "^4.0",
     "laravel/scout": "^10.13",
+    "laravel/socialite": "^5.18",
     "laravel/tinker": "^2.9",
     "livewire/livewire": "^3.5",
     "meilisearch/meilisearch-php": "^1.13",

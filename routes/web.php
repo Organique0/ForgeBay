@@ -3,6 +3,7 @@
 use App\Events\MessageSent;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\IdeaController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PublicUserProfile;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -12,6 +13,10 @@ Route::domain('localhost')->group(function () {
 	Route::get('/idea/{id}', [\App\Http\Controllers\IdeaController::class, 'show'])->name('ideas.show');
 	Route::get('/idea', [\App\Http\Controllers\IdeaController::class, 'index'])->name('ideas.index');
 	Route::get('/user/{id}', [PublicUserProfile::class, 'show'])->name('publicProfile.show');
+	Route::get('/auth/google', [LoginController::class, 'redirectToGoogle']);
+	Route::get('/auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
+	Route::get('/auth/github', [LoginController::class, 'redirectToGithub']);
+	Route::get('/auth/github/callback', [LoginController::class, 'handleGithubCallback']);
 
 	Route::middleware([
 		'auth:sanctum',
