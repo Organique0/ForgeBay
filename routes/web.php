@@ -41,6 +41,7 @@ Route::domain('localhost')->group(function () {
 			auth()->user()->tags()->sync($request->skills);
 		});
 		Route::get('/create-idea', [IdeaController::class, 'create'])->name('ideas.create');
+		Route::put('/ideas/{id}', [IdeaController::class, 'update'])->name('ideas.update');
 		Route::get('/my-ideas', [IdeaController::class, 'myIdeas'])->name('ideas.mine');
 
 		Route::get('/{ideaId}/add-tasks', [TaskController::class, 'index'])->name('tasks.index');

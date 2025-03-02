@@ -126,6 +126,32 @@ class IdeaController extends Controller
 		]);
 	}
 
+	public function update(Request $request, string $id)
+	{
+		// Make sure the idea belongs to the currently authenticated user
+		$idea = Idea::where('user_id', auth()->id())->findOrFail($id);
+
+		// Validate the incoming request
+		$validated = $request->validate([
+			'title'           => 'required|string|max:255',
+			'description'     => 'required|string',
+			'status'          => 'required|boolean',
+			'expirationDate'  => 'required|date_format:Y-m-d H:i:s',
+		]);
+
+		// Update fields
+		$idea->title       = $validated['title'];
+		$idea->description = $validated['description'];
+		$idea->active      = $validated['status'];
+		$idea->expires     = $validated['expirationDate'];
+		$idea->save();
+
+		return response()->json([
+			'message' => 'Idea updated successfully!',
+			'idea'    => $idea,
+		]);
+	}
+
 
 	public function new(Request $request)
 	{

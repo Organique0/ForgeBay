@@ -70,7 +70,7 @@ export default function Mine({ ideas }: { ideas: Idea[] }) {
 					</Link>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-6">
+				<div className="grid grid-cols-1 lg:grid-cols-[1fr_3fr] gap-6">
 					{/* Filters sidebar */}
 					<div className="space-y-6">
 						<div className="space-y-3">
@@ -180,9 +180,9 @@ export default function Mine({ ideas }: { ideas: Idea[] }) {
 											</div>
 										</CardContent>
 										<CardFooter>
-											<Link href={route('tasks.index', { ideaId: idea.id })}>
+											<Link href={route('tasks.index', { ideaId: idea.id })} className='w-full'>
 												<Button variant="outline" className="w-full">
-													Manage Tasks
+													Modify Idea
 												</Button>
 											</Link>
 										</CardFooter>

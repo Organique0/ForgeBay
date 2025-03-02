@@ -3,6 +3,7 @@ import { Badge } from '@/Components/Shadcn/ui/badge';
 import { Button } from '@/Components/Shadcn/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/Components/Shadcn/ui/collapsible';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/Components/Shadcn/ui/dropdown-menu';
 import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/Components/Shadcn/ui/table';
 import AppLayout from '@/Layouts/AppLayout';
 import { Application, Idea, Task } from '@/types';
@@ -21,6 +22,11 @@ export type UserApplications = UserApplication[];
 
 export default function UserApplications({ applications }: { applications: UserApplications }) {
 	console.log(applications);
+
+	const [filter, setFilter] = useState("all");
+
+	const filteredApplications = applications.filter((app) => filter === "all" || app.status.toLowerCase() === filter)
+
 	return (
 		<AppLayout title='My Applications'>
 			<div className="container mx-auto py-8 px-4">
@@ -29,26 +35,42 @@ export default function UserApplications({ applications }: { applications: UserA
 						<h1 className="text-3xl font-bold tracking-tight">My Applications</h1>
 						<p className="text-muted-foreground mt-1">View and manage all your submitted applications</p>
 					</div>
-					<div className="flex items-center gap-2">
-						<Button variant="outline" size="sm" className="flex items-center gap-2">
-							<Filter className="h-4 w-4" />
-							Filter
-						</Button>
-					</div>
+					<FilterDropdown currentFilter={filter} setFilter={setFilter} />
 				</div>
 
 				<div className="grid gap-6">
-					{applications.length > 0 ? (
-						applications.map((application) => <ApplicationCard key={application.id} application={application} />)
+					{filteredApplications.length > 0 ? (
+						filteredApplications.map((application) => <ApplicationCard key={application.id} application={application} />)
 					) : (
 						<div className="text-center py-12">
 							<h3 className="text-lg font-medium">No applications found</h3>
-							<p className="text-muted-foreground mt-1">You haven't submitted any applications yet.</p>
+							<p className="text-muted-foreground mt-1">
+								{filter === "all" ? "You haven't submitted any applications yet." : `No ${filter} applications found.`}
+							</p>
 						</div>
 					)}
 				</div>
 			</div>
 		</AppLayout>
+	)
+}
+
+function FilterDropdown({ currentFilter, setFilter }) {
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button variant="outline" className="flex items-center gap-2">
+					<Filter className="h-4 w-4" />
+					Filter: {currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1)}
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="end">
+				<DropdownMenuItem onClick={() => setFilter("all")}>All</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => setFilter("sent")}>Sent</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => setFilter("approved")}>Approved</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => setFilter("declined")}>Declined</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	)
 }
 
@@ -104,8 +126,6 @@ function StatusBadge({ status }: { status: string }) {
 				return { label: "Accepted", variant: "success" }
 			case "rejected":
 				return { label: "Rejected", variant: "error" }
-			case "pending":
-				return { label: "Pending Review", variant: "warning" }
 			default:
 				return { label: status, variant: "secondary" }
 		}

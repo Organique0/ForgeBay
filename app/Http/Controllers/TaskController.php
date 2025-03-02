@@ -15,7 +15,7 @@ class TaskController extends Controller
 		$idea = Idea::findOrFail($ideaId);
 		$existingTasks = $idea->tasks()->get();
 		return Inertia::render('Tasks/create', [
-			'idea'           => $idea,
+			'initialIdea'           => $idea,
 			'existingTasks'  => $existingTasks,
 		]);
 	}
