@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Application;
 use App\Models\Idea;
 
 return [
@@ -19,7 +18,7 @@ return [
     |
     */
 
-	'driver' => env('SCOUT_DRIVER', 'meilisearch'),
+	'driver' => env('SCOUT_DRIVER', 'tntsearch'),
 
 	/*
     |--------------------------------------------------------------------------
@@ -72,8 +71,8 @@ return [
     */
 
 	'chunk' => [
-		'searchable' => 1000,   // Increase this value as needed
-		'unsearchable' => 1000,
+		'searchable' => 300,   // Increase this value as needed
+		'unsearchable' => 300,
 	],
 
 	/*
@@ -234,6 +233,22 @@ return [
 			//     ],
 			// ],
 		],
+	],
+
+
+
+	'tntsearch' => [
+		'storage'  => storage_path(),
+		'fuzziness' => env('TNTSEARCH_FUZZINESS', true),
+		'fuzzy' => [
+			'prefix_length' => 2,
+			'max_expansions' => 50,
+			'distance' => 2,
+			'no_limit' => true
+		],
+		'asYouType' => true,
+		'searchBoolean' => env('TNTSEARCH_BOOLEAN', true),
+		'maxDocs' => env('TNTSEARCH_MAX_DOCS', 10000),
 	],
 
 ];

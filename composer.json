@@ -28,9 +28,9 @@
     "laravel/socialite": "^5.18",
     "laravel/tinker": "^2.9",
     "livewire/livewire": "^3.5",
-    "meilisearch/meilisearch-php": "^1.13",
     "predis/predis": "^2.3",
     "spatie/laravel-permission": "^6.10",
+    "teamtnt/laravel-scout-tntsearch-driver": "^15.0",
     "tightenco/ziggy": "^2.0"
   },
   "require-dev": {

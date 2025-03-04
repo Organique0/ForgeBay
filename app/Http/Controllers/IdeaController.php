@@ -6,6 +6,7 @@ use App\Models\Idea;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Traits\CacheableIdeas;
@@ -14,7 +15,7 @@ use Illuminate\Http\Response;
 
 class IdeaController extends Controller
 {
-	use CacheableIdeas, TransformIdeas;
+	use TransformIdeas;
 	public function index(Request $request)
 	{
 		// $currentPage = $request->input('page', 1);
@@ -45,7 +46,40 @@ class IdeaController extends Controller
 
 		// Cache::tags(['ideas_pages'])->put($cacheKey, $paginatedIdeas, 3600);
 
-		return Inertia::render('Ideas/Index', []);
+
+		$query = $request->input('query', 'voluptatum');
+
+    if (!$query) {
+        $ideas = Idea::latest()->with('user', 'tags')->paginate(10);
+    } else {
+			$ideas = Idea::search($query)->keys()->map(function ($ideaId) {
+				$idea = Idea::find($ideaId);
+				return [
+					'id'          => $idea->id,
+					'title'       => $idea->title,
+					'description' => $idea->description,
+					'tags' 			  => $idea->tags->pluck('name'),
+					'active'      => $idea->active,
+					'created_at'  => $idea->created_at,
+					'updated_at'  => $idea->updated_at,
+					'value'       => $idea->tasks->sum('value'),
+					'user'        => $idea->user,
+					'expires'     => $idea->expires,
+				];
+			});
+
+        // If you want pagination for search results as well
+       // $ideas = $ideas->paginate(10)->appends(['query' => $query]);
+    }
+
+    if ($request->wantsJson()) {
+        return response()->json($ideas);
+    }
+
+    return Inertia::render('Ideas/Index', [
+        'ideas' => $ideas,
+        'filters' => ['query' => $query],
+    ]);
 	}
 
 	public function show(string $id): \Inertia\Response

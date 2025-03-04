@@ -2,22 +2,58 @@
 
 namespace App\Models;
 
+use App\Traits\TransformIdeas;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
-use Meilisearch\Client;
+use Laravel\Scout\Engines\Engine;
+use Laravel\Scout\EngineManager;
 
 class Idea extends Model
 {
 	/** @use HasFactory<\Database\Factories\IdeaFactory> */
-	use HasFactory, Searchable;
+	use HasFactory;
+	use Searchable;
 
+	//tntsearch option
+	public $asYouType = true;
+
+	public $searchable = [
+		'id', 'title', 'description', 'tags', 'active', 'value', 'created_at', 'updated_at'
+	];
+	public function searchableUsing(): Engine
+	{
+		return app(EngineManager::class)->engine('tntsearch');
+	}
+	public function toSearchableArray(): array
+	{
+		// Eager load relationships
+		$this->load(['tags', 'tasks']);
+
+		// Manually fetch tags and calculate value
+		$tags = $this->tags->pluck('name')->implode(' ');
+		$value = $this->tasks->sum('value');
+
+		$array = [
+			'id'          => (int) $this->id,
+			'title'       => (string) $this->title,
+			'description' => (string) $this->description,
+			'tags'        => (string) $tags, // Pre-computed string of tag names
+			'active'      => (string) $this->active ? 'true' : 'false',
+			'value'       => (int) $value, // Pre-computed and cast to string
+			'created_at'  => (string) $this->created_at->toDateTimeString(),
+			'updated_at'  => (string) $this->updated_at->toDateTimeString(),
+			// Add a combined field for better searchability
+			//'searchable'  => $this->title . ' ' . $this->description . ' ' . $tags,
+		];
+
+		return $array;
+		//\Log::info('Data being indexed for model ' . $this->id, $array);
+	}
 	protected $fillable = [
 		'title',
 		'description',
@@ -48,15 +84,15 @@ class Idea extends Model
 	{
 		parent::boot();
 
-		static::deleted(function ($idea) {
-			$idea->searchable();
-		});
-		static::created(function ($idea) {
-			$idea->searchable();
-		});
-		static::updated(function ($idea) {
-			$idea->searchable();
-		});
+		// static::deleted(function ($idea) {
+		// 	$idea->searchable();
+		// });
+		// static::created(function ($idea) {
+		// 	$idea->searchable();
+		// });
+		// static::updated(function ($idea) {
+		// 	$idea->searchable();
+		// });
 
 		// When tasks related to idea change
 		// static::saved(function ($idea) {
@@ -97,30 +133,4 @@ class Idea extends Model
 	}
 
 
-	public function toSearchableArray()
-	{
-		$this->load(['tags', 'tasks', 'user']);
-		$applicationsCount = DB::table('applications')
-			->join('tasks', 'applications.task_id', '=', 'tasks.id')
-			->where('tasks.idea_id', $this->id)
-			->count();
-
-		$array = [
-			'id'					=> $this->id,
-			'title'       => $this->title,
-			'description' => $this->description,
-			'tags'        => $this->tags->pluck('name')->toArray(),
-			'active'      => $this->active,
-			'created_at'  => $this->created_at,
-			'updated_at'  => $this->updated_at,
-			'expires'     => $this->expires,
-			'value'       => $this->tasks->sum('value'),
-			'user'				=> $this->user->only(['id', 'name']),
-			'applications_count' => $applicationsCount,
-			'task_count' => $this->tasks->count(),
-
-		];
-
-		return $array;
-	}
 }
