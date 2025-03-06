@@ -85,7 +85,7 @@ const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query:
 					/>
 					<div className='flex flex-wrap gap-4'>
 						{ideas.tags && ideas.tags.map((tag) => (
-							<div key={tag.id} className="flex items-center space-x-2ear>
+							<div key={tag.id} className="flex items-center space-x-2">
 								<Checkbox
 									id={`tag-${tag.id}`}
 									checked={selectedTags.includes(tag.id)}
