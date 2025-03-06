@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import SingleIdea from '@/Components/MyComponents/SingleIdea';
 import { Button } from '@/Components/Shadcn/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { router } from '@inertiajs/react';
+import { Idea, PaginatedIdea, PaginationInstance } from '@/types';
 
-const Index: React.FC = ({ ideas, filters }) => {
+const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query: string} }) => {
 	console.log(ideas);
 	const [searchQuery, setSearchQuery] = useState(filters.query || '');
 
@@ -19,7 +20,7 @@ const Index: React.FC = ({ ideas, filters }) => {
 		: null;
 
 	const goToNextPage = () => {
-		if (ideas.next_cursor) {
+		if (nextPageUrl) {
 			router.get(nextPageUrl, {}, {
 				preserveState: true,
 				preserveScroll: true
@@ -28,23 +29,19 @@ const Index: React.FC = ({ ideas, filters }) => {
 	};
 
 	const goToPrevPage = () => {
-		if (ideas.prev_cursor) {
-				router.get(prevPageUrl, {}, {
+		if (prevPageUrl) {
+			router.get(prevPageUrl, {}, {
 				preserveState: true,
 				preserveScroll: true
 			});
 		}
 	};
 
-	const submitSearch = (e) => {
+	const submitSearch = (e: FormEvent) => {
 		e.preventDefault();
 
-		// Only trigger navigation if there's an actual query
 		router.get('/idea', { query: searchQuery }, {
 			preserveState: true,
-			onSuccess: () => {
-				setPreviousCursors([]);
-			}
 		});
 	};
 

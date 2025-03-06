@@ -1,15 +1,15 @@
 import { Link, router } from '@inertiajs/react'
-import React from 'react'
+import React, { FormEvent } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
 import { Badge } from '../Shadcn/ui/badge'
-import { Idea } from '@/types'
+import { Idea, PaginatedIdea } from '@/types'
 import { Button } from '../Shadcn/ui/button'
 import { CalendarIcon, ClipboardList, Hammer, LightbulbIcon, UsersIcon } from 'lucide-react'
 import { format, parseISO } from 'date-fns';
 
-export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClassName?: string }) {
+export default function SingleIdea({ hit, itemClassName }: { hit: PaginatedIdea, itemClassName?: string }) {
 
-	const handleIdeaClick = (e) => {
+	const handleIdeaClick = (e: FormEvent) => {
 		e.stopPropagation();
 		localStorage.setItem('ideasScrollPosition', window.scrollY.toString());
 		router.visit(`/idea/${hit.id}`)

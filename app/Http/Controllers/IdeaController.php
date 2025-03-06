@@ -6,12 +6,8 @@ use App\Models\Idea;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
-use Illuminate\Pagination\LengthAwarePaginator;
-use App\Traits\CacheableIdeas;
 use App\Traits\TransformIdeas;
-use Illuminate\Http\Response;
 
 class IdeaController extends Controller
 {
@@ -59,7 +55,7 @@ class IdeaController extends Controller
 
 		// Build the query
 		if (!$query) {
-			$builder = Idea::orderByDesc('created_at');
+			$builder = Idea::orderByDesc('created_at')->orderBy('id');
 		} else {
 			$ids = Idea::search($query)->get()->pluck('id');
 			$builder = Idea::whereIn('id', $ids)->latest();

@@ -103,6 +103,28 @@ export type Idea = {
 	expires: string;
 };
 
+export type PaginatedIdea = {
+	id: number;
+	title: string;
+	description: string;
+	tags: Tag[];
+	active: boolean;
+	value: number;
+	user: { id: number; name: string };
+	applications_count: number;
+	task_count: number;
+	created_at: DateTime;
+	updated_at: DateTime;
+};
+
+export type PaginationInstance = {
+	data: PaginatedIdea[];
+	next_cursor: string;
+	prev_cursor: string;
+	onLastPage: boolean;
+
+}
+
 export type Application = {
 	created_at: DateTime;
 	description: string;
