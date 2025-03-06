@@ -6,12 +6,16 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { router } from '@inertiajs/react';
 import { Idea, PaginatedIdea, PaginationInstance } from '@/types';
 import Checkbox from '@/Components/Checkbox';
+import useDebounce from '@/Hooks/useDebounce';
 
 const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query: string} }) => {
 	console.log(ideas);
 	const [searchQuery, setSearchQuery] = useState(filters.query || '');
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [orderBy, setOrderBy] = useState(filters.orderBy || 'latest_created');
+
+	const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
 	// Generate navigation URLs from cursor data
 	const nextPageUrl = ideas.next_cursor
 		? `/idea?cursor=${encodeURIComponent(ideas.next_cursor)}${filters.query ? `&query=${encodeURIComponent(filters.query)}` : ''}&tags=${selectedTags.join(',')}`
@@ -39,13 +43,13 @@ const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query:
 		}
 	};
 
-	const submitSearch = (e: FormEvent) => {
-		e.preventDefault();
-
-		router.get('/idea', { query: searchQuery }, {
-			preserveState: true,
-		});
-	};
+	// const submitSearch = (e: FormEvent) => {
+	// 	e.preventDefault();
+	//
+	// 	router.get('/idea', { query: searchQuery }, {
+	// 		preserveState: true,
+	// 	});
+	// };
 
 	const toggleTag = (tagId: number) => {
 		if (selectedTags.includes(tagId)) {
@@ -61,18 +65,17 @@ const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query:
 
 
 	useEffect(() => {
-		router.get('/idea', { query: searchQuery, tags: selectedTags.join(','), orderBy: orderBy }, {
+		router.get('/idea', { query: debouncedSearchQuery, tags: selectedTags.join(','), orderBy: orderBy }, {
 			preserveState: true,
 		});
-	}, [orderBy, selectedTags, searchQuery]);
+	}, [orderBy, selectedTags, debouncedSearchQuery]);
 
 	return (
 		<AppLayout title='Ideas'>
 
 			<div className="space-y-6">
 				{/* Search form  */}
-				<form onSubmit={submitSearch} className="gap-2">
-						<h1 className='mt-4'>Search by title or description</h1>
+				<h1 className='mt-4'>Search by title or description</h1>
 					<input
 						type="text"
 						placeholder="Search ideas..."
@@ -82,7 +85,7 @@ const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query:
 					/>
 					<div className='flex flex-wrap gap-4'>
 						{ideas.tags && ideas.tags.map((tag) => (
-							<div key={tag.id} className="flex items-center space-x-2">
+							<div key={tag.id} className="flex items-center space-x-2ear>
 								<Checkbox
 									id={`tag-${tag.id}`}
 									checked={selectedTags.includes(tag.id)}
@@ -94,13 +97,7 @@ const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query:
 							</div>
 						))}
 					</div>
-					<Button
-						type="submit"
-						variant="default"
-					>
-						Search
-					</Button>
-				</form>
+
 
 				<select
 					value={orderBy}
