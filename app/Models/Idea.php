@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\TransformIdeas;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Laravel\Scout\Searchable;
-use Laravel\Scout\Engines\Engine;
-use Laravel\Scout\EngineManager;
 
 class Idea extends Model
 {

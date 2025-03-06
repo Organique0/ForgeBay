@@ -34,7 +34,7 @@ class TaskController extends Controller
 			'value' => 'required|numeric',
 		]);
 
-		$validated['status'] = TaskStatus::IN_PROGRESS;
+		$validated['status'] = TaskStatus::TO_DO;
 
 		// Create the task through the relationship
 		$task = $idea->tasks()->create($validated);
