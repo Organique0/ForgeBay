@@ -7,9 +7,11 @@ import { router } from '@inertiajs/react';
 import { Idea, PaginatedIdea, PaginationInstance } from '@/types';
 import Checkbox from '@/Components/Checkbox';
 import useDebounce from '@/Hooks/useDebounce';
+import { useImmediateScrollRestoration } from '@/hooks/useImmediateScrollRestoration';
 
 const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query: string} }) => {
 	console.log(ideas);
+	useImmediateScrollRestoration('ideasScrollPosition', true);
 	const [searchQuery, setSearchQuery] = useState(filters.query || '');
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [orderBy, setOrderBy] = useState(filters.orderBy || 'latest_created');
@@ -67,6 +69,7 @@ const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query:
 	useEffect(() => {
 		router.get('/idea', { query: debouncedSearchQuery, tags: selectedTags.join(','), orderBy: orderBy }, {
 			preserveState: true,
+			preserveScroll: true
 		});
 	}, [orderBy, selectedTags, debouncedSearchQuery]);
 

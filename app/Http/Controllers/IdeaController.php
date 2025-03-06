@@ -51,7 +51,7 @@ class IdeaController extends Controller
 		//then you send the next_cursor as a cursor in the query
 		//and you get data for that cursor
 		//you repeat by sending the next_cursor to the client
-		$query = $request->input('query', 'Consequatur');
+		$query = $request->input('query', '');
 		$cursor = $request->input('cursor');
 		$orderBy = $request->input('orderBy', 'latest_created');
 		$tags = $request->input('tags');
