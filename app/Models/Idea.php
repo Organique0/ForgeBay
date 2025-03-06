@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\TransformIdeas;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Laravel\Scout\Searchable;
+use Laravel\Scout\Engines\Engine;
+use Laravel\Scout\EngineManager;
 
 class Idea extends Model
 {
@@ -17,7 +20,7 @@ class Idea extends Model
 	use Searchable;
 
 	//tntsearch option
-	//public $asYouType = true;
+	public $asYouType = true;
 
 	public function toSearchableArray(): array
 	{
@@ -32,10 +35,10 @@ class Idea extends Model
 			'description' => (string) $this->description,
 			'tags'        => $tags,
 			'active'      => $this->active,
-			'value'       => (int) $value,
+			'total_value'       => $value,
 			'user'        => $this->user->only(['id', 'name']),
 			'applications_count' => $this->tasks->count('applications'),
-			'task_count'  => $this->tasks->count(),
+			'tasks_count'  => $this->tasks->count(),
 			'created_at'  => $this->created_at,
 			'updated_at'  => $this->updated_at,
 			// Add a combined field for better searchability

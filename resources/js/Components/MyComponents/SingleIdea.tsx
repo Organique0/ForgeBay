@@ -45,7 +45,7 @@ export default function SingleIdea({ hit, itemClassName }: { hit: PaginatedIdea,
 
 				</CardTitle>
 				<CardDescription className='text-extrabold text-lg'>
-					Combined Value: {hit.value} $
+					Combined Value: {hit.total_value} $
 				</CardDescription>
 				<CardDescription className="flex items-center mt-2">
 					<CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
@@ -75,7 +75,7 @@ export default function SingleIdea({ hit, itemClassName }: { hit: PaginatedIdea,
 				<div className="flex justify-between items-center w-full">
 					<div className="flex items-center text-sm text-muted-foreground">
 						<ClipboardList className="h-3.5 w-3.5 mx-1.5" />
-						{hit.task_count || 0} tasks
+						{hit.tasks_count || 0} tasks
 						<UsersIcon className="h-3.5 w-3.5 mx-1.5 ml-3" />
 						{hit.applications_count || 0} applications
 					</div>
