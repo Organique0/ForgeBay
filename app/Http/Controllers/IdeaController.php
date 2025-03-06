@@ -47,39 +47,45 @@ class IdeaController extends Controller
 		// Cache::tags(['ideas_pages'])->put($cacheKey, $paginatedIdeas, 3600);
 
 
-		$query = $request->input('query', 'voluptatum');
+		//so like this is a game of ping pong
+		//called cursor pagination
+		//you send next data with next_cursor in it.
+		//then you send the next_cursor as a cursor in the query
+		//and you get data for that cursor
+		//you repeat by sending the next_cursor to the client
+		$query = $request->input('query', '');
+		$cursor = $request->input('cursor');
+		$perPage = 10;
 
-    if (!$query) {
-        $ideas = Idea::latest()->with('user', 'tags')->paginate(10);
-    } else {
-			$ideas = Idea::search($query)->keys()->map(function ($ideaId) {
-				$idea = Idea::find($ideaId);
-				return [
-					'id'          => $idea->id,
-					'title'       => $idea->title,
-					'description' => $idea->description,
-					'tags' 			  => $idea->tags->pluck('name'),
-					'active'      => $idea->active,
-					'created_at'  => $idea->created_at,
-					'updated_at'  => $idea->updated_at,
-					'value'       => $idea->tasks->sum('value'),
-					'user'        => $idea->user,
-					'expires'     => $idea->expires,
-				];
-			});
+		// Build the query
+		if (!$query) {
+			$builder = Idea::orderByDesc('created_at');
+		} else {
+			$ids = Idea::search($query)->get()->pluck('id');
+			$builder = Idea::whereIn('id', $ids)->latest();
+		}
 
-        // If you want pagination for search results as well
-       // $ideas = $ideas->paginate(10)->appends(['query' => $query]);
-    }
+		$ideas = $builder->cursorPaginate($perPage, ['*'], 'cursor', $cursor);
 
-    if ($request->wantsJson()) {
-        return response()->json($ideas);
-    }
+		//some stuff to transform ideas to be in the same format
+		//independent of if there is a query or not.
+		//and I already accept this data on the front so it has to be in this format.
+		//and I get to pick how and what gets send.
+		$ideas->through(fn($idea) => $idea->toSearchableArray());
 
-    return Inertia::render('Ideas/Index', [
-        'ideas' => $ideas,
-        'filters' => ['query' => $query],
-    ]);
+		//send next cursor as an encoded string.
+		//so that it looks better in the url.
+		$nextCursor = $ideas->nextCursor() ? $ideas->nextCursor()->encode() : null;
+		$prevCursor = $ideas->previousCursor() ? $ideas->previousCursor()->encode() : null;
+		return Inertia::render('Ideas/Index', [
+				'ideas' => [
+						'data' => $ideas->items(),
+						'next_cursor' => $nextCursor,
+						'prev_cursor' => $prevCursor,
+						'onLastPage' => !$ideas->hasMorePages()
+				],
+				'filters' => ['query' => $query],
+		]);
 	}
 
 	public function show(string $id): \Inertia\Response

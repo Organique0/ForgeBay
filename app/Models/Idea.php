@@ -20,33 +20,27 @@ class Idea extends Model
 	use Searchable;
 
 	//tntsearch option
-	public $asYouType = true;
+	//public $asYouType = true;
 
-	public $searchable = [
-		'id', 'title', 'description', 'tags', 'active', 'value', 'created_at', 'updated_at'
-	];
-	public function searchableUsing(): Engine
-	{
-		return app(EngineManager::class)->engine('tntsearch');
-	}
 	public function toSearchableArray(): array
 	{
-		// Eager load relationships
-		$this->load(['tags', 'tasks']);
+		$this->load(['tags', 'tasks', 'user', 'applications', 'tasks']);
 
-		// Manually fetch tags and calculate value
-		$tags = $this->tags->pluck('name')->implode(' ');
+		$tags = $this->tags->pluck('name');
 		$value = $this->tasks->sum('value');
 
 		$array = [
 			'id'          => (int) $this->id,
 			'title'       => (string) $this->title,
 			'description' => (string) $this->description,
-			'tags'        => (string) $tags, // Pre-computed string of tag names
-			'active'      => (string) $this->active ? 'true' : 'false',
-			'value'       => (int) $value, // Pre-computed and cast to string
-			'created_at'  => (string) $this->created_at->toDateTimeString(),
-			'updated_at'  => (string) $this->updated_at->toDateTimeString(),
+			'tags'        => $tags,
+			'active'      => $this->active,
+			'value'       => (int) $value,
+			'user'        => $this->user->only(['id', 'name']),
+			'applications_count' => $this->tasks->count('applications'),
+			'task_count'  => $this->tasks->count(),
+			'created_at'  => $this->created_at,
+			'updated_at'  => $this->updated_at,
 			// Add a combined field for better searchability
 			//'searchable'  => $this->title . ' ' . $this->description . ' ' . $tags,
 		];
@@ -54,6 +48,7 @@ class Idea extends Model
 		return $array;
 		//\Log::info('Data being indexed for model ' . $this->id, $array);
 	}
+
 	protected $fillable = [
 		'title',
 		'description',
@@ -83,6 +78,7 @@ class Idea extends Model
 	protected static function boot()
 	{
 		parent::boot();
+
 
 		// static::deleted(function ($idea) {
 		// 	$idea->searchable();

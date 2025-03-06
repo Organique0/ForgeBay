@@ -9,8 +9,10 @@ import { format, parseISO } from 'date-fns';
 
 export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClassName?: string }) {
 
-	const handleIdeaClick = () => {
+	const handleIdeaClick = (e) => {
+		e.stopPropagation();
 		localStorage.setItem('ideasScrollPosition', window.scrollY.toString());
+		router.visit(`/idea/${hit.id}`)
 	};
 
 	const handleUserLinkClick = (e: React.MouseEvent) => {
@@ -66,7 +68,7 @@ export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClas
 						hit.tags.map((tag: string, index) => (
 							<Badge id={index + ""} key={tag} className='text-xs'>{tag}</Badge>
 						))
-					}
+					 }
 				</div>
 			</CardContent>
 			<CardFooter>

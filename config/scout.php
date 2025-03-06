@@ -246,7 +246,7 @@ return [
 			'distance' => 2,
 			'no_limit' => true
 		],
-		'asYouType' => true,
+		'asYouType' => false,
 		'searchBoolean' => env('TNTSEARCH_BOOLEAN', true),
 		'maxDocs' => env('TNTSEARCH_MAX_DOCS', 10000),
 	],

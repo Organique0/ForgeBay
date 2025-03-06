@@ -1,131 +1,114 @@
-import React, { useEffect, useRef } from 'react';
-import {
-	Configure,
-	InstantSearch,
-	RefinementList,
-	SearchBox,
-	SortBy,
-	useInstantSearch,
-} from 'react-instantsearch';
+import React, { useState, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
-import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
-import InfiniteHits from '@/Components/MyComponents/InfiniteHits';
-import { useImmediateScrollRestoration } from '@/hooks/useImmediateScrollRestoration';
 import SingleIdea from '@/Components/MyComponents/SingleIdea';
-import { inertia } from 'framer-motion';
-
+import { Button } from '@/Components/Shadcn/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { router } from '@inertiajs/react';
 
 const Index: React.FC = ({ ideas, filters }) => {
-	console.log(ideas, filters);
-	useImmediateScrollRestoration('ideasScrollPosition', true);
-	const sentinelRef = useRef(null);
-	const isLastPage = useRef(ideas.next_page_url);
+	console.log(ideas);
+	const [searchQuery, setSearchQuery] = useState(filters.query || '');
 
-	useEffect(() => {
-		if (sentinelRef.current !== null) {
-			const observer = new IntersectionObserver((entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting && !ideas.next_page_url) {
-						showMore();
-					}
-				});
-			});
+	// Generate navigation URLs from cursor data
+	const nextPageUrl = ideas.next_cursor
+		? `/idea?cursor=${encodeURIComponent(ideas.next_cursor)}${filters.query ? `&query=${encodeURIComponent(filters.query)}` : ''}`
+		: null;
 
-			observer.observe(sentinelRef.current);
+	const prevPageUrl = ideas.prev_cursor
+		? `/idea?cursor=${encodeURIComponent(ideas.prev_cursor)}${filters.query ? `&query=${encodeURIComponent(filters.query)}` : ''}`
+		: null;
 
-			return () => {
-				observer.disconnect();
-			};
-		}
-	}, [isLastPage, showMore]);
-
-	function showMore() {
-		if (ideas.next_page_url) {
-			inertia.visit(ideas.next_page_url, {
-				method: 'get',
-				preserveScroll: true,
+	const goToNextPage = () => {
+		if (ideas.next_cursor) {
+			router.get(nextPageUrl, {}, {
 				preserveState: true,
-				onSuccess: (page) => {
-					// Merge the new data into your local state
-				}
+				preserveScroll: true
 			});
 		}
-	}
+	};
+
+	const goToPrevPage = () => {
+		if (ideas.prev_cursor) {
+				router.get(prevPageUrl, {}, {
+				preserveState: true,
+				preserveScroll: true
+			});
+		}
+	};
+
+	const submitSearch = (e) => {
+		e.preventDefault();
+
+		// Only trigger navigation if there's an actual query
+		router.get('/idea', { query: searchQuery }, {
+			preserveState: true,
+			onSuccess: () => {
+				setPreviousCursors([]);
+			}
+		});
+	};
 
 	return (
 		<AppLayout title='Ideas'>
 			<h1 className='mt-4'>Search by title, description, tags, user, date ...</h1>
-			{/* <InstantSearch
-				indexName='ideas:created_at:desc'
-				preserveSharedStateOnUnmount
-				routing={true}
-				//@ts-expect-error
-				searchClient={searchClient}>
-				<Configure
-					filters="active = true" />
-				<div className="md:flex mt-2 mb-4 gap-6">
-					<SearchBox className='flex-grow' />
-					<SortBy
-						items={[
-							{ label: 'Latest', value: 'ideas:created_at:desc' },
-							{ label: 'Oldest', value: 'ideas:created_at:asc' },
-							{ label: 'Recently Updated', value: 'ideas:updated_at:desc' },
-							{ label: 'Least Recently Updated', value: 'ideas:updated_at:asc' },
-							{ label: 'Highest Value', value: 'ideas:value:desc' },
-							{ label: 'Lowest Value', value: 'ideas:value:asc' },
-						]}
-					/>
-				</div>
-				<div className='flex'>
-					<RefinementList attribute="tags" className='' />
-					<div className='flex-grow w-full' />
-				</div>
-				<NoResultsBoundary fallback={<NoResults />}>
-					<InfiniteHits />
-				</NoResultsBoundary>
-			</InstantSearch> */}
 
-			<div className="">
-				<ul className="">
-					{ideas.map((idea) => (
-						<li key={idea.id} className='my-6'>
-							<SingleIdea hit={idea} />
-						</li>
-					))}
-					<li ref={sentinelRef} aria-hidden="true" className='h-10' />
-				</ul>
+			<div className="space-y-6">
+				{/* Search form  */}
+				<form onSubmit={submitSearch} className="flex gap-2">
+					<input
+						type="text"
+						placeholder="Search ideas..."
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
+						className="w-full p-2 border rounded"
+					/>
+					<Button
+						type="submit"
+						variant="default"
+					>
+						Search
+					</Button>
+				</form>
+
+				{/* Ideas list */}
+				<div className="">
+					<ul className="">
+						{ideas.data && ideas.data.length > 0 ? (
+							ideas.data.map((idea) => (
+								<li key={idea.id} className='my-6'>
+									<SingleIdea hit={idea} />
+								</li>
+							))
+						) : (
+							<p>No ideas found.</p>
+						)}
+					</ul>
+				</div>
+
+				{/* Pagination */}
+				<div className="flex items-center justify-between">
+					<Button
+						variant="outline"
+						disabled={!ideas.prev_cursor}
+						onClick={goToPrevPage}
+					>
+						<ChevronLeft className="h-4 w-4 mr-2" />
+						Previous
+					</Button>
+
+
+					<Button
+						variant="outline"
+						disabled={!ideas.next_cursor}
+						onClick={goToNextPage}
+					>
+						Next
+						<ChevronRight className="h-4 w-4 ml-2" />
+					</Button>
+				</div>
 			</div>
-		</AppLayout >
+		</AppLayout>
 	);
 };
-
-
-
-function NoResults() {
-	//const { indexUiState } = useInstantSearch();
-	return (
-		<div>
-			<p>
-				No results for <q>{ }</q>.
-			</p>
-		</div>
-	);
-}
-
-function NoResultsBoundary({ children, fallback }: { children: React.ReactNode; fallback: React.ReactNode }) {
-	const { results } = useInstantSearch();
-	if (!results.__isArtificial && results.nbHits === 0) {
-		return (
-			<>
-				{fallback}
-				<div hidden>{children}</div>
-			</>
-		);
-	}
-
-	return children;
-}
-
-
 
 export default Index;
