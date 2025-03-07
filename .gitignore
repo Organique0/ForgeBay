@@ -20,3 +20,5 @@ yarn-error.log
 /.idea
 /.vscode
 storage/ideas.index
+storage/ideas.index-shm
+storage/ideas.index-wal

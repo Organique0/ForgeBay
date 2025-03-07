@@ -6,11 +6,8 @@ use App\ApplicationStatus;
 use App\Events\ApplicationStatusUpdated;
 use App\Events\TaskStatusUpdated;
 use App\Models\Application;
-use App\Models\Idea;
-use App\Models\Task;
 use App\TaskStatus;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
 class ApplicationController extends Controller
@@ -35,16 +32,8 @@ class ApplicationController extends Controller
 			'status' => $validatedData['applicationStatus'],
 		]);
 
-
-		// Update task status
-		//$task = Task::find($validatedData['taskId']);
-		//$task->update(['status' => $validatedData['taskStatus']]);
-
-		// Load the idea with relationships
-		//$idea = Idea::with(['tasks', 'tags', 'user'])->find($validatedData['ideaId']);
-
 		ApplicationStatusUpdated::dispatch($validatedData['taskId'], $validatedData['applicationStatus'], $validatedData['ideaId']);
-		//TaskStatusUpdated::dispatch($validatedData['taskId'], $validatedData['taskStatus'], $validatedData['ideaId']);
+		TaskStatusUpdated::dispatch($validatedData['taskId'], $validatedData['taskStatus'], $validatedData['ideaId']);
 	}
 
 	public function show(Request $request)

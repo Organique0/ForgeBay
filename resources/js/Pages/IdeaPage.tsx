@@ -31,26 +31,26 @@ const IdeaPage = ({ idea: initialIdea, recommendations }: { idea: IdeaType, reco
 	const firstToDoIndex = idea.tasks.findIndex(task => task.status === 'to_do');
 	const page = useTypedPage();
 
-	// useEffect(() => {
-	// 	const handler = (e: Event) => {
-	// 		const event = (e as CustomEvent).detail;
-	// 		if (event.ideaId === initialIdea.id) {
-	// 			setIdea(prevIdea => ({
-	// 				...prevIdea,
-	// 				tasks: prevIdea.tasks.map(task => {
-	// 					if (task.id === event.taskId) {
-	// 						return { ...task, status: event.status };
-	// 					}
-	// 					return task;
-	// 				})
-	// 			}));
-	// 		}
-	// 	};
-	// 	window.addEventListener('taskStatusUpdate', handler);
-	// 	return () => {
-	// 		window.removeEventListener('taskStatusUpdate', handler);
-	// 	};
-	// }, [initialIdea.id]);
+	 useEffect(() => {
+	 	const handler = (e: Event) => {
+	 		const event = (e as CustomEvent).detail;
+	 		if (event.ideaId === initialIdea.id) {
+	 			setIdea(prevIdea => ({
+	 				...prevIdea,
+	 				tasks: prevIdea.tasks.map(task => {
+	 					if (task.id === event.taskId) {
+	 						return { ...task, status: event.status };
+	 					}
+	 					return task;
+	 				})
+	 			}));
+	 		}
+	 	};
+	 	window.addEventListener('taskStatusUpdate', handler);
+	 	return () => {
+	 		window.removeEventListener('taskStatusUpdate', handler);
+	 	};
+	 }, [initialIdea.id]);
 
 	console.log(recommendations);
 	return (
