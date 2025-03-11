@@ -35,6 +35,9 @@ export default function EditIdeaAndTasks({
 	const [idea, setIdea] = useState<Idea>(initialIdea)
 	const [tasks, setTasks] = useState<Task[]>(existingTasks)
 	const [successMessage, setSuccessMessage] = useState<string | null>(null)
+	const [availableTags, setAvailableTags] = useState<CleanTag[]>(initialIdea.tags)
+	const [selectedTags, setSelectedTags] = useState<CleanTag[]>([])
+	const [query, setQuery] = useState("")
 
 	// Idea Edit Form
 	const ideaFormSchema = z.object({
@@ -49,6 +52,7 @@ export default function EditIdeaAndTasks({
 		description: z.string().min(10, {
 			message: "Description must be at least 10 characters.",
 		}),
+		tags: z.any(),
 		status: z.boolean(),
 		expirationDate: z.date(),
 	})
@@ -60,6 +64,7 @@ export default function EditIdeaAndTasks({
 			description: idea.description,
 			status: idea.active,
 			expirationDate: new Date(idea.expires),
+			tags: selectedTags,
 		},
 	})
 
@@ -170,7 +175,7 @@ export default function EditIdeaAndTasks({
 
 	return (
 		<AppLayout title={`Edit Idea: ${idea.title}`}>
-			<div className="container max-w-4xl py-10">
+			<div className="container max-w-4xl py-10 m-auto">
 				{successMessage && (
 					<Alert className="mb-6 bg-green-50 border-green-200">
 						<CheckCircle2 className="h-4 w-4 text-green-600" />
@@ -368,7 +373,7 @@ export default function EditIdeaAndTasks({
 									name="description"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel className="text-base">Description (Optional)</FormLabel>
+											<FormLabel className="text-base">Description</FormLabel>
 											<FormControl>
 												<Textarea
 													placeholder="Add details about this task..."

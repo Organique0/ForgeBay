@@ -190,6 +190,7 @@ class IdeaController extends Controller
 			'description' => 'required|string',
 			'tags' => 'array',
 			'tags.*' => 'exists:tags,id',
+			'expirationDate'  => 'required|date_format:Y-m-d H:i:s',
 		]);
 
 
@@ -198,7 +199,7 @@ class IdeaController extends Controller
 		$idea->description = $validated['description'];
 		$idea->user_id = auth()->id();
 		$idea->active = true;
-		$idea->expires = now()->addMonths(3);
+		$idea->expires = $validated['expirationDate'];
 		$idea->save();
 
 		if (isset($validated['tags']) && !empty($validated['tags'])) {

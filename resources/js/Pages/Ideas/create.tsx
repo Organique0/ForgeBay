@@ -17,8 +17,11 @@ import { Button } from '@/Components/Shadcn/ui/button';
 import { z } from "zod"
 import axios from 'axios';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
-import { PlusCircle } from 'lucide-react';
-
+import { Calendar, PlusCircle } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/Shadcn/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/Components/Shadcn/ui/popover';
+import { Calendar as CalendarComponent } from "@/Components/Shadcn/ui/calendar";
+import { format } from 'date-fns';
 
 
 export default function Create({ allTags }: { allTags: CleanTag[] }) {
@@ -37,10 +40,11 @@ export default function Create({ allTags }: { allTags: CleanTag[] }) {
 			.max(50, {
 				message: "Title cannot exceed 50 characters.",
 			}),
-		description: z.string().min(2, {
-			message: "Description must be at least 2 characters.",
+		description: z.string().min(10, {
+			message: "Description must be at least 10 characters.",
 		}),
 		tags: z.any(),
+		expirationDate: z.date(),
 	})
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -49,19 +53,20 @@ export default function Create({ allTags }: { allTags: CleanTag[] }) {
 			title: "",
 			description: "",
 			tags: selectedTags,
+			expirationDate: new Date(new Date().setMonth(new Date().getMonth() + 3))
+
 		},
 	})
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		// Extract tag IDs from selected tags
-		const tagIds = selectedTags.map((tag) => tag.id)
-
+		//const tagIds = selectedTags.map((tag) => tag.id)
+		const payload = {
+			...values,
+			expirationDate: format(values.expirationDate, 'yyyy-MM-dd HH:mm:ss'),
+		};
 		axios
-			.post("/ideas/new", {
-				title: values.title,
-				description: values.description,
-				tags: tagIds,
-			})
+			.post("/ideas/new", payload)
 			.then((response) => {
 				// Handle successful submission
 				if (response.data.redirect) {
@@ -212,6 +217,41 @@ export default function Create({ allTags }: { allTags: CleanTag[] }) {
 										</FormItem>
 									)}
 								/>
+								<div className="grid gap-6 sm:grid-cols-2">
+									<FormField
+										control={form.control}
+										name="expirationDate"
+										render={({ field }) => (
+											<FormItem className="flex flex-col">
+												<FormLabel className="text-base">Expiration Date</FormLabel>
+												<Popover>
+													<PopoverTrigger asChild>
+														<FormControl>
+															<Button
+																variant={"outline"}
+																className={`w-full pl-3 text-left font-normal ${!field.value && "text-muted-foreground"}`}
+															>
+																{field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+																<Calendar className="ml-auto h-4 w-4 opacity-50" />
+															</Button>
+														</FormControl>
+													</PopoverTrigger>
+													<PopoverContent className="w-auto p-0" align="start">
+														<CalendarComponent
+															mode="single"
+															selected={field.value || undefined}
+															onSelect={(date) => field.onChange(date)}
+															disabled={(date) => date < new Date() || date > new Date("2100-01-01")}
+															initialFocus
+														/>
+													</PopoverContent>
+												</Popover>
+												<FormDescription>Set an expiration date for your idea</FormDescription>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</div>
 							</form>
 						</Form>
 					</CardContent>
