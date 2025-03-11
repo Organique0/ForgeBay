@@ -70,12 +70,12 @@ export default function Create({ allTags }: { allTags: CleanTag[] }) {
 			.post("/ideas/new", payload)
 			.then((response) => {
 				// Handle successful submission
-			// 	if (response.data.redirect) {
-			// 		window.location.href = response.data.redirect;
-			// 	} else {
-			// 		// Redirect to the ideas list or show success message
-			// 		window.location.href = route('ideas.index');
-			// 	}
+			 	if (response.data.redirect) {
+			 		window.location.href = response.data.redirect;
+			 	} else {
+			 		// Redirect to the ideas list or show success message
+			 		window.location.href = route('ideas.index');
+			 	}
 			console.log(response);
 			 })
 			.catch((error) => {
