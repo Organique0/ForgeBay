@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Traits\TransformIdeas;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class IdeaController extends Controller
 {
@@ -140,14 +139,20 @@ class IdeaController extends Controller
 			->where('active', true)
 			->whereHas('tags', fn($q) => $q->whereIn('tags.id', $tagIds))
 			->with([
-				'tags',
-				'tasks' => fn($q) => $q->withCount('applications'),
-				'user'
+				'user:id,name',
+				'tags' => function ($query) {
+					$query->select('tags.id', 'tags.name')->pluck('name');
+				}
 			])
+			->withSum('tasks as total_value', 'value')
+			->withCount('tasks')
+			->withCount(['tasks as applications_count' => function ($query) {
+				$query->withCount('applications')->selectRaw('sum(applications_count)');
+			}])
 			->take(8)
 			->get();
 
-		$recommendations = $this->TransformIdeas($recommendations);
+		//$recommendations = $this->TransformIdeas($recommendations);
 
 
 		if (!$idea) {
@@ -234,7 +239,7 @@ class IdeaController extends Controller
 			$idea->tags()->sync($validated['tags']);
 		}
 
-		//return response()->json(['redirect' => route('tasks.index', $idea->id)]);
+		return response()->json(['redirect' => route('tasks.index', $idea->id)]);
 	}
 
 	public function myIdeas(Request $request)
