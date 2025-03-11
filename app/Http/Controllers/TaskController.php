@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Idea;
+use App\Models\Tag;
 use App\TaskStatus;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -12,11 +13,13 @@ class TaskController extends Controller
 	// Existing index method to show task creation page
 	public function index($ideaId)
 	{
-		$idea = Idea::findOrFail($ideaId);
+		$idea = Idea::with('tags')->findOrFail($ideaId);
 		$existingTasks = $idea->tasks()->get();
+		$tags = Tag::select('id', 'name')->get();
 		return Inertia::render('Tasks/create', [
 			'initialIdea'           => $idea,
 			'existingTasks'  => $existingTasks,
+			'allTags' => $tags,
 		]);
 	}
 

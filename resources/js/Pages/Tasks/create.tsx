@@ -29,14 +29,15 @@ import { Calendar as CalendarComponent } from "@/Components/Shadcn/ui/calendar";
 export default function EditIdeaAndTasks({
 	initialIdea,
 	existingTasks = [],
-}: { initialIdea: Idea; existingTasks?: Task[] }) {
+	allTags
+}: { initialIdea: Idea; existingTasks?: Task[]; allTags: CleanTag[] }) {
 	console.log(initialIdea);
 	const route = useRoute()
 	const [idea, setIdea] = useState<Idea>(initialIdea)
 	const [tasks, setTasks] = useState<Task[]>(existingTasks)
 	const [successMessage, setSuccessMessage] = useState<string | null>(null)
-	const [availableTags, setAvailableTags] = useState<CleanTag[]>(initialIdea.tags)
-	const [selectedTags, setSelectedTags] = useState<CleanTag[]>([])
+	const [availableTags, setAvailableTags] = useState<CleanTag[]>(allTags)
+	const [selectedTags, setSelectedTags] = useState<CleanTag[]>(initialIdea.tags)
 	const [query, setQuery] = useState("")
 
 	// Idea Edit Form
@@ -72,6 +73,7 @@ export default function EditIdeaAndTasks({
 		const payload = {
 			...values,
 			expirationDate: format(values.expirationDate, 'yyyy-MM-dd HH:mm:ss'),
+			tags: selectedTags || null,
 		};
 		axios
 			.put(`/ideas/${idea.id}`, payload)
@@ -92,6 +94,27 @@ export default function EditIdeaAndTasks({
 				}
 			})
 	}
+
+		function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
+			const search = event.target.value.toLocaleLowerCase()
+			setQuery(search)
+
+			const filteredItems = allTags.filter(
+				(tag) => tag.name.toLocaleLowerCase().includes(search) && !selectedTags.some((t) => t.id === tag.id),
+			)
+
+			setAvailableTags(filteredItems)
+		}
+
+		const handleTagClick = (tag: CleanTag) => {
+			if (selectedTags.some((t) => t.id === tag.id)) {
+				setSelectedTags((prev) => prev.filter((t) => t.id !== tag.id))
+				setAvailableTags((prev) => [...prev, tag].sort((a, b) => a.name.localeCompare(b.name)))
+			} else {
+				setSelectedTags((prev) => [...prev, tag].sort((a, b) => a.name.localeCompare(b.name)))
+				setAvailableTags((prev) => prev.filter((t) => t.id !== tag.id))
+			}
+		}
 
 	// Task Form
 	const taskFormSchema = z.object({
@@ -288,8 +311,64 @@ export default function EditIdeaAndTasks({
 												<FormMessage />
 											</FormItem>
 										)}
-									/>
-								</div>
+									/></div>
+																	<FormField
+																		control={ideaForm.control}
+																		name="tags"
+																		render={({ field }) => (
+																			<FormItem>
+																				<FormLabel className="text-base">Tags</FormLabel>
+																				<FormControl>
+																					<div className="space-y-4">
+																						<div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+																							<Input
+																								value={query}
+																								onChange={handleInputChange}
+																								className="max-w-xs"
+																								placeholder="Search for tags..."
+																							/>
+																							<p className="text-sm text-muted-foreground">{selectedTags.length} tags selected</p>
+																						</div>
+
+																						{selectedTags.length > 0 && (
+																							<div className="bg-muted/50 p-3 rounded-md">
+																								<h4 className="text-sm font-medium mb-2">Selected Tags</h4>
+																								<div className="flex flex-wrap gap-2">
+																									{selectedTags.map((tag) => (
+																										<Tag
+																											key={tag.id}
+																											value={tag.name}
+																											isSelected={true}
+																											onClick={() => handleTagClick(tag)}
+																										/>
+																									))}
+																								</div>
+																							</div>
+																						)}
+
+																						{availableTags.length > 0 && (
+																							<div className="bg-background border rounded-md p-3">
+																								<h4 className="text-sm font-medium mb-2">Available Tags</h4>
+																								<div className="flex flex-wrap gap-2">
+																									{availableTags.map((tag) => (
+																										<Tag
+																											key={tag.id}
+																											value={tag.name}
+																											isSelected={false}
+																											onClick={() => handleTagClick(tag)}
+																										/>
+																									))}
+																								</div>
+																							</div>
+																						)}
+																					</div>
+																				</FormControl>
+																				<FormDescription>Tags help categorize your idea and make it discoverable</FormDescription>
+																				<FormMessage />
+																			</FormItem>
+																		)}
+																	/>
+
 
 								<div className="flex justify-end">
 									<Button type="submit" className="gap-2">

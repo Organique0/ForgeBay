@@ -28,14 +28,27 @@ class IdeaController extends Controller
 		$perPage = 10;
 
 		$builder = Idea::where('active', true)
-				->whereHas('tasks', function($query) {
-			$query->where('status', 'to_do');
-				});
-		if ($query) {
+			->whereHas('tasks', function($query) {
+				$query->where('status', 'to_do');
+			})
+			->with([
+				'user:id,name',
+				'tags' => function($query) {
+					$query->select('tags.id', 'tags.name')->pluck('name');
+				}
+			])
+			->withSum('tasks as total_value', 'value')
+			->withCount('tasks')
+			->withCount(['tasks as applications_count' => function($query) {
+				$query->withCount('applications')->selectRaw('sum(applications_count)');
+			}]);
+
+
 			// Get IDs that match the search query
-			$ids = Idea::search($query)->where('active', true)->get()->pluck('id');
-			$builder->whereIn('id', $ids);
-		}
+			if($query) {
+				$ids = Idea::search($query)->where('active', true)->get()->pluck('id');
+				$builder->whereIn('id', $ids);
+			}
 
 		// Then apply tag filtering if tags are provided
 		if ($tags) {
@@ -83,7 +96,6 @@ class IdeaController extends Controller
 				$builder->orderBy('created_at', 'desc')->orderBy('id', 'desc');
 				break;
 		}
-		Log::info($builder->get());
 		$ideas = $builder->cursorPaginate($perPage, ['*'], 'cursor', $cursor);
 
 
@@ -91,7 +103,7 @@ class IdeaController extends Controller
 		//independent of if there is a query or not.
 		//and I already accept this data on the front so it has to be in this format.
 		//and I get to pick how and what gets send.
-		$ideas->through(fn($idea) => $idea->toSearchableArray());
+		//$ideas->through(fn($idea) => $idea->toSearchableArray());
 
 		//send next cursor as an encoded string.
 		//so that it looks better in the url.
@@ -161,14 +173,19 @@ class IdeaController extends Controller
 		// Make sure the idea belongs to the currently authenticated user
 		$idea = Idea::where('user_id', auth()->id())->findOrFail($id);
 
+		// Transform tags array to just IDs
+		if ($request->has('tags')) {
+				$request->merge(['tags' => collect($request->tags)->pluck('id')->toArray()]);
+		}
+
 		// Validate the incoming request
 		$validated = $request->validate([
-			'title'           => 'required|string|max:255',
-			'description'     => 'required|string',
-			'status'          => 'required|boolean',
-			'expirationDate'  => 'required|date_format:Y-m-d H:i:s',
-			'tags'            => 'nullable|array', // Add this
-			'tags.*'          => 'exists:tags,id', // Add this
+				'title'           => 'required|string|max:255',
+				'description'     => 'required|string',
+				'status'          => 'required|boolean',
+				'expirationDate'  => 'required|date_format:Y-m-d H:i:s',
+				'tags'            => 'nullable|array',
+				'tags.*'          => 'exists:tags,id',
 		]);
 
 		// Update fields
@@ -178,9 +195,11 @@ class IdeaController extends Controller
 		$idea->expires     = $validated['expirationDate'];
 		$idea->save();
 
-		if (isset($validated['tags'])) {
+
+		if (isset($validated['tags']) && !empty($validated['tags'])) {
 			$idea->tags()->sync($validated['tags']); // Use sync to update tags
 		}
+
 
 		return response()->json([
 			'message' => 'Idea updated successfully!',
@@ -191,12 +210,15 @@ class IdeaController extends Controller
 
 	public function new(Request $request)
 	{
+		if ($request->has('tags')) {
+			$request->merge(['tags' => collect($request->tags)->pluck('id')->toArray()]);
+		}
 		$validated = $request->validate([
-			'title' => 'required|string|max:255',
-			'description' => 'required|string',
-			'tags' => 'array',
-			'tags.*' => 'exists:tags,id',
+			'title'           => 'required|string|max:255',
+			'description'     => 'required|string',
 			'expirationDate'  => 'required|date_format:Y-m-d H:i:s',
+			'tags'            => 'nullable|array',
+			'tags.*'          => 'exists:tags,id',
 		]);
 
 
@@ -209,10 +231,10 @@ class IdeaController extends Controller
 		$idea->save();
 
 		if (isset($validated['tags']) && !empty($validated['tags'])) {
-			$idea->tags()->attach($validated['tags']);
+			$idea->tags()->sync($validated['tags']);
 		}
 
-		return response()->json(['redirect' => route('tasks.index', $idea->id)]);
+		//return response()->json(['redirect' => route('tasks.index', $idea->id)]);
 	}
 
 	public function myIdeas(Request $request)

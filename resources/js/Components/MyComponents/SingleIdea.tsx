@@ -2,7 +2,7 @@ import { Link, router } from '@inertiajs/react'
 import React, { FormEvent } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
 import { Badge } from '../Shadcn/ui/badge'
-import { Idea, PaginatedIdea } from '@/types'
+import { Idea, PaginatedIdea, Tag } from '@/types'
 import { Button } from '../Shadcn/ui/button'
 import { CalendarIcon, ClipboardList, Hammer, LightbulbIcon, UsersIcon } from 'lucide-react'
 import { format, parseISO } from 'date-fns';
@@ -65,8 +65,8 @@ export default function SingleIdea({ hit, itemClassName }: { hit: PaginatedIdea,
 				<div className="flex flex-wrap gap-2 mt-4">
 					{
 						//@ts-ignore
-						hit.tags.map((tag: string, index) => (
-							<Badge id={index + ""} key={tag} className='text-xs'>{tag}</Badge>
+						hit.tags.map((tag: Tag, index) => (
+							<Badge id={index + ""} key={tag.id} className='text-xs'>{tag.name}</Badge>
 						))
 					 }
 				</div>

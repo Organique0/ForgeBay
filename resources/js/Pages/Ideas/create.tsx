@@ -64,18 +64,20 @@ export default function Create({ allTags }: { allTags: CleanTag[] }) {
 		const payload = {
 			...values,
 			expirationDate: format(values.expirationDate, 'yyyy-MM-dd HH:mm:ss'),
+			tags: selectedTags || null,
 		};
 		axios
 			.post("/ideas/new", payload)
 			.then((response) => {
 				// Handle successful submission
-				if (response.data.redirect) {
-					window.location.href = response.data.redirect;
-				} else {
-					// Redirect to the ideas list or show success message
-					window.location.href = route('ideas.index');
-				}
-			})
+			// 	if (response.data.redirect) {
+			// 		window.location.href = response.data.redirect;
+			// 	} else {
+			// 		// Redirect to the ideas list or show success message
+			// 		window.location.href = route('ideas.index');
+			// 	}
+			console.log(response);
+			 })
 			.catch((error) => {
 				// Handle validation errors
 				if (error.response && error.response.data.errors) {

@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 	{
 
 
-		$this->call(RoleSeeder::class);
+		$this->call([RoleSeeder::class]);
 
 		$users = User::factory(500)->withPersonalTeam()->create();
 		$users->each(function ($user) {

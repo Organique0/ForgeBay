@@ -22,29 +22,28 @@ class Idea extends Model
 
 	public function toSearchableArray(): array
 	{
-		$this->load(['tags', 'tasks', 'user', 'applications', 'tasks']);
+		//$this->load(['tags']);
 
-		$tags = $this->tags->pluck('name');
-		$tagsString = $tags->implode(', '); // Convert collection to string
-		$value = $this->tasks->sum('value');
+		//$tags = $this->tags->pluck('name');
+		//$tagsString = $tags->implode(', '); // Convert collection to string
+		//$value = $this->tasks->sum('value');
 
 		$returnArray =  [
 			'id'                => (int)$this->id,
 			'title'             => (string)$this->title,
 			'description'       => (string)$this->description,
-			'tags'              => (string)$tagsString, // Now it's a string TNTSearch can handle
-			'active'            => (bool)$this->active,
-			'total_value'       => (int)$value,
-			'user'              => $this->user ? $this->user->name : null,
-			'applications_count' => (int)$this->tasks->sum(function ($task) {
-				return $task->applications->count();
-			}),
-			'tasks_count'       => (int)$this->tasks->count(),
-			'created_at'        => $this->created_at->toDateTimeString(),
-			'updated_at'        => $this->updated_at->toDateTimeString(),
+			//'tags'              => (string)$tagsString, // Now it's a string TNTSearch can handle
+			//'active'            => (bool)$this->active,
+			//'total_value'       => (int)$value,
+			//'user'              => $this->user ? $this->user->name : null,
+			// 'applications_count' => (int)$this->tasks->sum(function ($task) {
+			// 	return $task->applications->count();
+			// }),
+			// 'tasks_count'       => (int)$this->tasks->count(),
+			//'created_at'        => $this->created_at->toDateTimeString(),
+			//'updated_at'        => $this->updated_at->toDateTimeString(),
 		];
 
-		Log::info($returnArray);
 		return $returnArray;
 	}
 

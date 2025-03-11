@@ -107,7 +107,7 @@ export type PaginatedIdea = {
 	id: number;
 	title: string;
 	description: string;
-	tags: Tag[];
+	tags: string[];
 	active: boolean;
 	value: number;
 	user: { id: number; name: string };
