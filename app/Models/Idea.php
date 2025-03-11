@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\Log;
 use Laravel\Scout\Searchable;
 
 class Idea extends Model
@@ -24,26 +25,27 @@ class Idea extends Model
 		$this->load(['tags', 'tasks', 'user', 'applications', 'tasks']);
 
 		$tags = $this->tags->pluck('name');
+		$tagsString = $tags->implode(', '); // Convert collection to string
 		$value = $this->tasks->sum('value');
 
-		$array = [
-			'id'          => (int) $this->id,
-			'title'       => (string) $this->title,
-			'description' => (string) $this->description,
-			'tags'        => $tags,
-			'active'      => $this->active,
-			'total_value'       => $value,
-			'user'        => $this->user->only(['id', 'name']),
-			'applications_count' => $this->tasks->count('applications'),
-			'tasks_count'  => $this->tasks->count(),
-			'created_at'  => $this->created_at,
-			'updated_at'  => $this->updated_at,
-			// Add a combined field for better searchability
-			//'searchable'  => $this->title . ' ' . $this->description . ' ' . $tags,
+		$returnArray =  [
+			'id'                => (int)$this->id,
+			'title'             => (string)$this->title,
+			'description'       => (string)$this->description,
+			'tags'              => (string)$tagsString, // Now it's a string TNTSearch can handle
+			'active'            => (bool)$this->active,
+			'total_value'       => (int)$value,
+			'user'              => $this->user ? $this->user->name : null,
+			'applications_count' => (int)$this->tasks->sum(function ($task) {
+				return $task->applications->count();
+			}),
+			'tasks_count'       => (int)$this->tasks->count(),
+			'created_at'        => $this->created_at->toDateTimeString(),
+			'updated_at'        => $this->updated_at->toDateTimeString(),
 		];
 
-		return $array;
-		//\Log::info('Data being indexed for model ' . $this->id, $array);
+		Log::info($returnArray);
+		return $returnArray;
 	}
 
 	protected $fillable = [

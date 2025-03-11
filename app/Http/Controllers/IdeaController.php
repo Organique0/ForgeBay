@@ -167,6 +167,8 @@ class IdeaController extends Controller
 			'description'     => 'required|string',
 			'status'          => 'required|boolean',
 			'expirationDate'  => 'required|date_format:Y-m-d H:i:s',
+			'tags'            => 'nullable|array', // Add this
+			'tags.*'          => 'exists:tags,id', // Add this
 		]);
 
 		// Update fields
@@ -175,6 +177,10 @@ class IdeaController extends Controller
 		$idea->active      = $validated['status'];
 		$idea->expires     = $validated['expirationDate'];
 		$idea->save();
+
+		if (isset($validated['tags'])) {
+			$idea->tags()->sync($validated['tags']); // Use sync to update tags
+		}
 
 		return response()->json([
 			'message' => 'Idea updated successfully!',
