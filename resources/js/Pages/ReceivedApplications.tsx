@@ -2,14 +2,20 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/Components/Shadcn/ui/avat
 import { Badge } from '@/Components/Shadcn/ui/badge';
 import { Button } from '@/Components/Shadcn/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
-import { Application, ReceivedApplicationsType } from '@/types';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/Components/Shadcn/ui/pagination';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/Shadcn/ui/select';
+import AppLayout from '@/Layouts/AppLayout';
+import { RegularPaginationInstance } from '@/types';
 import { MessageSquare, UserPlus } from 'lucide-react';
 import React from 'react'
+import { router } from '@inertiajs/react';
+
+
 type DateTime = string
-export default function ReceivedApplications({applications}: {applications: ReceivedApplicationsType}) {
+
+export default function ReceivedApplications({ applications }: { applications: RegularPaginationInstance }) {
 	console.log(applications);
 
-	// Format date to be more readable
 	const formatDate = (dateString: DateTime) => {
 		return new Date(dateString).toLocaleDateString("en-US", {
 			year: "numeric",
@@ -18,7 +24,6 @@ export default function ReceivedApplications({applications}: {applications: Rece
 		})
 	}
 
-	// Get status badge color based on application status
 	const getStatusColor = (status: "sent" | "approved" | "declined") => {
 		switch (status) {
 			case "sent":
@@ -33,11 +38,32 @@ export default function ReceivedApplications({applications}: {applications: Rece
 	}
 
 	return (
+		<AppLayout title='received-applications'>
 		<div className="container mx-auto py-8">
 			<h1 className="text-3xl font-bold mb-6">Received Applications</h1>
 
+			<div className='mb-6 flex gap-6 items-center'>
+				<p>Status:</p>
+						<Select defaultValue="sent" onValueChange={(value) => {
+						router.get('/ideas/received-applications', { status: value }, {
+							preserveState: true,
+							preserveScroll: true,
+						});
+					}}>
+						<SelectTrigger className="w-[200px]">
+							<SelectValue placeholder="Application Status" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="sent">Sent</SelectItem>
+							<SelectItem value="approved">Approved</SelectItem>
+							<SelectItem value="declined">Declined</SelectItem>
+						</SelectContent>
+					</Select>
+
+			</div>
+
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				{applications.map((application) => (
+				{applications.data.map((application) => (
 					<Card key={application.id} className="h-full flex flex-col">
 						<CardHeader>
 							<div className="flex justify-between items-start">
@@ -107,6 +133,42 @@ export default function ReceivedApplications({applications}: {applications: Rece
 					</Card>
 				))}
 			</div>
+				<Pagination className='mt-6'>
+					<PaginationContent>
+						<PaginationItem>
+							<PaginationLink href={applications.first_page_url}>First</PaginationLink>
+						</PaginationItem>
+						<PaginationItem>
+							<PaginationPrevious href={applications.prev_page_url} />
+						</PaginationItem>
+						{applications.current_page > 1 && (
+							<PaginationItem>
+								<PaginationLink href={`?page=${applications.current_page - 1}`}>
+									{applications.current_page - 1}
+								</PaginationLink>
+							</PaginationItem>
+						)}
+						<PaginationItem>
+							<PaginationLink href={`?page=${applications.current_page}`} isActive>
+								{applications.current_page}
+							</PaginationLink>
+						</PaginationItem>
+						{applications.current_page < applications.last_page && (
+							<PaginationItem>
+								<PaginationLink href={`?page=${applications.current_page + 1}`}>
+									{applications.current_page + 1}
+								</PaginationLink>
+							</PaginationItem>
+						)}
+						<PaginationItem>
+							<PaginationNext href={applications.next_page_url} />
+						</PaginationItem>
+						<PaginationItem>
+							<PaginationLink href={applications.last_page_url}>Last</PaginationLink>
+						</PaginationItem>
+					</PaginationContent>
+				</Pagination>
 		</div>
+		</AppLayout>
 	)
 }

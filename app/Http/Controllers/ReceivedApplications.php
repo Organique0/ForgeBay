@@ -8,16 +8,29 @@ use Inertia\Inertia;
 
 class ReceivedApplications extends Controller
 {
-   public function index(Request $request)
-	 {
-		$applications = Application::whereHas('task', function ($q) {
+	public function index(Request $request)
+	{
+			// Set default status to 'sent'
+			$status = $request->input('status', 'sent');
+
+			$applicationsQuery = Application::whereHas('task', function ($q) {
 				// Only get applications where the task was created by the logged in user
 				$q->where('user_id', auth()->id());
-		})->with(['task.idea.user:id,bio,current_team_id,email,name'])
-			->get();
+			});
 
-		return Inertia::render('ReceivedApplications', [
-			'applications' => $applications
-		]);
-	 }
+			if ($status) {
+				$applicationsQuery->where('status', $status);
+			}
+
+			$applications = $applicationsQuery
+				->with(['task.idea.user:id,bio,current_team_id,email,name'])
+				->paginate(6);
+
+			return Inertia::render('ReceivedApplications', [
+				'applications' => $applications,
+				'filters' => [
+					'status' => $status,
+				],
+			]);
+	}
 }
