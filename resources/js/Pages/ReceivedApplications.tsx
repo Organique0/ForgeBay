@@ -8,19 +8,19 @@ import AppLayout from '@/Layouts/AppLayout';
 import { RegularPaginationInstance, Team } from '@/types';
 import { MessageSquare, UserPlus } from 'lucide-react';
 import React, { useState } from 'react'
-import { router, useForm } from '@inertiajs/react';
+import { Link, router, useForm } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 
 
 type DateTime = string
 
 export default function ReceivedApplications({ applications, team }: { applications: RegularPaginationInstance, team: Team }) {
-	console.log(team);
-
 	const addTeamMemberForm = useForm({
 		email: '',
 		role: 'editor',
 	});
+	const pathSegments = window.location.pathname.split('/');
+	const ideaId = pathSegments[2];
 
 	function handleAddToTeam(email: string) {
 		addTeamMemberForm.setData({ email, role: 'editor' });
@@ -63,8 +63,8 @@ export default function ReceivedApplications({ applications, team }: { applicati
 
 			<div className='mb-6 flex gap-6 items-center'>
 				<p>Status:</p>
-						<Select defaultValue="sent" onValueChange={(value) => {
-						router.get('/ideas/received-applications', { status: value }, {
+				<Select defaultValue="sent" onValueChange={(value) => {
+						router.get(`/ideas/${ideaId}/received-applications`, { status: value }, {
 							preserveState: true,
 							preserveScroll: true,
 						});
@@ -87,7 +87,7 @@ export default function ReceivedApplications({ applications, team }: { applicati
 						<CardHeader>
 							<div className="flex justify-between items-start">
 								<div>
-									<CardTitle className="text-xl">{application.task.idea.title}</CardTitle>
+									<CardTitle className="text-xl">{application.task.name}</CardTitle>
 									<CardDescription className="mt-1">Task ID: {application.task_id}</CardDescription>
 								</div>
 								<Badge className={getStatusColor(application.status)}>
@@ -108,8 +108,8 @@ export default function ReceivedApplications({ applications, team }: { applicati
 								</div>
 
 								<div className="pt-2 border-t">
-									<h3 className="text-sm font-medium text-muted-foreground">Idea Details</h3>
-									<p className="mt-1">{application.task.idea.description}</p>
+									<h3 className="text-sm font-medium text-muted-foreground">Idea</h3>
+									<p className="mt-1">{application.task.idea.title}</p>
 									<div className="flex justify-between mt-2 text-xs text-muted-foreground">
 										<span>Active: {application.task.idea.active ? "Yes" : "No"}</span>
 										<span>Expires: {formatDate(application.task.idea.expires)}</span>
@@ -139,15 +139,17 @@ export default function ReceivedApplications({ applications, team }: { applicati
 
 						<CardFooter className="border-t pt-4">
 							<div className="flex space-x-2 w-full">
-								<Button variant="outline" className="flex-1" size="sm">
-									<MessageSquare className="h-4 w-4 mr-2" />
-									Message
-								</Button>
+								<Link href={`/messages/${application.task.idea.user.id}`} className="flex-1">
+										<Button variant="outline" className='w-full'  size="sm">
+											<MessageSquare className="h-4 w-4 mr-2" />
+											Message
+										</Button>
+								</Link>
 								<Button className="flex-1" size="sm" onClick={()=>handleAddToTeam(application.task.idea.user.email)}>
 									<UserPlus className="h-4 w-4 mr-2" />
 									Send team invitation
 								</Button>
-							</div>
+								</div>
 						</CardFooter>
 					</Card>
 				))}

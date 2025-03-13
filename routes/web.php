@@ -4,6 +4,7 @@ use App\Events\MessageSent;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\PublicUserProfile;
 use App\Http\Controllers\ReceivedApplications;
 use App\Http\Controllers\TaskController;
@@ -48,19 +49,20 @@ Route::domain('localhost')->group(function () {
 		Route::get('/{ideaId}/add-tasks', [TaskController::class, 'index'])->name('tasks.index');
 		Route::post('/ideas/{ideaId}/tasks', [TaskController::class, 'create'])->name('tasks.create');
 		Route::delete('/ideas/{ideaId}/tasks/{taskId}', [TaskController::class, 'delete'])->name('tasks.delete');
-		Route::get('/ideas/received-applications', [ReceivedApplications::class, 'index'])->name('received.index');
+		Route::get('/ideas/{ideaId}/received-applications', [ReceivedApplications::class, 'index'])->name('received.index');
 
+		Route::get('/messages/{userId}', [MessagesController::class, 'index'])->name('messages.index');
 		Route::post('/messages', function (Request $request) {
 			$request->validate([
-				'message' => 'required|string',
+				'message'     => 'required|string',
+				'recipientId' => 'required|string',
 			]);
-			MessageSent::dispatch(auth()->user()->name, $request->message);
-			return response()->json(
-				[
-					'text' => 'Message sent!',
-					'user' => auth()->user()->name,
-				]
-			);
+
+			MessageSent::dispatch(auth()->user()->name, $request->message, $request->recipientId);
+			return response()->json([
+				'text' => 'Message sent!',
+				'user' => auth()->user()->name,
+			]);
 		})->name('messages.send');
 	});
 });
