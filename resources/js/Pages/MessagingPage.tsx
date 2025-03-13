@@ -9,76 +9,38 @@ import AppLayout from "@/Layouts/AppLayout"
 import useTypedPage from "@/Hooks/useTypedPage"
 import { useRoute } from "ziggy-js"
 import axios from "axios"
+import { Application, ApplicationWithUserObject, DateTime, User } from "@/types"
+import { formatDate } from "date-fns"
+import { now } from "lodash"
 
 type MessageType = {
-	id: string
-	content: string
-	sender: "user" | "other"
-	timestamp: Date
-	attachments?: {
-		type: "image" | "file"
-		url: string
-		name: string
-	}[]
-}
+	application_id: number;
+	attachmentUrl?: string;
+	created_at: DateTime;
+	id: number;
+	message: string;
+	updated_at: DateTime;
+	user: User;
+	user_id: number;
+};
 
-export default function MessagingPage({recipientId}) {
-	const [messages, setMessages] = useState<MessageType[]>([
-		{
-			id: "1",
-			content: "Hey there! How's it going?",
-			sender: "other",
-			timestamp: new Date(Date.now() - 3600000),
-		},
-		{
-			id: "2",
-			content: "I'm doing well, thanks for asking! Just finished a project.",
-			sender: "user",
-			timestamp: new Date(Date.now() - 3000000),
-		},
-		{
-			id: "3",
-			content: "That's great! Can you send me some photos of it?",
-			sender: "other",
-			timestamp: new Date(Date.now() - 2400000),
-		},
-		{
-			id: "4",
-			content: "Sure, here's a preview image:",
-			sender: "user",
-			timestamp: new Date(Date.now() - 1800000),
-			attachments: [
-				{
-					type: "image",
-					url: "/placeholder.svg?height=300&width=400",
-					name: "project-preview.jpg",
-				},
-			],
-		},
-		{
-			id: "5",
-			content: "And here's the documentation file:",
-			sender: "user",
-			timestamp: new Date(Date.now() - 1200000),
-			attachments: [
-				{
-					type: "file",
-					url: "#",
-					name: "project-documentation.pdf",
-				},
-			],
-		},
-		{
-			id: "6",
-			content: "Looks amazing! I'll review the docs and get back to you.",
-			sender: "other",
-			timestamp: new Date(Date.now() - 600000),
-		},
-	]);
+export default function MessagingPage(
+	{loadedMessages, application}:
+	{ loadedMessages: MessageType[], application: ApplicationWithUserObject}
+
+) {
+	console.log(loadedMessages);
+	const [messages, setMessages] = useState(loadedMessages);
 
 	const { auth } = useTypedPage().props;
 
-	window.Echo.private(`messages.${auth.user?.id}`)
+	const currentPath = window.location.pathname;
+	const segments = currentPath.split("/");
+	const applicationId = application.id + "";
+	const conversationUserId = application.user.id;
+
+
+	window.Echo.private(`messages.${applicationId}`)
 		.listen('MessageSent', (event: any) => {
 			console.log('Received private message:', event);
 		});
@@ -104,41 +66,76 @@ export default function MessagingPage({recipientId}) {
 	const handleSendMessage = () => {
 		if (newMessage.trim() === "" && attachments.length === 0) return
 
+		//so that it is in the same format as the response from the server
+		//we could just make a request to messages.index to load new data
+		//but to me that seems extra load on the server
+		//so using react state seems a better idea
+		//after you reload the page, only then it fetches data from the database.
 		const newMessageObj: MessageType = {
-			 id: Date.now().toString(),
-			 content: newMessage,
-			 sender: "user",
-			 timestamp: new Date(),
-			 attachments: attachments.map((attachment) => ({
-			 	type: attachment.type,
-			 	url: attachment.previewUrl || "#",
-			 	name: attachment.file.name,
-			 })),
+			application_id: parseInt(applicationId),
+			recipient_id: conversationUserId,
+			//attachmentUrl: attachments.length > 0 ? attachments[0].previewUrl ?? null : null,
+			attachmentUrl: undefined,
+			created_at: new Date().toISOString() as unknown as DateTime,
+			updated_at: new Date().toISOString() as unknown as DateTime,
+			id: (messages[messages.length - 1]?.id || 0) + 1,
+			message: newMessage,
+			user_id: auth.user!.id,
+			user: loadedMessages[0].user
 		}
+
+		// axios.post('/messages', newMessageObj2)
+		// 	.then((response) => {
+		// 		router.get(`/messages/${applicationId}`,{},{
+		// 			preserveScroll:true,
+		// 		})
+		// 	})
+		// 	.catch((error) => {
+		// 		console.error('Error sending message:', error);
+		// 	});
+
 		const newMessageObj2 = {
 			message: newMessage,
-			recipientId: recipientId
+			application_id: applicationId,
+			recipient_id: conversationUserId+"",
+			// attachments: attachments.map((attachment) => ({
+			// 	type: attachment.type,
+			// 	url: attachment.previewUrl || "#",
+			// 	name: attachment.file.name,
+			// })),
 		}
 
-		axios.post('/messages', newMessageObj2)
+		axios.post('/messages', newMessageObj2).then((response)=>{
+			setMessages([...messages, response.data.message])
+			setNewMessage("")
+			setAttachments([])
+		})
 
 
 
-		setMessages([...messages, newMessageObj])
-		setNewMessage("")
-		setAttachments([])
-
-		// Simulate a reply after 1 second
-		setTimeout(() => {
-			const replyMessage: MessageType = {
-				id: (Date.now() + 1).toString(),
-				content: "Thanks for sharing! I'll take a look at these.",
-				sender: "other",
-				timestamp: new Date(),
-			}
-			setMessages((prev) => [...prev, replyMessage])
-		}, 1000)
 	}
+
+	const conversationChannel = `messages.${Math.min(auth.user!.id, conversationUserId)}.${Math.max(auth.user!.id, conversationUserId)}`;
+
+	// Inside MessagingPage.tsx, after setting up state etc.
+	window.Echo.private(conversationChannel)
+		.listen('MessageSent', (event: any) => {
+			console.log('Received private message:', event);
+			// Append the new message to the messages state.
+			// Adjust the shape if necessary—for instance, create an object matching MessageType.
+			const newMsg = {
+				application_id: parseInt(applicationId),
+				attachmentUrl: undefined,
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
+				id: (messages[messages.length - 1]?.id || 0) + 1,  // or use event data if it provides id
+				message: event.message,
+				user: { ...auth.user, name: event.name },
+				user_id: auth.user!.id,
+			};
+			setMessages(prevMessages => [...prevMessages, newMsg]);
+		});
+
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "image" | "file") => {
 		if (e.target.files && e.target.files.length > 0) {
@@ -176,13 +173,14 @@ export default function MessagingPage({recipientId}) {
 		setAttachments(attachments.filter((_, i) => i !== index))
 	}
 
-	const formatTime = (date: Date) => {
-		return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+	const formatTime = (input: string | Date): string => {
+		const date = typeof input === "string" ? new Date(input) : input;
+		return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 	}
 
 	return (
 		<AppLayout title="Messages">
-		<div className="flex flex-col h-full max-w-7xl mx-auto border rounded-lg overflow-hidden mt-12">
+		<div className="flex flex-col h-[80vh] max-w-7xl mx-auto border rounded-lg overflow-hidden mt-12">
 			<div className="flex items-center p-4 border-b bg-background">
 				<Avatar className="h-10 w-10 mr-3">
 					<AvatarImage src="/placeholder.svg?height=40&width=40" alt="Contact" />
@@ -194,17 +192,17 @@ export default function MessagingPage({recipientId}) {
 				</div>
 			</div>
 
-			<ScrollArea className="flex-1 p-4">
+			<ScrollArea className="flex-1 p-4 h-72!">
 				<div className="space-y-4">
 					{messages.map((message) => (
-						<div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
+						<div key={message.id} className={`flex ${message.user.id === auth.user!.id ? "justify-end" : "justify-start"}`}>
 							<div
-								className={`max-w-[80%] rounded-lg p-3 ${message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
+								className={`max-w-[80%] rounded-lg p-3 ${message.user.id === auth.user!.id ? "bg-primary text-primary-foreground" : "bg-muted"
 									}`}
 							>
-								<div className="mb-1">{message.content}</div>
+								<div className="mb-1">{message.message}</div>
 
-								{message.attachments?.map((attachment, index) => (
+								{/* {message.attachments?.map((attachment, index) => (
 									<div key={index} className="mt-2">
 										{attachment.type === "image" ? (
 											<div className="rounded-md overflow-hidden">
@@ -221,9 +219,9 @@ export default function MessagingPage({recipientId}) {
 											</div>
 										)}
 									</div>
-								))}
+								))} */}
 
-								<div className="text-xs mt-1 opacity-70 text-right">{formatTime(message.timestamp)}</div>
+								<div className="text-xs mt-1 opacity-70 text-right">{formatTime(message.created_at)}</div>
 							</div>
 						</div>
 					))}

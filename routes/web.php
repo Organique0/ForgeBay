@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\MessageSent;
+
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\LoginController;
@@ -53,19 +53,10 @@ Route::domain('localhost')->group(function () {
 		Route::delete('/ideas/{ideaId}/tasks/{taskId}', [TaskController::class, 'delete'])->name('tasks.delete');
 		Route::get('/ideas/{ideaId}/received-applications', [ReceivedApplications::class, 'index'])->name('received.index');
 
-		Route::get('/messages/{userId}', [MessagesController::class, 'index'])->name('messages.index');
+		Route::get('/messages/{applicationId}', [MessagesController::class, 'index'])
+			->whereNumber(['applicationId', 'recipientId'])
+			->name('messages.index');
 		Route::get('/messages/received', [MessagesController::class, 'received'])->name('messages.received');
-		Route::post('/messages', function (Request $request) {
-			$request->validate([
-				'message'     => 'required|string',
-				'recipientId' => 'required|string',
-			]);
-
-			MessageSent::dispatch(auth()->user()->name, $request->message, $request->recipientId);
-			return response()->json([
-				'text' => 'Message sent!',
-				'user' => auth()->user()->name,
-			]);
-		})->name('messages.send');
+		Route::post('/messages', [MessagesController::class, 'SendMessage'])->name('messages.send');
 	});
 });

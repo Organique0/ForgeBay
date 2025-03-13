@@ -1,4 +1,4 @@
-type DateTime = string;
+export type DateTime = string;
 
 export type Nullable<T> = T | null;
 
@@ -134,6 +134,15 @@ export type Application = {
 	user_id: number;
 	updated_at: DateTime;
 }
+
+export type ApplicationWithUserObject = Application & {
+	user:{
+		id: number;
+		name: string;
+		profile_photo_id: string;
+	}
+}
+;
 
 export type ReceivedApplicationsType = {
 	created_at: DateTime;

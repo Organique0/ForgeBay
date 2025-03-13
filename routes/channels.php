@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Broadcast;
 });*/
 
 //as long as you are logged in you can listen to the messages channel
+// Broadcast::channel('messages.{recipientId}', function ($user, $recipientId) {
+// 	// Allow only if the authenticated user is the intended recipient.
+// 	return (int) $user->id === (int) $recipientId;
+// });
 Broadcast::channel('messages.{recipientId}', function ($user, $recipientId) {
-	// Allow only if the authenticated user is the intended recipient.
-	return (int) $user->id === (int) $recipientId;
+	return true;
 });

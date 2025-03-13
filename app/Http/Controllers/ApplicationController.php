@@ -6,6 +6,7 @@ use App\ApplicationStatus;
 use App\Events\ApplicationStatusUpdated;
 use App\Events\TaskStatusUpdated;
 use App\Models\Application;
+use App\Models\Message;
 use App\TaskStatus;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -41,6 +42,14 @@ class ApplicationController extends Controller
 		$applications = Application::where('user_id', auth()->id())
 			->with(['task', 'task.idea'])
 			->get();
+
+		$applications->each(function($application) {
+			if ($application->status === ApplicationStatus::Approved) {
+				$application->messages = Message::where('user_id', auth()->id())
+					->where('application_id', $application->id)
+					->get();
+			}
+		});
 
 		return Inertia::render('UserApplications', [
 			'applications' => $applications

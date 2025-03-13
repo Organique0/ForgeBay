@@ -154,7 +154,7 @@ export default function ReceivedApplications({ applications, team }: { applicati
 						<CardFooter className="border-t pt-4 block">
 							{application.status == 'approved' && (
 								<div className="flex space-x-2 w-full mb-4">
-									<Link href={`/messages/${application.user.id}`} className="flex-1">
+									<Link href={`/messages/${application.id}`} className="flex-1">
 										<Button variant="outline" className='w-full' size="sm">
 											<MessageSquare className="h-4 w-4 mr-2" />
 											Message

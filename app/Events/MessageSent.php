@@ -12,16 +12,20 @@ class MessageSent implements ShouldBroadcast
 {
 	use Dispatchable, InteractsWithSockets, SerializesModels;
 
+	public string $channel;
+
 	public function __construct(
-		public string $name,
+		public string $application_id,
+		public string $recipient_id,
 		public string $message,
-		public int $recipientId
-	) {}
+	) {
+		$this->channel = 'messages.' . $application_id;
+	}
 
 	public function broadcastOn(): array
 	{
 		return [
-			new PrivateChannel('messages.' . $this->recipientId),
+			new PrivateChannel($this->channel),
 		];
 	}
 }
