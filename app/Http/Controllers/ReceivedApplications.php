@@ -31,6 +31,7 @@ class ReceivedApplications extends Controller
 				'filters' => [
 					'status' => $status,
 				],
+			'team' => auth()->user()->currentTeam,
 			]);
 	}
 }

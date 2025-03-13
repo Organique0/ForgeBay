@@ -5,16 +5,35 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/Components/Shadcn/ui/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/Shadcn/ui/select';
 import AppLayout from '@/Layouts/AppLayout';
-import { RegularPaginationInstance } from '@/types';
+import { Nullable, RegularPaginationInstance, Team } from '@/types';
 import { MessageSquare, UserPlus } from 'lucide-react';
-import React from 'react'
-import { router } from '@inertiajs/react';
+import React, { useState } from 'react'
+import { router, useForm } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 
 
 type DateTime = string
 
-export default function ReceivedApplications({ applications }: { applications: RegularPaginationInstance }) {
-	console.log(applications);
+export default function ReceivedApplications({ applications, team }: { applications: RegularPaginationInstance, team: Team }) {
+	console.log(team);
+
+	const addTeamMemberForm = useForm({
+		email: '',
+		role: 'editor',
+	});
+
+	function handleAddToTeam(email: string) {
+		addTeamMemberForm.setData({ email, role: 'editor' });
+		addTeamMember();
+	}
+
+	function addTeamMember() {
+		addTeamMemberForm.post(route('team-members.store', [team]), {
+			errorBag: 'addTeamMember',
+			preserveScroll: true,
+			onSuccess: () => addTeamMemberForm.reset('email'),
+		});
+	}
 
 	const formatDate = (dateString: DateTime) => {
 		return new Date(dateString).toLocaleDateString("en-US", {
@@ -124,9 +143,9 @@ export default function ReceivedApplications({ applications }: { applications: R
 									<MessageSquare className="h-4 w-4 mr-2" />
 									Message
 								</Button>
-								<Button className="flex-1" size="sm">
+								<Button className="flex-1" size="sm" onClick={()=>handleAddToTeam(application.task.idea.user.email)}>
 									<UserPlus className="h-4 w-4 mr-2" />
-									Add to Team
+									Send team invitation
 								</Button>
 							</div>
 						</CardFooter>
