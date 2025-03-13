@@ -188,7 +188,7 @@ export default function Mine({ ideas }: { ideas: Idea[] }) {
 													Modify Idea
 												</Button>
 											</Link>
-											<Link href={route('received.index')} className='w-full'>
+											<Link href={route('received.index', { ideaId: idea.id })} className='w-full'>
 												<Button variant="outline" className="w-full mt-3 ring">
 													See all applications
 												</Button>

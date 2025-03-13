@@ -6,10 +6,11 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/Shadcn/ui/select';
 import AppLayout from '@/Layouts/AppLayout';
 import { RegularPaginationInstance, Team } from '@/types';
-import { MessageSquare, UserPlus } from 'lucide-react';
+import { CheckCircle, CircleX, CrossIcon, MessageSquare, UserPlus } from 'lucide-react';
 import React, { useState } from 'react'
 import { Link, router, useForm } from '@inertiajs/react';
 import { route } from 'ziggy-js';
+import axios from 'axios';
 
 
 type DateTime = string
@@ -34,6 +35,18 @@ export default function ReceivedApplications({ applications, team }: { applicati
 			preserveScroll: true,
 			onSuccess: () => addTeamMemberForm.reset('email'),
 		});
+	}
+
+	function decline(id:number) {
+		axios.post(`/applications/decline`, {
+			applicationId:id
+		})
+	}
+
+	function approve(id:number) {
+		axios.post(`/applications/approve`, {
+			applicationId:id
+		})
 	}
 
 	const formatDate = (dateString: DateTime) => {
@@ -138,19 +151,33 @@ export default function ReceivedApplications({ applications, team }: { applicati
 							</div>
 						</CardContent>
 
-						<CardFooter className="border-t pt-4">
-							<div className="flex space-x-2 w-full">
-								<Link href={`/messages/${application.user.id}`} className="flex-1">
-										<Button variant="outline" className='w-full'  size="sm">
+						<CardFooter className="border-t pt-4 block">
+							{application.status == 'approved' && (
+								<div className="flex space-x-2 w-full mb-4">
+									<Link href={`/messages/${application.user.id}`} className="flex-1">
+										<Button variant="outline" className='w-full' size="sm">
 											<MessageSquare className="h-4 w-4 mr-2" />
 											Message
 										</Button>
-								</Link>
-								<Button className="flex-1" size="sm" onClick={()=>handleAddToTeam(application.user.email)}>
-									<UserPlus className="h-4 w-4 mr-2" />
-									Send team invitation
-								</Button>
+									</Link>
+									<Button className="flex-1" size="sm" onClick={() => handleAddToTeam(application.user.email)}>
+										<UserPlus className="h-4 w-4 mr-2" />
+										Send team invitation
+									</Button>
 								</div>
+							)}
+							{application.status == 'sent' && (
+								<div className="flex space-x-2 w-full">
+									<Button variant="outline" className='w-full' size="sm" onClick={() => approve(application.id)}>
+										<CheckCircle className="h-4 w-4 mr-2" />
+										Approve
+									</Button>
+									<Button variant="outline" className='w-full' size="sm" onClick={() => decline(application.id)}>
+										<CircleX className="h-4 w-4 mr-2" />
+										Decline
+									</Button>
+								</div>
+							)}
 						</CardFooter>
 					</Card>
 				))}

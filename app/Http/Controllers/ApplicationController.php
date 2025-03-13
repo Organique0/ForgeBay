@@ -57,4 +57,18 @@ class ApplicationController extends Controller
 
 		return $applications;
 	}
+
+
+	public function approve(Request $request) {
+		$applicationId = $request->input('applicationId');
+		$application = Application::where('id', $applicationId);
+		$application->update(['status' => ApplicationStatus::Approved]);
+
+	}
+
+	public function decline(Request $request) {
+		$applicationId = $request->input('applicationId');
+		$application = Application::where('id', $applicationId);
+		$application->update(['status' => ApplicationStatus::Approved]);
+	}
 }

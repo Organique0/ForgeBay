@@ -162,15 +162,15 @@ export type ReceivedApplicationsType = {
 			id: number;
 			title: string;
 			updated_at: DateTime;
-			user: {
-				bio: string;
-				current_team_id: number;
-				email: string;
-				id: number;
-				name: string;
-				profile_photo_url: string;
-			}
 		}
+	}
+	user: {
+		bio: string;
+		current_team_id: number;
+		email: string;
+		id: number;
+		name: string;
+		profile_photo_url: string;
 	}
 }[];
 
