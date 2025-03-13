@@ -21,7 +21,10 @@ class ReceivedApplications extends Controller
 			}
 
 		$applications = $applicationsQuery
-			->with(['task.idea.user:id,bio,current_team_id,email,name'])
+			->with([
+				'user:id,bio,current_team_id,email,name', // applicant’s user data
+				'task.idea' // task details and its associated idea data
+			])
 			->paginate(6);
 
 			return Inertia::render('ReceivedApplications', [

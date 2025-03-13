@@ -15,6 +15,7 @@ import { route } from 'ziggy-js';
 type DateTime = string
 
 export default function ReceivedApplications({ applications, team }: { applications: RegularPaginationInstance, team: Team }) {
+	console.log(applications);
 	const addTeamMemberForm = useForm({
 		email: '',
 		role: 'editor',
@@ -120,17 +121,17 @@ export default function ReceivedApplications({ applications, team }: { applicati
 									<h3 className="text-sm font-medium text-muted-foreground">Applicant</h3>
 									<div className="flex items-center mt-2">
 										<Avatar className="h-10 w-10">
-											<AvatarImage src={application.task.idea.user.profile_photo_url} alt={application.task.idea.user.name} />
-											<AvatarFallback>{application.task.idea.user.name.charAt(0)}</AvatarFallback>
+											<AvatarImage src={application.user.profile_photo_url} alt={application.user.name} />
+											<AvatarFallback>{application.user.name.charAt(0)}</AvatarFallback>
 										</Avatar>
 										<div className="ml-3">
-											<p className="text-sm font-medium">{application.task.idea.user.name}</p>
-											<p className="text-xs text-muted-foreground">{application.task.idea.user.email}</p>
+											<p className="text-sm font-medium">{application.user.name}</p>
+											<p className="text-xs text-muted-foreground">{application.user.email}</p>
 										</div>
 									</div>
 									{application.include_profile && (
 										<div className="mt-2">
-											<p className="text-sm">{application.task.idea.user.bio}</p>
+											<p className="text-sm">{application.user.bio}</p>
 										</div>
 									)}
 								</div>
@@ -139,13 +140,13 @@ export default function ReceivedApplications({ applications, team }: { applicati
 
 						<CardFooter className="border-t pt-4">
 							<div className="flex space-x-2 w-full">
-								<Link href={`/messages/${application.task.idea.user.id}`} className="flex-1">
+								<Link href={`/messages/${application.user.id}`} className="flex-1">
 										<Button variant="outline" className='w-full'  size="sm">
 											<MessageSquare className="h-4 w-4 mr-2" />
 											Message
 										</Button>
 								</Link>
-								<Button className="flex-1" size="sm" onClick={()=>handleAddToTeam(application.task.idea.user.email)}>
+								<Button className="flex-1" size="sm" onClick={()=>handleAddToTeam(application.user.email)}>
 									<UserPlus className="h-4 w-4 mr-2" />
 									Send team invitation
 								</Button>
