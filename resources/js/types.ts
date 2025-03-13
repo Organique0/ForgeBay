@@ -136,6 +136,45 @@ export type Application = {
 	updated_at: DateTime;
 }
 
+export type ReceivedApplicationsType = {
+	created_at: DateTime;
+	description: string;
+	id: number;
+	include_profile: boolean;
+	status: 'sent' | 'approved' | 'declined';
+	task_id: number;
+	user_id: number;
+	updated_at: DateTime;
+	task: {
+		created_at: DateTime;
+		description: string;
+		has_applied:boolean;
+		id:number;
+		idea_id:number;
+		name:string;
+		status: Status;
+		updated_at: DateTime;
+		user_id: number;
+		idea: {
+			active: boolean;
+			created_at: DateTime;
+			description: string;
+			expires: DateTime;
+			id: number;
+			title: string;
+			updated_at: DateTime;
+			user: {
+				bio: string;
+				current_team_id: number;
+				email: string;
+				id: number;
+				name: string;
+				profile_photo_url: string;
+			}
+		}
+	}
+}[];
+
 export type User = {
 	active: boolean;
 	created_at: string;

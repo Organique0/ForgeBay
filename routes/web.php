@@ -5,6 +5,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PublicUserProfile;
+use App\Http\Controllers\ReceivedApplications;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -47,6 +48,7 @@ Route::domain('localhost')->group(function () {
 		Route::get('/{ideaId}/add-tasks', [TaskController::class, 'index'])->name('tasks.index');
 		Route::post('/ideas/{ideaId}/tasks', [TaskController::class, 'create'])->name('tasks.create');
 		Route::delete('/ideas/{ideaId}/tasks/{taskId}', [TaskController::class, 'delete'])->name('tasks.delete');
+		Route::get('/ideas/received-applications', [ReceivedApplications::class, 'index'])->name('received.index');
 
 		Route::post('/messages', function (Request $request) {
 			$request->validate([
