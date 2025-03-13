@@ -54,6 +54,7 @@ Route::domain('localhost')->group(function () {
 		Route::get('/ideas/{ideaId}/received-applications', [ReceivedApplications::class, 'index'])->name('received.index');
 
 		Route::get('/messages/{userId}', [MessagesController::class, 'index'])->name('messages.index');
+		Route::get('/messages/received', [MessagesController::class, 'received'])->name('messages.received');
 		Route::post('/messages', function (Request $request) {
 			$request->validate([
 				'message'     => 'required|string',

@@ -21,16 +21,13 @@ window.Echo = new Echo({
 	enabledTransports: ['ws', 'wss'],
 });
 
-window.Echo.channel('messages').listen('MessageSent', (e: any) => {
-	console.log(e);
-});
-
 window.Echo.channel(`task.updates`)
 	.listen('ApplicationStatusUpdated', (event: any) => {
 		console.log('Received ApplicationStatusUpdated event:', event);
 
 
 	});
+
 window.Echo.channel('task.updates')
 	.listen('TaskStatusUpdated', (event: any) => {
 		window.dispatchEvent(new CustomEvent('taskStatusUpdate', { detail: event }));
