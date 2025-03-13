@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/Components/Shadcn/ui/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/Shadcn/ui/select';
 import AppLayout from '@/Layouts/AppLayout';
-import { Nullable, RegularPaginationInstance, Team } from '@/types';
+import { RegularPaginationInstance, Team } from '@/types';
 import { MessageSquare, UserPlus } from 'lucide-react';
 import React, { useState } from 'react'
 import { router, useForm } from '@inertiajs/react';

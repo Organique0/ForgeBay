@@ -10,11 +10,9 @@ class ReceivedApplications extends Controller
 {
 	public function index(Request $request)
 	{
-			// Set default status to 'sent'
 			$status = $request->input('status', 'sent');
 
 			$applicationsQuery = Application::whereHas('task', function ($q) {
-				// Only get applications where the task was created by the logged in user
 				$q->where('user_id', auth()->id());
 			});
 
