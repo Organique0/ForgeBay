@@ -89,13 +89,22 @@ export default function MessagingPage(
 
 
 	useEffect(() => {
-		window.Echo.private(`messages.${applicationId}`)
+		const channel = window.Echo.private(`messages.${applicationId}`)
 			.listen('.MessageSent', (event: any) => {
 				console.log('Received private message:', event);
-				const messageObj = typeof event.message === 'string' ? JSON.parse(event.message) : event.message;
-				console.log(messageObj);
-				setMessages(prevMessages => [...prevMessages, messageObj]);
+				const messageObj = typeof event.message === "string"
+					? JSON.parse(event.message)
+					: event.message;
+				setMessages(prevMessages => {
+					if (prevMessages.find(m => m.id === messageObj.id)) return prevMessages;
+					return [...prevMessages, messageObj];
+				});
 			});
+
+		return () => {
+			//@ts-ignore
+			channel.leave();
+		};
 	}, [applicationId]);
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "image" | "file") => {

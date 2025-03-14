@@ -47,7 +47,6 @@ class messagesController extends Controller
 		//$message->recipient_user = User::where('id', $request->recipient_id)->select('id', 'name')->first();
 		$message->user = User::where('id', auth()->id())->select('id', 'name')->first();
 
-		//ok, it has to be to others. Or you get 20 received requests to yourself.
 		broadcast(new MessageSent($request->application_id, $message))->toOthers();
 			return response()->json([
 				'text' => 'Message sent!',
