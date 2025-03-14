@@ -16,7 +16,6 @@ class MessageSent implements ShouldBroadcast
 
 	public function __construct(
 		public string $application_id,
-		public string $recipient_id,
 		public string $message,
 	) {
 		$this->channel = 'messages.' . $application_id;
@@ -27,5 +26,10 @@ class MessageSent implements ShouldBroadcast
 		return [
 			new PrivateChannel($this->channel),
 		];
+	}
+
+	public function broadcastAs(): string
+	{
+		return 'MessageSent';
 	}
 }

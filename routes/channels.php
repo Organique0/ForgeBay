@@ -11,6 +11,6 @@ use Illuminate\Support\Facades\Broadcast;
 // 	// Allow only if the authenticated user is the intended recipient.
 // 	return (int) $user->id === (int) $recipientId;
 // });
-Broadcast::channel('messages.{recipientId}', function ($user, $recipientId) {
+Broadcast::channel('messages.{application_id}', function ($user, $recipientId) {
 	return true;
 });

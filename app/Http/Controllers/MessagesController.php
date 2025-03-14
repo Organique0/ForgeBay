@@ -33,7 +33,7 @@ class messagesController extends Controller
 			$request->validate([
 				'message'     => 'required|string',
 				'application_id' => 'required|string',
-				'recipient_id' => 'required|string'
+				//'recipient_id' => 'required|string'
 			]);
 
 		$message = Message::create([
@@ -44,10 +44,11 @@ class messagesController extends Controller
 			'updated_at'     => now()
 		]);
 
-		$message->recipient_user = User::where('user_id', $request->recipient_id);
-		$message->user = User::where('user_id', auth()->id());
+		//$message->recipient_user = User::where('id', $request->recipient_id)->select('id', 'name')->first();
+		$message->user = User::where('id', auth()->id())->select('id', 'name')->first();
 
-		MessageSent::dispatch($request->application_id, $request->recipient_id, $message->message);
+		//ok, it has to be to others. Or you get 20 received requests to yourself.
+		broadcast(new MessageSent($request->application_id, $message))->toOthers();
 			return response()->json([
 				'text' => 'Message sent!',
 				'message' => $message
@@ -55,3 +56,4 @@ class messagesController extends Controller
 		}
 
 }
+

@@ -29,21 +29,18 @@ export default function MessagingPage(
 	{ loadedMessages: MessageType[], application: ApplicationWithUserObject}
 
 ) {
-	console.log(loadedMessages);
 	const [messages, setMessages] = useState(loadedMessages);
 
 	const { auth } = useTypedPage().props;
 
-	const currentPath = window.location.pathname;
-	const segments = currentPath.split("/");
 	const applicationId = application.id + "";
 	const conversationUserId = application.user.id;
 
 
-	window.Echo.private(`messages.${applicationId}`)
-		.listen('MessageSent', (event: any) => {
-			console.log('Received private message:', event);
-		});
+	// window.Echo.private(`messages.${applicationId}`)
+	// 	.listen('MessageSent', (event: any) => {
+	// 		//console.log('Received private message:', event);
+	// 	});
 
 	const [newMessage, setNewMessage] = useState("")
 	const [attachments, setAttachments] = useState<
@@ -58,7 +55,6 @@ export default function MessagingPage(
 	const imageInputRef = useRef<HTMLInputElement>(null)
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 
-	// Scroll to bottom when messages change
 	useEffect(() => {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
 	}, [messages])
@@ -71,33 +67,11 @@ export default function MessagingPage(
 		//but to me that seems extra load on the server
 		//so using react state seems a better idea
 		//after you reload the page, only then it fetches data from the database.
-		const newMessageObj: MessageType = {
-			application_id: parseInt(applicationId),
-			recipient_id: conversationUserId,
-			//attachmentUrl: attachments.length > 0 ? attachments[0].previewUrl ?? null : null,
-			attachmentUrl: undefined,
-			created_at: new Date().toISOString() as unknown as DateTime,
-			updated_at: new Date().toISOString() as unknown as DateTime,
-			id: (messages[messages.length - 1]?.id || 0) + 1,
-			message: newMessage,
-			user_id: auth.user!.id,
-			user: loadedMessages[0].user
-		}
-
-		// axios.post('/messages', newMessageObj2)
-		// 	.then((response) => {
-		// 		router.get(`/messages/${applicationId}`,{},{
-		// 			preserveScroll:true,
-		// 		})
-		// 	})
-		// 	.catch((error) => {
-		// 		console.error('Error sending message:', error);
-		// 	});
 
 		const newMessageObj2 = {
 			message: newMessage,
 			application_id: applicationId,
-			recipient_id: conversationUserId+"",
+			//recipient_id: conversationUserId+"",
 			// attachments: attachments.map((attachment) => ({
 			// 	type: attachment.type,
 			// 	url: attachment.previewUrl || "#",
@@ -106,36 +80,23 @@ export default function MessagingPage(
 		}
 
 		axios.post('/messages', newMessageObj2).then((response)=>{
+			//console.log(response);
 			setMessages([...messages, response.data.message])
 			setNewMessage("")
 			setAttachments([])
 		})
-
-
-
 	}
 
-	const conversationChannel = `messages.${Math.min(auth.user!.id, conversationUserId)}.${Math.max(auth.user!.id, conversationUserId)}`;
 
-	// Inside MessagingPage.tsx, after setting up state etc.
-	window.Echo.private(conversationChannel)
-		.listen('MessageSent', (event: any) => {
-			console.log('Received private message:', event);
-			// Append the new message to the messages state.
-			// Adjust the shape if necessary—for instance, create an object matching MessageType.
-			const newMsg = {
-				application_id: parseInt(applicationId),
-				attachmentUrl: undefined,
-				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString(),
-				id: (messages[messages.length - 1]?.id || 0) + 1,  // or use event data if it provides id
-				message: event.message,
-				user: { ...auth.user, name: event.name },
-				user_id: auth.user!.id,
-			};
-			setMessages(prevMessages => [...prevMessages, newMsg]);
-		});
-
+	useEffect(() => {
+		window.Echo.private(`messages.${applicationId}`)
+			.listen('.MessageSent', (event: any) => {
+				console.log('Received private message:', event);
+				const messageObj = typeof event.message === 'string' ? JSON.parse(event.message) : event.message;
+				console.log(messageObj);
+				setMessages(prevMessages => [...prevMessages, messageObj]);
+			});
+	}, [applicationId]);
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "image" | "file") => {
 		if (e.target.files && e.target.files.length > 0) {
@@ -301,12 +262,6 @@ export default function MessagingPage(
 					onChange={(e) => setNewMessage(e.target.value)}
 					placeholder="Type a message..."
 					className="flex-1"
-					onKeyDown={(e) => {
-						if (e.key === "Enter" && !e.shiftKey) {
-							e.preventDefault()
-							handleSendMessage()
-						}
-					}}
 				/>
 
 				<Button size="icon" className="h-9 w-9 rounded-full" onClick={handleSendMessage}>
