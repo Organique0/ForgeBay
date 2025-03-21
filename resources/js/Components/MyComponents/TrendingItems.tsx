@@ -1,5 +1,4 @@
 import React from 'react';
-import Autoplay from "embla-carousel-autoplay"
 import { Badge } from '@/Components/Shadcn/ui/badge';
 import { Link } from '@inertiajs/react';
 import { Button } from '@/Components/Shadcn/ui/button';

@@ -7,7 +7,7 @@ import { Button } from '../Shadcn/ui/button'
 import { CalendarIcon, ClipboardList, Hammer, LightbulbIcon, UsersIcon } from 'lucide-react'
 import { format, parseISO } from 'date-fns';
 
-export default function SingleIdea({ hit, itemClassName }: { hit: PaginatedIdea, itemClassName?: string }) {
+export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClassName?: string }) {
 
 	const handleIdeaClick = (e: FormEvent) => {
 		e.stopPropagation();

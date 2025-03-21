@@ -94,7 +94,7 @@ export type Idea = {
 	user: User;
 	user_id: number;
 	id: number;
-	value: number;
+	total_value: number;
 	active: boolean;
 	created_at: string;
 	updated_at: string;
@@ -109,7 +109,7 @@ export type PaginatedIdea = {
 	description: string;
 	tags: string[];
 	active: boolean;
-	value: number;
+	total_value: number;
 	user: { id: number; name: string };
 	applications_count: number;
 	tasks_count: number;
@@ -139,7 +139,7 @@ export type ApplicationWithUserObject = Application & {
 	user:{
 		id: number;
 		name: string;
-		profile_photo_id: string;
+		profile_photo_url: string;
 	}
 }
 ;

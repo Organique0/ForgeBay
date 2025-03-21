@@ -56,7 +56,7 @@ Route::domain('localhost')->group(function () {
 		Route::get('/messages/{applicationId}', [MessagesController::class, 'index'])
 			->whereNumber(['applicationId', 'recipientId'])
 			->name('messages.index');
-		Route::get('/messages/received', [MessagesController::class, 'received'])->name('messages.received');
+		//Route::get('/messages/received', [MessagesController::class, 'received'])->name('messages.received');
 		Route::post('/messages', [MessagesController::class, 'SendMessage'])->name('messages.send');
 	});
 });

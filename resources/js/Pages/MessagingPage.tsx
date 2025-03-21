@@ -68,28 +68,28 @@ export default function MessagingPage(
 		//so using react state seems a better idea
 		//after you reload the page, only then it fetches data from the database.
 
-		const newMessageObj2 = {
-			message: newMessage,
-			application_id: applicationId,
-			//recipient_id: conversationUserId+"",
-			// attachments: attachments.map((attachment) => ({
-			// 	type: attachment.type,
-			// 	url: attachment.previewUrl || "#",
-			// 	name: attachment.file.name,
-			// })),
-		}
+		const formData = new FormData();
+		formData.append('message', newMessage);
+		formData.append('application_id', applicationId);
 
-		axios.post('/messages', newMessageObj2).then((response)=>{
-			//console.log(response);
-			setMessages([...messages, response.data.message])
-			setNewMessage("")
-			setAttachments([])
-		})
+		attachments.forEach((attachment, index) => {
+			formData.append(`attachments[${index}]`, attachment.file);
+		});
+
+		axios.post('/messages', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		}).then((response) => {
+			setMessages([...messages, response.data.message]);
+			setNewMessage("");
+			setAttachments([]);
+		});
 	}
 
 
 	useEffect(() => {
-		const channel = window.Echo.private(`messages.${applicationId}`)
+		window.Echo.private(`messages.${applicationId}`)
 			.listen('.MessageSent', (event: any) => {
 				console.log('Received private message:', event);
 				const messageObj = typeof event.message === "string"
@@ -102,10 +102,34 @@ export default function MessagingPage(
 			});
 
 		return () => {
-			//@ts-ignore
-			channel.leave();
+			window.Echo.leave(`messages.${applicationId}`);
 		};
 	}, [applicationId]);
+
+	const [isOnline, setIsOnline] = useState(false);
+
+	useEffect(() => {
+		if (!window.Echo) return;
+		const channelName = `chat.${conversationUserId}`;
+		window.Echo.join(channelName)
+			.here((members: any[]) => {
+				setIsOnline(members.some(member => member.id === conversationUserId));
+			})
+			.joining((member: any) => {
+				if (member.id === conversationUserId) {
+					setIsOnline(true);
+				}
+			})
+			.leaving((member: any) => {
+				if (member.id === conversationUserId) {
+					setIsOnline(false);
+				}
+			});
+
+		return () => {
+			window.Echo.leave(channelName);
+		};
+	}, [conversationUserId]);
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "image" | "file") => {
 		if (e.target.files && e.target.files.length > 0) {
@@ -153,12 +177,15 @@ export default function MessagingPage(
 		<div className="flex flex-col h-[80vh] max-w-7xl mx-auto border rounded-lg overflow-hidden mt-12">
 			<div className="flex items-center p-4 border-b bg-background">
 				<Avatar className="h-10 w-10 mr-3">
-					<AvatarImage src="/placeholder.svg?height=40&width=40" alt="Contact" />
-					<AvatarFallback>JD</AvatarFallback>
+					<AvatarImage src={application.user.profile_photo_url} alt="Contact" />
+					<AvatarFallback>{application.user.name}</AvatarFallback>
 				</Avatar>
 				<div>
-					<h2 className="text-sm font-medium">Jane Doe</h2>
-					<p className="text-xs text-muted-foreground">Online</p>
+					<h2 className="text-sm font-medium">{application.user.name}</h2>
+					<p className="flex items-center text-xs text-muted-foreground">
+						<span className={`inline-block w-2 h-2 rounded-full mr-2 ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}></span>
+						{isOnline ? 'Online' : 'Offline'}
+					</p>
 				</div>
 			</div>
 
@@ -172,24 +199,42 @@ export default function MessagingPage(
 							>
 								<div className="mb-1">{message.message}</div>
 
-								{/* {message.attachments?.map((attachment, index) => (
-									<div key={index} className="mt-2">
-										{attachment.type === "image" ? (
-											<div className="rounded-md overflow-hidden">
-												<img
-													src={attachment.url || "/placeholder.svg"}
-													alt={attachment.name}
-													className="max-w-full h-auto"
-												/>
-											</div>
-										) : (
-											<div className="flex items-center gap-2 p-2 bg-background/50 rounded-md">
-												<File className="h-4 w-4" />
-												<span className="text-sm truncate">{attachment.name}</span>
-											</div>
-										)}
-									</div>
-								))} */}
+								{
+									message.attachmentUrl && (() => {
+										try {
+											const attachments: string[] = JSON.parse(message.attachmentUrl);
+											return attachments.map((url, index) => {
+												const isImage = /\.(jpeg|jpg|gif|png|webp)$/i.test(url);
+												const name = url.split('/').pop() || "Download file";
+												return (
+													<div key={index} className="mt-2">
+														{isImage ? (
+															<div className="rounded-md overflow-hidden">
+																<img
+																	src={url}
+																	alt={`Attachment ${index}`}
+																	className="max-w-full h-auto"
+																/>
+															</div>
+														) : (
+															<a
+																href={url}
+																target="_blank"
+																rel="noopener noreferrer"
+																className="text-blue-600 underline"
+															>
+																{name}
+															</a>
+														)}
+													</div>
+												);
+											});
+										} catch (error) {
+											console.error("Error parsing attachments", error);
+											return null;
+										}
+									})()
+								}
 
 								<div className="text-xs mt-1 opacity-70 text-right">{formatTime(message.created_at)}</div>
 							</div>

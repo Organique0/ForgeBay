@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('message', function (Blueprint $table) {
             $table->id();
-						$table->string('message');
+						$table->string('message')->nullable();
 						$table->foreignId('user_id')->constrained()->onDelete('cascade') ;
 						$table->string('attachmentUrl')->nullable();
 						$table->foreignId('application_id')->constrained()->onDelete('cascade');

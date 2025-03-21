@@ -123,7 +123,7 @@ export default function AppLayout({
 												My Ideas
 											</NavLink>
 
-											<NavLink
+											{/* <NavLink
 												href={route('messages.received')}
 												active={route().current('messages.received')}
 												onClick={() => {
@@ -131,7 +131,7 @@ export default function AppLayout({
 												}}
 											>
 												My Messages
-											</NavLink>
+											</NavLink> */}
 										</>
 									)
 

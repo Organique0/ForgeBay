@@ -14,3 +14,7 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('messages.{application_id}', function ($user, $recipientId) {
 	return true;
 });
+
+Broadcast::channel('chat.{conversationUserId}', function ($user, $conversationUserId) {
+	return ['id' => $user->id];
+});
