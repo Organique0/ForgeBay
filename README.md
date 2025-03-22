@@ -16,7 +16,7 @@ Uporaba:
 ./vendor/bin/sail je lahko dodan kot alias za lažjo uporabo v bash, fish ali zsh config: alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
 
 Ukazi brez uporabe aliasa:
-- composer install (verjetno bo potrebno omogočiti določene php vtičnike. Odvnisno od os. Na Linux je /etc/php mapa)
+- composer install (verjetno bo potrebno omogočiti določene php vtičnike (iconv in intl). Odvnisno od os. Na Linux je to /etc/php mapa). 
 - ./vendor/bin/sail up
 - ./vendor/bin/sail npm run dev
 - ./vendor/bin/sail queue:work
@@ -53,7 +53,7 @@ Everything is described in the documentation.
 !! If you are using Docker Desktop for Linux, you should use the default Docker context by executing the following command: docker context use default. !!
 
 Commands you need to execute in separate terminal windows (in the root folder):
-- composer install (If you are missing certain PHP extensions it will tell you which. php.ini on Linux is in /etc/php.)
+- composer install (If you are missing certain PHP extensions it will tell you which. (Most likely iconv and intl) php.ini on Linux is in /etc/php.)
 - ./vendor/bin/sail up
 - ./vendor/bin/sail npm run dev
 - ./vendor/bin/sail queue:work
