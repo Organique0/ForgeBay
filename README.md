@@ -6,7 +6,7 @@ Povzetek
 
 Zahtevano: 
 - MacOs, Linux ali WSL2.
-- Docker nameščen in zagnan
+- Docker nameščen in zagnan (Linux: sudo systemctl start docker)
 - nameščen in pravilno nastavljen PHP in Composer
 
 Uporaba:
@@ -35,6 +35,12 @@ Najlažja ustavitev:
 Docker storitev bo seveda še vedno aktiva tudi po zaustavitvi Sail.
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Tutorial for those who have no idea what they are doing.
+
+Requirements:
+- MacOs, Linux or WSL2.
+- Docker installed and docker service active (Linux: sudo systemctl start docker)
+- Installed and properly configured PHP and Composer
 
 For local testing it is very recommended to use Laravel Sail. That is why it exists.
 Otherwise you need to have things like laravel, postgresql and redis installed on your system.
