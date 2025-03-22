@@ -6,8 +6,10 @@ Povzetek
 
 Zahtevano: 
 - MacOs, Linux ali WSL2.
-- Docker nameščen in zagnan (Linux: sudo systemctl start docker)
+- Docker nameščen in zagnan (Linux ukaz za zagon Docker storitve: sudo systemctl start docker, Windows: Uporabi Docker Desktop)
 - nameščen in pravilno nastavljen PHP in Composer
+
+!! Če Docker storitev ne dela na Linux, je verjetno potreben ukaz: docker context use default. !!
 
 Uporaba:
 (Terminal odprt v mapi projekta. Najlažje vsak ukaz v svojem oknu. Ni potrebno za vse, će veste za katere. Okna je najbolje imeti ves čas odprta. Zaradi izpisov in enostavne ustavitve)
@@ -39,7 +41,7 @@ Tutorial for those who have no idea what they are doing.
 
 Requirements:
 - MacOs, Linux or WSL2.
-- Docker installed and docker service active (Linux: sudo systemctl start docker)
+- Docker installed and docker service active (Linux command to start the service: sudo systemctl start docker. Windows: Just use Docker Desktop)
 - Installed and properly configured PHP and Composer
 
 For local testing it is very recommended to use Laravel Sail. That is why it exists.
@@ -47,6 +49,8 @@ Otherwise you need to have things like laravel, postgresql and redis installed o
 Documentation: https://laravel.com/docs/12.x/sail
 
 Everything is described in the documentation.
+
+!! If you are using Docker Desktop for Linux, you should use the default Docker context by executing the following command: docker context use default. !!
 
 Commands you need to execute in separate terminal windows (in the root folder):
 - composer install (If you are missing certain PHP extensions it will tell you which. php.ini on Linux is in /etc/php.)
