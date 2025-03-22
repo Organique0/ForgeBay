@@ -16,7 +16,8 @@ class InMessageGroup
 	 */
 	public function handle(Request $request, Closure $next): Response
 	{
-		$applicationId = $request->route('applicationId');
+		// Sometimes it gets send as a post parameter, sometimes as a route parameter
+		$applicationId = $request->route('applicationId') ?? $request->input('application_id');
 
 		if (!$applicationId) {
 			return redirect()->route('dashboard')->with('error', 'Invalid application ID');
@@ -31,17 +32,14 @@ class InMessageGroup
 		try {
 			$application = Application::with('task.idea')->findOrFail($applicationId);
 
-			// Allow if user is the applicant
 			if ((int) $userId === (int) $application->user_id) {
 				return $next($request);
 			}
 
-			// Allow if user is the idea creator
 			if ((int) $userId === (int) $application->task->idea->user_id) {
 				return $next($request);
 			}
 
-			// User is not authorized to access this chat
 			return redirect()->route('dashboard')->with('error', 'You are not authorized to access this conversation');
 		} catch (\Exception $e) {
 			return redirect()->route('dashboard')->with('error', 'Application not found');

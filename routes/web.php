@@ -57,7 +57,7 @@ Route::domain('localhost')->group(function () {
 
 
 	});
-	Route::middleware(['auth',\App\Http\Middleware\InMessageGroup::class])->group(function () {
+	Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',\App\Http\Middleware\InMessageGroup::class])->group(function () {
 		Route::get('/messages/{applicationId}', [MessagesController::class, 'index'])
 			->whereNumber(['applicationId', 'recipientId'])
 			->name('messages.index');
