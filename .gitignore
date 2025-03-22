@@ -22,3 +22,6 @@ yarn-error.log
 storage/ideas.index
 storage/ideas.index-shm
 storage/ideas.index-wal
+/data/mailpit.db-shm
+/data/mailpit.db-wal
+/data/mailpit.db
