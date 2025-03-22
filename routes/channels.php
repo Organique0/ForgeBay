@@ -18,3 +18,7 @@ Broadcast::channel('messages.{application_id}', function ($user, $recipientId) {
 Broadcast::channel('chat.{application_id}', function ($user, $conversationUserId) {
 	return ['id' => $user->id, 'name' => $user->name];
 });
+
+Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+	return (int) $user->id === (int) $id;
+});

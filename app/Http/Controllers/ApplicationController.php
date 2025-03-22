@@ -7,6 +7,8 @@ use App\Events\ApplicationStatusUpdated;
 use App\Events\TaskStatusUpdated;
 use App\Models\Application;
 use App\Models\Message;
+use App\Notifications\ApplicationAccepted;
+use App\Notifications\ApplicationDeclined;
 use App\TaskStatus;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -33,14 +35,13 @@ class ApplicationController extends Controller
 			'status' => $validatedData['applicationStatus'],
 		]);
 
-		ApplicationStatusUpdated::dispatch($validatedData['taskId'], $validatedData['applicationStatus'], $validatedData['ideaId']);
-		TaskStatusUpdated::dispatch($validatedData['taskId'], $validatedData['taskStatus'], $validatedData['ideaId']);
 	}
 
 	public function show(Request $request)
 	{
 		$applications = Application::where('user_id', auth()->id())
 			->with(['task', 'task.idea'])
+			->latest()
 			->get();
 
 		$applications->each(function($application) {
@@ -70,14 +71,27 @@ class ApplicationController extends Controller
 
 	public function approve(Request $request) {
 		$applicationId = $request->input('applicationId');
-		$application = Application::where('id', $applicationId);
-		$application->update(['status' => ApplicationStatus::Approved]);
+		$application = Application::with('user')->findOrFail($applicationId);
+		$application->update(['status' => ApplicationStatus::Approved->value]);
+		// Send notification to the user who applied
+		$application->user->notify(new ApplicationAccepted($applicationId));
 
+		// dispatch event for real-time updates
+//		event(new ApplicationStatusUpdated(
+//			$application->task_id,
+//			ApplicationStatus::Approved->value,
+//			$application->task->idea_id
+//		));
+
+		return response()->json(['message' => 'Application approved successfully']);
 	}
 
 	public function decline(Request $request) {
 		$applicationId = $request->input('applicationId');
-		$application = Application::where('id', $applicationId);
-		$application->update(['status' => ApplicationStatus::Approved]);
+		$application = Application::with('user')->findOrFail($applicationId);
+		$application->update(['status' => ApplicationStatus::Declined->value]);
+		$application->user->notify(new ApplicationDeclined($applicationId));
+
+		return response()->json(['message' => 'Application declined successfully']);
 	}
 }

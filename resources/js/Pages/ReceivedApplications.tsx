@@ -6,11 +6,12 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/Shadcn/ui/select';
 import AppLayout from '@/Layouts/AppLayout';
 import { RegularPaginationInstance, Team } from '@/types';
-import { CheckCircle, CircleX, CrossIcon, MessageSquare, UserPlus } from 'lucide-react';
-import React, { useState } from 'react'
+import { CheckCircle, CircleX, MessageSquare, UserPlus } from 'lucide-react';
+import React from 'react'
 import { Link, router, useForm } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import axios from 'axios';
+import StatusPretty from '@/Components/MyComponents/StatusPretty';
 
 
 type DateTime = string
@@ -101,8 +102,11 @@ export default function ReceivedApplications({ applications, team }: { applicati
 						<CardHeader>
 							<div className="flex justify-between items-start">
 								<div>
+									<div className={'flex gap-2'}>
+										<CardDescription>Task</CardDescription>
+										<StatusPretty initialStatus={application.task.status}/>
+									</div>
 									<CardTitle className="text-xl">{application.task.name}</CardTitle>
-									<CardDescription className="mt-1">Task ID: {application.task_id}</CardDescription>
 								</div>
 								<Badge className={getStatusColor(application.status)}>
 									{application.status.charAt(0).toUpperCase() + application.status.slice(1)}
