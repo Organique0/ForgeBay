@@ -37,7 +37,7 @@ export default function MessagingPage(
 
 	const applicationId = application.id + "";
 	const currentUserId = auth.user?.id;
-	const recipientUser = currentUserId === application.user_id ? application.user : application.task;
+	const recipientUser = currentUserId === application.task.id ? application.user : application.task;
 
 
 	// window.Echo.private(`messages.${applicationId}`)
