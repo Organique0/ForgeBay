@@ -52,9 +52,4 @@ class Task extends Model
 	{
 		return $this->hasMany(Application::class);
 	}
-
-	public function user(): BelongsTo
-	{
-		return $this->belongsTo(User::class);
-	}
 }

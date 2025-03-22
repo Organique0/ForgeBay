@@ -136,6 +136,12 @@ export type Application = {
 }
 
 export type ApplicationWithUserObject = Application & {
+	//this is supposed to be the user that created the idea for which the application is for
+	task: {
+		id:number,
+		name:string,
+		profile_photo_url:string,
+	}
 	user:{
 		id: number;
 		name: string;
@@ -180,6 +186,7 @@ export type ReceivedApplicationsType = {
 		id: number;
 		name: string;
 		profile_photo_url: string;
+		tags: Tag[]
 	}
 }[];
 

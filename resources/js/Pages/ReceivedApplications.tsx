@@ -16,7 +16,6 @@ import axios from 'axios';
 type DateTime = string
 
 export default function ReceivedApplications({ applications, team }: { applications: RegularPaginationInstance, team: Team }) {
-	console.log(applications);
 	const addTeamMemberForm = useForm({
 		email: '',
 		role: 'editor',
@@ -69,6 +68,7 @@ export default function ReceivedApplications({ applications, team }: { applicati
 				return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
 		}
 	}
+
 
 	return (
 		<AppLayout title='received-applications'>
@@ -144,7 +144,10 @@ export default function ReceivedApplications({ applications, team }: { applicati
 									</div>
 									{application.include_profile && (
 										<div className="mt-2">
-											<p className="text-sm">{application.user.bio}</p>
+											<p className="text-sm mb-2">{application.user.bio}</p>
+											{application.user.tags.map((tag) => (
+												<Badge key={tag.id || tag.name} className="mr-1">{tag.name}</Badge>
+											))}
 										</div>
 									)}
 								</div>

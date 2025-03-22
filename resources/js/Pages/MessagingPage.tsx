@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { useState, useRef, useEffect } from "react"
 import { Paperclip, ImageIcon, Send, File, X } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/Shadcn/ui/avatar"
@@ -28,13 +28,16 @@ export default function MessagingPage(
 	{loadedMessages, application}:
 	{ loadedMessages: MessageType[], application: ApplicationWithUserObject}
 
+
 ) {
+	console.log(application);
 	const [messages, setMessages] = useState(loadedMessages);
 
 	const { auth } = useTypedPage().props;
 
 	const applicationId = application.id + "";
-	const conversationUserId = application.user.id;
+	const currentUserId = auth.user?.id;
+	const recipientUser = currentUserId === application.user_id ? application.user : application.task;
 
 
 	// window.Echo.private(`messages.${applicationId}`)
@@ -56,7 +59,10 @@ export default function MessagingPage(
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
-		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+		const timer = setTimeout(() => {
+			messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+		}, 1000)
+		return () => clearTimeout(timer)
 	}, [messages])
 
 	const handleSendMessage = () => {
@@ -110,18 +116,21 @@ export default function MessagingPage(
 
 	useEffect(() => {
 		if (!window.Echo) return;
-		const channelName = `chat.${conversationUserId}`;
+		const currentUserIdNum = Number(currentUserId);
+		const channelName = `chat.${applicationId}`;
 		window.Echo.join(channelName)
 			.here((members: any[]) => {
-				setIsOnline(members.some(member => member.id === conversationUserId));
+				console.log('Presence members:', members);
+				console.log('Current user:', currentUserIdNum);
+				setIsOnline(members.some(member => member.id !== currentUserIdNum));
 			})
 			.joining((member: any) => {
-				if (member.id === conversationUserId) {
+				if (member.id !== currentUserIdNum) {
 					setIsOnline(true);
 				}
 			})
 			.leaving((member: any) => {
-				if (member.id === conversationUserId) {
+				if (member.id !== currentUserIdNum) {
 					setIsOnline(false);
 				}
 			});
@@ -129,7 +138,9 @@ export default function MessagingPage(
 		return () => {
 			window.Echo.leave(channelName);
 		};
-	}, [conversationUserId]);
+	}, []);
+
+
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "image" | "file") => {
 		if (e.target.files && e.target.files.length > 0) {
@@ -181,7 +192,7 @@ export default function MessagingPage(
 					<AvatarFallback>{application.user.name}</AvatarFallback>
 				</Avatar>
 				<div>
-					<h2 className="text-sm font-medium">{application.user.name}</h2>
+						<h2 className="text-sm font-medium">{recipientUser.name}</h2>
 					<p className="flex items-center text-xs text-muted-foreground">
 						<span className={`inline-block w-2 h-2 rounded-full mr-2 ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}></span>
 						{isOnline ? 'Online' : 'Offline'}

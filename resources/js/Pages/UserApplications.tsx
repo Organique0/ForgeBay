@@ -107,6 +107,14 @@ function ApplicationCard({ application }: { application: UserApplication }) {
 					</Button>
 				</Link>
 			</CardFooter>
+			<CardFooter className="flex justify-between border-t pt-4">
+				<div/>
+				<Link href={`/messages/${application.id}`}>
+					<Button variant="outline" size="sm">
+						Message User
+					</Button>
+				</Link>
+			</CardFooter>
 		</Card>
 	)
 }

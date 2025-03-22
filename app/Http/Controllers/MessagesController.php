@@ -16,10 +16,19 @@ class messagesController extends Controller
    public function index($applicationId) {
 
 		$messages = Message::with(['user:id,name'])->where('application_id', $applicationId)->get();
-		$application = Application::with('user:id,name')->where('id', $applicationId)->first();
+		$application = Application::with([
+			'user:id,name',
+			'task.idea.user:id,name',
+		])->where('id', $applicationId)->first();
+
+		// Replace the full task data with just the task's user information.
+		if ($application && $application->task) {
+			$application->setRelation('task', $application->task->idea->user);
+		}
+
 		return Inertia::render('MessagingPage', [
 			'loadedMessages' => $messages,
-			'application' => $application
+			'application'    => $application,
 		]);
 	 }
 

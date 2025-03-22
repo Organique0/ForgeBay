@@ -22,8 +22,9 @@ class ReceivedApplications extends Controller
 
 		$applications = $applicationsQuery
 			->with([
-				'user:id,bio,current_team_id,email,name', // applicant’s user data
-				'task.idea' // task details and its associated idea data
+				'user:id,bio,email,name',
+				'user.tags',
+				'task.idea',
 			])
 			->paginate(6);
 
