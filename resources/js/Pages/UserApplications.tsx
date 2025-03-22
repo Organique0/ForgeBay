@@ -1,10 +1,8 @@
-import StatusPretty from '@/Components/MyComponents/StatusPretty';
 import { Badge } from '@/Components/Shadcn/ui/badge';
 import { Button } from '@/Components/Shadcn/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/Components/Shadcn/ui/collapsible';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/Components/Shadcn/ui/dropdown-menu';
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/Components/Shadcn/ui/table';
 import AppLayout from '@/Layouts/AppLayout';
 import { Application, Idea, Task } from '@/types';
 import { Link } from '@inertiajs/react';
@@ -23,7 +21,7 @@ export type UserApplications = UserApplication[];
 export default function UserApplications({ applications }: { applications: UserApplications }) {
 	console.log(applications);
 
-	const [filter, setFilter] = useState("all");
+	const [filter, setFilter] = useState<"all" | "sent" | "approved" | "declined">("all");
 
 	const filteredApplications = applications.filter((app) => filter === "all" || app.status.toLowerCase() === filter)
 
@@ -55,7 +53,7 @@ export default function UserApplications({ applications }: { applications: UserA
 	)
 }
 
-function FilterDropdown({ currentFilter, setFilter }) {
+function FilterDropdown({ currentFilter, setFilter }: { currentFilter: string; setFilter: (filter: "all" | "sent" | "approved" | "declined") => void }) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -111,7 +109,7 @@ function ApplicationCard({ application }: { application: UserApplication }) {
 				<div/>
 				<Link href={`/messages/${application.id}`}>
 					<Button variant="outline" size="sm">
-						Message User
+						Application Messages
 					</Button>
 				</Link>
 			</CardFooter>

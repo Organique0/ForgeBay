@@ -2,7 +2,7 @@ import { Link, router } from '@inertiajs/react'
 import React, { FormEvent } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
 import { Badge } from '../Shadcn/ui/badge'
-import { Idea, PaginatedIdea, Tag } from '@/types'
+import { Idea, Tag } from '@/types'
 import { Button } from '../Shadcn/ui/button'
 import { CalendarIcon, ClipboardList, Hammer, LightbulbIcon, UsersIcon } from 'lucide-react'
 import { format, parseISO } from 'date-fns';
@@ -22,7 +22,7 @@ export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClas
 	};
 
 	return (
-		<Card className={'transition-all hover:s`hadow-l ' + itemClassName} id={hit.id + ""}>
+		<Card className={'transition-all hover:shadow-l ' + itemClassName} id={hit.id + ""}>
 			<CardHeader>
 				<CardTitle className="block lg:flex items-start gap-2">
 

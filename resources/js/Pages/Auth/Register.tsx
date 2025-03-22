@@ -40,9 +40,9 @@ export default function Register() {
 							<div className="flex h-8 w-8 items-center justify-center rounded-md">
 								<GalleryVerticalEnd className="size-6" />
 							</div>
-							<span className="sr-only">Acme Inc.</span>
+							<span className="sr-only">ForgeBay Register</span>
 						</Link>
-						<h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
+						<h1 className="text-xl font-bold">Welcome to ForgeBay</h1>
 						<div className="text-center text-sm">
 							Already have an account?{" "}
 							<Link href="/login" className="underline underline-offset-4">

@@ -55,9 +55,9 @@ export default function Login({ canResetPassword, status }: Props) {
 							<div className="flex h-8 w-8 items-center justify-center rounded-md">
 								<GalleryVerticalEnd className="size-6" />
 							</div>
-							<span className="sr-only">Acme Inc.</span>
+							<span className="sr-only">ForgeBay Login</span>
 						</Link>
-						<h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
+						<h1 className="text-xl font-bold">Welcome to ForgeBay</h1>
 						<div className="text-center text-sm">
 							Don&apos;t have an account?{" "}
 							<Link href="/register" className="underline underline-offset-4">
