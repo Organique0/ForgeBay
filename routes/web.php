@@ -55,10 +55,12 @@ Route::domain('localhost')->group(function () {
 		Route::delete('/ideas/{ideaId}/tasks/{taskId}', [TaskController::class, 'delete'])->name('tasks.delete');
 		Route::get('/ideas/{ideaId}/received-applications', [ReceivedApplications::class, 'index'])->name('received.index');
 
+
+	});
+	Route::middleware(['auth',\App\Http\Middleware\InMessageGroup::class])->group(function () {
 		Route::get('/messages/{applicationId}', [MessagesController::class, 'index'])
 			->whereNumber(['applicationId', 'recipientId'])
 			->name('messages.index');
-		//Route::get('/messages/received', [MessagesController::class, 'received'])->name('messages.received');
 		Route::post('/messages', [MessagesController::class, 'SendMessage'])->name('messages.send');
 	});
 });
