@@ -18,6 +18,7 @@ Uporaba:
 Ukazi brez uporabe aliasa:
 - composer install (verjetno bo potrebno omogočiti določene php vtičnike (iconv in intl). Odvnisno od os. Na Linux je to /etc/php mapa). 
 - ./vendor/bin/sail up
+- ./vendor/bin/sail npm install
 - ./vendor/bin/sail npm run dev
 - ./vendor/bin/sail queue:work
 - ./vendor/bin/sail reverb:start
@@ -55,6 +56,7 @@ Everything is described in the documentation.
 Commands you need to execute in separate terminal windows (in the root folder):
 - composer install (If you are missing certain PHP extensions it will tell you which. (Most likely iconv and intl) php.ini on Linux is in /etc/php.)
 - ./vendor/bin/sail up
+- ./vendor/bin/sail npm install
 - ./vendor/bin/sail npm run dev
 - ./vendor/bin/sail queue:work
 - ./vendor/bin/sail reverb:start
