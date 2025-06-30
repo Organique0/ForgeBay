@@ -8,6 +8,8 @@ import { RouteContext } from '@/Hooks/useRoute';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ThemeProvider } from 'next-themes';
 import 'instantsearch.css/themes/algolia.css';
+import { NotificationProvider } from './Context/NotificationContext';
+import { NotificationAlert } from './Components/MyComponents/NotificationAlert';
 
 const appName =
 	window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
@@ -27,7 +29,10 @@ createInertiaApp({
 		return root.render(
 			<RouteContext.Provider value={(window as any).route}>
 				<ThemeProvider>
+					<NotificationProvider>
 					<App {...props} />
+						<NotificationAlert/>
+					</NotificationProvider>
 				</ThemeProvider>
 			</RouteContext.Provider>,
 		);

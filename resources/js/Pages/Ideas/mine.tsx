@@ -182,10 +182,15 @@ export default function Mine({ ideas }: { ideas: Idea[] }) {
 												</div>
 											</div>
 										</CardContent>
-										<CardFooter>
+										<CardFooter className='block'>
 											<Link href={route('tasks.index', { ideaId: idea.id })} className='w-full'>
 												<Button variant="outline" className="w-full">
 													Modify Idea
+												</Button>
+											</Link>
+											<Link href={route('received.index', { ideaId: idea.id })} className='w-full'>
+												<Button variant="outline" className="w-full mt-3 ring">
+													See all applications
 												</Button>
 											</Link>
 										</CardFooter>

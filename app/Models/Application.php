@@ -24,15 +24,8 @@ class Application extends Model
 		return $this->belongsTo(Task::class);
 	}
 
-	public function users(): BelongsTo
+	public function user(): BelongsTo
 	{
 		return $this->belongsTo(User::class);
-	}
-
-	public function idea()
-	{
-		return $this->belongsTo(Idea::class, 'task_id', 'id')
-			->join('tasks', 'tasks.idea_id', '=', 'ideas.id')
-			->where('tasks.id', '=', $this->task_id);
 	}
 }

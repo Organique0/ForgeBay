@@ -1,12 +1,8 @@
 import React from 'react';
-import Autoplay from "embla-carousel-autoplay"
-import { Badge } from '@/Components/Shadcn/ui/badge';
 import { Link } from '@inertiajs/react';
 import { Button } from '@/Components/Shadcn/ui/button';
-import { CalendarIcon, ChartBarIcon, ChevronRightIcon, LightbulbIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
-import { format, parseISO } from 'date-fns';
+import { ChevronRightIcon,  TrendingUpIcon, } from 'lucide-react';
 import { Idea } from '@/types';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../Shadcn/ui/carousel';
 import SingleIdea from './SingleIdea';
 
 
@@ -45,7 +41,7 @@ export default function TrendingItems({
 					</Button>
 				</Link>
 			</div>
-			<div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
+			<div className='grid grid-cols-1 3xl:grid-cols-2 gap-5'>
 				{ideas.map((idea, index) => (
 					<SingleIdea key={index} hit={idea} itemClassName={itemClassName} />
 				))}

@@ -1,10 +1,12 @@
 <?php
 
-use App\Events\MessageSent;
+
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\PublicUserProfile;
+use App\Http\Controllers\ReceivedApplications;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -25,10 +27,14 @@ Route::domain('localhost')->group(function () {
 		'verified',
 	])->group(function () {
 
-
+		Route::get('/user', function (Request $request) {
+			return $request->user();
+		});
 		Route::post('/ideas/new', [IdeaController::class, 'new'])->name('ideas.new');
 		Route::post('/application', [\App\Http\Controllers\ApplicationController::class, 'new'])->name('application.new');
 		Route::get('/applications', [ApplicationController::class, 'show'])->name('applications.show');
+		Route::post('/applications/decline', [ApplicationController::class, 'decline'])->name('applications.decline');
+		Route::post('/applications/approve', [ApplicationController::class, 'approve'])->name('applications.approve');
 		Route::post('/applications', [ApplicationController::class, 'search'])->name('applications.search');
 		Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 		Route::post('/skills', function (Request $request) {
@@ -47,18 +53,14 @@ Route::domain('localhost')->group(function () {
 		Route::get('/{ideaId}/add-tasks', [TaskController::class, 'index'])->name('tasks.index');
 		Route::post('/ideas/{ideaId}/tasks', [TaskController::class, 'create'])->name('tasks.create');
 		Route::delete('/ideas/{ideaId}/tasks/{taskId}', [TaskController::class, 'delete'])->name('tasks.delete');
+		Route::get('/ideas/{ideaId}/received-applications', [ReceivedApplications::class, 'index'])->name('received.index');
 
-		Route::post('/messages', function (Request $request) {
-			$request->validate([
-				'message' => 'required|string',
-			]);
-			MessageSent::dispatch(auth()->user()->name, $request->message);
-			return response()->json(
-				[
-					'text' => 'Message sent!',
-					'user' => auth()->user()->name,
-				]
-			);
-		})->name('messages.send');
+
+	});
+	Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',\App\Http\Middleware\InMessageGroup::class])->group(function () {
+		Route::get('/messages/{applicationId}', [MessagesController::class, 'index'])
+			->whereNumber(['applicationId', 'recipientId'])
+			->name('messages.index');
+		Route::post('/messages', [MessagesController::class, 'SendMessage'])->name('messages.send');
 	});
 });

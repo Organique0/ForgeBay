@@ -122,6 +122,16 @@ export default function AppLayout({
 											>
 												My Ideas
 											</NavLink>
+
+											{/* <NavLink
+												href={route('messages.received')}
+												active={route().current('messages.received')}
+												onClick={() => {
+													localStorage.removeItem('ideasScrollPosition');
+												}}
+											>
+												My Messages
+											</NavLink> */}
 										</>
 									)
 

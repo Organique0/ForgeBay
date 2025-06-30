@@ -1,17 +1,14 @@
-import StatusPretty from '@/Components/MyComponents/StatusPretty';
 import { Badge } from '@/Components/Shadcn/ui/badge';
 import { Button } from '@/Components/Shadcn/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/Components/Shadcn/ui/collapsible';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/Components/Shadcn/ui/dropdown-menu';
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/Components/Shadcn/ui/table';
 import AppLayout from '@/Layouts/AppLayout';
 import { Application, Idea, Task } from '@/types';
 import { Link } from '@inertiajs/react';
 import { formatDistanceToNow } from 'date-fns';
 import { ChevronDown, ChevronUp, Clock, Filter } from 'lucide-react';
-import React, { useState } from 'react'
-
+import React, { useEffect, useRef, useState } from 'react';
 
 export type UserApplication = Application & {
 	task: TaskWithIdea;
@@ -21,12 +18,18 @@ export type UserApplications = UserApplication[];
 
 
 export default function UserApplications({ applications }: { applications: UserApplications }) {
-	console.log(applications);
+	const highlight = useRef(window.location.search.split('=')[1]);
 
-	const [filter, setFilter] = useState("all");
+	const [filter, setFilter] = useState<"all" | "sent" | "approved" | "declined">("all");
+	const highlightedCardRef = useRef<HTMLDivElement | null>(null);
 
 	const filteredApplications = applications.filter((app) => filter === "all" || app.status.toLowerCase() === filter)
 
+	useEffect(() => {
+		if (highlight && highlightedCardRef.current) {
+			highlightedCardRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
+	}, [highlight, filteredApplications]);
 	return (
 		<AppLayout title='My Applications'>
 			<div className="container mx-auto py-8 px-4">
@@ -40,7 +43,15 @@ export default function UserApplications({ applications }: { applications: UserA
 
 				<div className="grid gap-6">
 					{filteredApplications.length > 0 ? (
-						filteredApplications.map((application) => <ApplicationCard key={application.id} application={application} />)
+						filteredApplications.map((application) => (
+							<div
+								ref={application.id.toString() === highlight.current ? highlightedCardRef : null}
+								key={application.id}
+								className={application.id.toString() === highlight.current ? "ring-2 ring-purple-700 rounded-lg" : ""}
+							>
+								<ApplicationCard application={application} />
+							</div>
+						))
 					) : (
 						<div className="text-center py-12">
 							<h3 className="text-lg font-medium">No applications found</h3>
@@ -55,7 +66,7 @@ export default function UserApplications({ applications }: { applications: UserA
 	)
 }
 
-function FilterDropdown({ currentFilter, setFilter }) {
+function FilterDropdown({ currentFilter, setFilter }: { currentFilter: string; setFilter: (filter: "all" | "sent" | "approved" | "declined") => void }) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -104,6 +115,14 @@ function ApplicationCard({ application }: { application: UserApplication }) {
 				<Link href={`/idea/${application.task.idea_id}`}>
 					<Button variant="outline" size="sm">
 						View details
+					</Button>
+				</Link>
+			</CardFooter>
+			<CardFooter className="flex justify-between border-t pt-4">
+				<div/>
+				<Link href={`/messages/${application.id}`}>
+					<Button variant="outline" size="sm">
+						Application Messages
 					</Button>
 				</Link>
 			</CardFooter>

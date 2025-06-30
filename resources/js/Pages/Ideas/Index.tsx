@@ -9,6 +9,7 @@ import Checkbox from '@/Components/Checkbox';
 import useDebounce from '@/Hooks/useDebounce';
 import useImmediateScrollRestoration from '@/Hooks/useImmediateScrollRestoration';
 
+//here we are using cursor pagination because it's faster
 const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query: string} }) => {
 	console.log(ideas);
 	useImmediateScrollRestoration('ideasScrollPosition', true);

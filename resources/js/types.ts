@@ -1,4 +1,4 @@
-type DateTime = string;
+export type DateTime = string;
 
 export type Nullable<T> = T | null;
 
@@ -94,7 +94,7 @@ export type Idea = {
 	user: User;
 	user_id: number;
 	id: number;
-	value: number;
+	total_value: number;
 	active: boolean;
 	created_at: string;
 	updated_at: string;
@@ -109,7 +109,7 @@ export type PaginatedIdea = {
 	description: string;
 	tags: string[];
 	active: boolean;
-	value: number;
+	total_value: number;
 	user: { id: number; name: string };
 	applications_count: number;
 	tasks_count: number;
@@ -122,7 +122,6 @@ export type PaginationInstance = {
 	next_cursor: string;
 	prev_cursor: string;
 	onLastPage: boolean;
-
 }
 
 export type Application = {
@@ -134,6 +133,76 @@ export type Application = {
 	task_id: number;
 	user_id: number;
 	updated_at: DateTime;
+}
+
+export type ApplicationWithUserObject = Application & {
+	//this is supposed to be the user that created the idea for which the application is for
+	task: {
+		id:number,
+		name:string,
+		profile_photo_url:string,
+	}
+	user:{
+		id: number;
+		name: string;
+		profile_photo_url: string;
+	}
+}
+;
+
+export type ReceivedApplicationsType = {
+	created_at: DateTime;
+	description: string;
+	id: number;
+	include_profile: boolean;
+	status: 'sent' | 'approved' | 'declined';
+	task_id: number;
+	user_id: number;
+	updated_at: DateTime;
+	task: {
+		created_at: DateTime;
+		description: string;
+		has_applied:boolean;
+		id:number;
+		idea_id:number;
+		name:string;
+		status: Status;
+		updated_at: DateTime;
+		user_id: number;
+		idea: {
+			active: boolean;
+			created_at: DateTime;
+			description: string;
+			expires: DateTime;
+			id: number;
+			title: string;
+			updated_at: DateTime;
+		}
+	}
+	user: {
+		bio: string;
+		current_team_id: number;
+		email: string;
+		id: number;
+		name: string;
+		profile_photo_url: string;
+		tags: Tag[]
+	}
+}[];
+
+export type RegularPaginationInstance = {
+	data: ReceivedApplicationsType;
+	current_page: number;
+	first_page_url: string;
+	from:number;
+	last_page: number;
+	last_page_url: string;
+	next_page_url: string;
+	path: string;
+	per_page: number;
+	prev_page_url:string;
+	to:number;
+	total:number;
 }
 
 export type User = {

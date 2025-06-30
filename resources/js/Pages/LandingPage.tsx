@@ -7,7 +7,6 @@ import { Idea } from '@/types';
 import { CalendarIcon, ChevronRightIcon, LightbulbIcon, UsersIcon } from 'lucide-react';
 import AppLayout from '@/Layouts/AppLayout';
 import { format, parseISO } from 'date-fns';
-import SingleRecommendedIdea from '@/Components/MyComponents/SingleRecommendedIdea';
 import { Carousel } from 'react-instantsearch';
 import { CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/Shadcn/ui/carousel';
 import TrendingItems from '@/Components/MyComponents/TrendingItems';
