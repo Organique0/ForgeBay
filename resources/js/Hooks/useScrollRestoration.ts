@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export function useScrollRestoration(key: string, delay = 150) {
+export default  function useScrollRestoration(key: string, delay = 150) {
 	useEffect(() => {
 		const pos = localStorage.getItem(key);
 		if (pos) {

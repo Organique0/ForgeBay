@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect } from 'react';
 
-export function useImmediateScrollRestoration(key: string, isLoaded: boolean = false) {
+export default function useImmediateScrollRestoration(key: string, isLoaded: boolean = false) {
 	useEffect(() => {
 		if (!isLoaded) return;
 

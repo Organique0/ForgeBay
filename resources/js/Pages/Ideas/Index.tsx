@@ -7,7 +7,7 @@ import { router } from '@inertiajs/react';
 import { Idea, PaginatedIdea, PaginationInstance } from '@/types';
 import Checkbox from '@/Components/Checkbox';
 import useDebounce from '@/Hooks/useDebounce';
-import { useImmediateScrollRestoration } from '@/hooks/useImmediateScrollRestoration';
+import useImmediateScrollRestoration from '@/Hooks/useImmediateScrollRestoration';
 
 const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query: string} }) => {
 	console.log(ideas);
