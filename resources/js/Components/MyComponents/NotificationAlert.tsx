@@ -41,7 +41,7 @@ export function NotificationAlert() {
             </div>
             <button
               onClick={() => removeNotification(notification.id)}
-              className="flex-shrink-0 text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400"
+              className="shrink-0 text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400"
             >
               <X className="h-4 w-4" />
             </button>

@@ -114,7 +114,7 @@ export default function ReceivedApplications({ applications, team }: { applicati
 							</div>
 						</CardHeader>
 
-						<CardContent className="flex-grow">
+						<CardContent className="grow">
 							<div className="space-y-4">
 								<div>
 									<h3 className="text-sm font-medium text-muted-foreground">Application</h3>

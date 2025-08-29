@@ -300,7 +300,7 @@ export default function AppLayout({
 															<Button
 																type="submit"
 																variant={'link'}
-																className={'p-0 m-0 h-5 cursor-pointer flex flex-grow'}
+																className={'p-0 m-0 h-5 cursor-pointer flex grow'}
 															>
 																Log Out
 															</Button>

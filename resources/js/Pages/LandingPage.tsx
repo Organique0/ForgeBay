@@ -21,7 +21,7 @@ export default function LandingPage({ latestIdeas }: LandingPageProps) {
 	return (
 		<AppLayout title="Welcome to ForgeBay" fullWidth>
 			{/* Hero Banner */}
-			<div className="relative bg-gradient-to-r from-primary/80 to-primary overflow-hidden">
+			<div className="relative bg-linear-to-r from-primary/80 to-primary overflow-hidden">
 				<div className="absolute inset-0">
 					<svg className="absolute inset-0 h-full w-full" xmlns="http://www.w3.org/2000/svg">
 						<defs>
