@@ -5,11 +5,18 @@ Dokumentacija: https://laravel.com/docs/12.x/sail
 Povzetek
 
 Zahtevano: 
-- MacOs, Linux ali WSL2.
+- MacOs, Linux ali WSL2 (https://dev.to/robencom/laravel-sail-on-windows-1pgk).
 - Docker nameščen in zagnan (Linux ukaz za zagon Docker storitve: sudo systemctl start docker, Windows: Uporabi Docker Desktop)
 - nameščen in pravilno nastavljen PHP in Composer
 
 !! Če Docker storitev ne dela na Linux, je verjetno potreben ukaz: docker context use default. !!
+
+Dodatek o WSL2:
+-	WSL mora biti omogočen
+-	V njem mora biti nameščen Debian Linux
+-	Ko omogočimo WSL, se v Raziskovalca doda v levi meni Linux
+-	Mapa tega celotnega projekta se mora nahajati znotraj WSL (V Raziskovalcu se pojavi v levem meniju bližnjica do datotečnega sistema v WLS. V Linux OS se uporabniške datoteke da v home/{uporabniško_ime}/)
+-	V VS Code namestimo razširitev za podporo WSL. Znotraj VS Code odpremo ukazno vrstico (F1 ali CTR+SHIFT+P. Izberemo WSL:poveži z WSL).
 
 Uporaba:
 (Terminal odprt v mapi projekta. Najlažje vsak ukaz v svojem oknu. Ni potrebno za vse, će veste za katere. Okna je najbolje imeti ves čas odprta. Zaradi izpisov in enostavne ustavitve)
@@ -41,7 +48,7 @@ Docker storitev bo seveda še vedno aktiva tudi po zaustavitvi Sail.
 Tutorial for those who have no idea what they are doing.
 
 Requirements:
-- MacOs, Linux or WSL2.
+- MacOs, Linux or WSL2 (https://dev.to/robencom/laravel-sail-on-windows-1pgk).
 - Docker installed and docker service active (Linux command to start the service: sudo systemctl start docker. Windows: Just use Docker Desktop)
 - Installed and properly configured PHP and Composer
 
@@ -52,6 +59,13 @@ Documentation: https://laravel.com/docs/12.x/sail
 Everything is described in the documentation.
 
 !! If you are using Docker Desktop for Linux, you should use the default Docker context by executing the following command: docker context use default. !!
+
+More about WSL2:
+-	WSL must be enabled on your operating system
+-	In WSL you have to install Debian Linux or something similar.
+-	When WSL is enabled, a new entry will appear in the left sidebar in Windows Explorer
+-	The root folder of this project must be put inside WSL (usually you would put it in your home folder there)
+-	VS Code is preffered because of it's good support for WSL. All you need is to install an extension and then open the Command Pallete with F1 or CTRL+SHIFT+P, select ">WSL: Connect to WSL" and pick the folder of the project.
 
 Commands you need to execute in separate terminal windows (in the root folder):
 - composer install (If you are missing certain PHP extensions it will tell you which. (Most likely iconv and intl) php.ini on Linux is in /etc/php.)
