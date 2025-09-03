@@ -23,10 +23,7 @@ type MessageType = {
 export default function MessagingPage(
 	{loadedMessages, application}:
 	{ loadedMessages: MessageType[], application: ApplicationWithUserObject}
-
-
 ) {
-	console.log(application);
 	const [messages, setMessages] = useState(loadedMessages);
 
 	const { auth } = useTypedPage().props;
@@ -321,6 +318,12 @@ export default function MessagingPage(
 				<Input
 					value={newMessage}
 					onChange={(e) => setNewMessage(e.target.value)}
+					onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+						if (e.key === "Enter" && !e.shiftKey) {
+							e.preventDefault()
+							handleSendMessage()
+						}
+					}}
 					placeholder="Type a message..."
 					className="flex-1"
 				/>
