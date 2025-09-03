@@ -133,19 +133,25 @@ function ApplicationCard({ application }: { application: UserApplication }) {
             </CardContent>
 
             <CardFooter className="flex flex-col gap-3 border-t pt-4 bg-muted/20">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 w-full">
-                    <div className="text-xs text-muted-foreground font-mono bg-muted px-2 py-1 rounded">
-                        ID: {application.id}
-                    </div>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full sm:justify-end">
                     <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                        {application.task.idea?.active 
+                        ? 
                         <Link href={`/idea/${application.task.idea_id}`}>
                             <Button variant="outline" size="sm" className="w-full sm:w-auto hover:bg-primary/10">
                                 View Project
                             </Button>
                         </Link>
+                        :
+                        <Button variant="outline" size="sm" className="w-full sm:w-auto cursor-not-allowed opacity-50" disabled>
+                            Project Inactive
+                        </Button>
+                        }
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                         <Link href={`/messages/${application.id}`}>
                             <Button variant="default" size="sm" className="w-full sm:w-auto">
-                                View Messages
+                                View Messages (does not work)
                             </Button>
                         </Link>
                     </div>

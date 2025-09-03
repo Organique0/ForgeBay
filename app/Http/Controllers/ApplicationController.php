@@ -44,13 +44,15 @@ class ApplicationController extends Controller
 			->latest()
 			->get();
 
-		$applications->each(function($application) {
-			if ($application->status === ApplicationStatus::Approved) {
-				$application->messages = Message::where('user_id', auth()->id())
-					->where('application_id', $application->id)
-					->get();
-			}
-		});
+		// why is this here?
+		// there is no message table?
+		// $applications->each(function($application) {
+		// 	if ($application->status === ApplicationStatus::Approved) {
+		// 		$application->messages = Message::where('user_id', auth()->id())
+		// 			->where('application_id', $application->id)
+		// 			->get();
+		// 	}
+		// });
 
 		return Inertia::render('UserApplications', [
 			'applications' => $applications
