@@ -1,17 +1,16 @@
 import React from 'react';
-import { Idea } from '@/types';
 import { Badge } from '@/Components/Shadcn/ui/badge';
 
 type Props = {
-	idea?: Idea;
-	initialStatus?: TaskStatus;
-	[key: string]: any;
+	initialStatus: TaskStatus;
+	className?: string;
 };
 type StatusValue = "success" | "error" | "warning" | "info";
 type TaskStatus = "to_do" | "in_progress" | "done" | "No Tasks";
 
-const StatusPretty: React.FC<Props> = ({ idea, initialStatus, ...rest }) => {
-	const startStatus: TaskStatus = initialStatus || (idea && idea.tasks.length > 0 ? idea.tasks[idea.tasks.length - 1].status : 'No Tasks');
+const StatusPretty: React.FC<Props> = ({ initialStatus, className }) => {
+	const startStatus: TaskStatus = initialStatus;
+	// || (idea && idea.tasks.length > 0 ? idea.tasks[idea.tasks.length - 1].status : 'No Tasks');
 
 	let status: string;
 	let value: StatusValue;
@@ -35,7 +34,7 @@ const StatusPretty: React.FC<Props> = ({ idea, initialStatus, ...rest }) => {
 	}
 
 	return (
-		<Badge variant={value} className={rest.className}>
+		<Badge variant={value} className={className}>
 			{status}
 		</Badge>
 	);

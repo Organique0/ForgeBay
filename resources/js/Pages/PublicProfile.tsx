@@ -1,15 +1,15 @@
-import React from 'react';
-import { Link, usePage } from '@inertiajs/react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/Components/Shadcn/ui/avatar';
 import { Badge } from '@/Components/Shadcn/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/Components/Shadcn/ui/chart';
+import useTypedPage from '@/Hooks/useTypedPage';
 import AppLayout from '@/Layouts/AppLayout';
 import { Idea, Tag } from '@/types';
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/Components/Shadcn/ui/chart';
-import { Bar, BarChart, CartesianGrid, Label, LabelList, Pie, PieChart, XAxis } from 'recharts';
-import useTypedPage from '@/Hooks/useTypedPage';
+import { Link } from '@inertiajs/react';
 import { format, parseISO } from 'date-fns';
-import { CheckCircle, Lightbulb, XCircle, User, Wrench } from 'lucide-react';
+import { CheckCircle, Lightbulb, User, Wrench, XCircle } from 'lucide-react';
+import React from 'react';
+import { Bar, BarChart, CartesianGrid, Label, LabelList, Pie, PieChart, XAxis } from 'recharts';
 
 interface PublicProfileProps {
 	name: string;
@@ -17,7 +17,7 @@ interface PublicProfileProps {
 	profile_photo_url: string;
 	bio: string;
 	ideas: Idea[];
-	tags: Tag[];
+	tags: string[];
 	applications: Application[];
 }
 
@@ -243,7 +243,7 @@ export default function PublicProfile() {
 								Skills & Interests
 							</h2>
 							<div className="flex flex-wrap gap-2">
-								{tags.map((tag: Tag, index: number) => (
+								{tags.map((tag: string, index: number) => (
 									<Badge key={index} className='text-lg'>
 										{tag}
 									</Badge>

@@ -27,14 +27,14 @@ export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClas
 				<CardTitle className="block lg:flex items-start gap-2">
 
 					<div className='flex gap-4'>
-						<LightbulbIcon className="h-5 w-5 text-primary mt-1" />
-						<Link href={`/idea/${hit.id}`} onClick={handleIdeaClick}>
+						<LightbulbIcon className="h-6 w-6 text-primary mt-1" />
+						<Link href={`/idea/${hit.id}`} onClick={handleIdeaClick} className='text-2xl md:text-3xl font-semibold hover:underline'>
 							{hit.title}
 						</Link>
 					</div>
 
 					<div className='gap-4 ml-auto flex mt-2 lg:mt-0'>
-						<Hammer className="h-5 w-5 text-primary mt-1" />
+						<Hammer className="h-6 w-6 text-primary mt-1" />
 						<div className='flex lg:block'>
 							<span className='block text-left text-lg lg:text-xl mr-1'>Created By: </span>
 							<Link href={`/user/${hit.user.id}`} className='text-lg lg:text-xl underline' onClick={handleUserLinkClick}>
@@ -85,62 +85,5 @@ export default function SingleIdea({ hit, itemClassName }: { hit: Idea, itemClas
 				</div>
 			</CardFooter>
 		</Card>
-		// <Link href={`/idea/${hit.id}`} onClick={handleIdeaClick}>
-		// 	<Card className={'min-h-[25em] flex flex-col transition-all hover:shadow-lg'}>
-		// 		<CardHeader>
-		// 			<div className={'lg:flex lg:justify-between'}>
-		// 				<div className='flex'>
-		// 					<LightbulbIcon className="h-5 w-5 text-primary mt-1" />
-		// 					<h1 className='text-2xl md:text-3xl font-semibold'>{hit.title}</h1>
-		// 				</div>
-		// 				<Link as='button' href={`/user/${hit.user.id}`} className='lg:flex items-center gap-4 underline hidden text-right float-end' onClick={handleUserLinkClick}>
-		// 					<div className='block items-center gap-4'>
-		// 						<span className='block text-right'>Created By: </span>
-		// 						{hit.user.name}
-		// 					</div>
-		// 					<Hammer />
-		// 				</Link>
-		// 			</div>
-		// 			<p className="font-bold text-xl">${hit.value}</p>
-		// 		</CardHeader>
-		// 		<CardContent className={'grow'}>
-		// 			<p className={'grow text-lg md:text-xl'}>{hit.description}</p>
-		// 		</CardContent>
-		// 		<CardFooter className={'block lg:flex justify-between'}>
-		// 			<div className='flex gap-2 flex-wrap'>
-		// 				{hit.tags.map((tag: string) => (
-		// 					<Badge key={tag} className='text-lg'>{tag}</Badge>
-		// 				))}
-		// 			</div>
-
-		// 			<div className='mt-4 lg:mt-0 flex flex-wrap lg:block justify-between'>
-		// 				<div className='gap-4 flex items-center'>
-		// 					<div className='block'>
-		// 						{hit.created_at && (
-		// 							<time className='block'>
-		// 								Created{' '}
-		// 								{new Date(hit.created_at).toLocaleDateString()}
-		// 							</time>
-		// 						)}
-		// 						{hit.updated_at && (
-		// 							<time>
-		// 								Updated{' '}
-		// 								{new Date(hit.updated_at).toLocaleDateString()}
-		// 							</time>
-		// 						)}
-		// 					</div>
-		// 					<CalendarIcon />
-		// 				</div>
-		// 				<Link as={'button'} href={`/user/${hit.user.id}`} className='lg:hidden underline flex gap-4 items-center text-right float-end' onClick={handleUserLinkClick}>
-		// 					<div className='block'>
-		// 						<span className='block text-right'>Created By: </span>
-		// 						{hit.user.name}
-		// 					</div>
-		// 					<Hammer />
-		// 				</Link>
-		// 			</div>
-		// 		</CardFooter>
-		// 	</Card>
-		// </Link >
 	)
 }

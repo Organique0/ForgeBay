@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Laravel\Scout\Searchable;
+use Illuminate\Support\Facades\DB;
 
 class Idea extends Model
 {
@@ -45,6 +46,42 @@ class Idea extends Model
 
 		return $returnArray;
 	}
+
+	/**
+     * Scope for the landing page ideas (active, have at least one to_do task, with counts/sums).
+     */
+    public function scopeIdeasList($query, int $limit = 6)
+    {
+        return $query->where('active', true)
+            ->whereHas('tasks', fn($q) => $q->where('status', 'to_do'))
+            ->with('user:id,name')
+            ->with(['tags' => fn($q) => $q->select('tags.id', 'tags.name')])
+            ->withSum('tasks as total_value', 'value')
+            ->withCount('tasks')
+			->withCount('applications')
+            ->take($limit);
+    }
+
+	/**
+     * Scope for the idea detail page (active, have at least one to_do task, with counts/sums and eager-loaded relationships).
+     */
+    public function scopeIdeasPage($query)
+    {
+        return $query->where('active', true)
+            ->with([
+                // eager-load tasks and include applications count on each task
+                'tasks' => function ($q) {
+                    $q->withCount('applications');
+                },
+                // eager-load user but only id/name
+                'user:id,name',
+                // eager-load tags (select columns only)
+                'tags' => fn($q) => $q->select('tags.id', 'tags.name'),
+            ])
+            ->withSum('tasks as total_value', 'value')
+            ->withCount('tasks')
+            ->withCount('applications');
+    }
 
 	protected $fillable = [
 		'title',

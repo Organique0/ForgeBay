@@ -1,29 +1,25 @@
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/Components/Shadcn/ui/form'
+import Tag from '@/Components/MyComponents/Tag';
+import { Alert, AlertDescription, AlertTitle } from '@/Components/Shadcn/ui/alert';
+import { Button } from '@/Components/Shadcn/ui/button';
+import { Calendar as CalendarComponent } from "@/Components/Shadcn/ui/calendar";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/Components/Shadcn/ui/form';
+import { Input } from '@/Components/Shadcn/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/Components/Shadcn/ui/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/Shadcn/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/Shadcn/ui/table';
+import { Textarea } from '@/Components/Shadcn/ui/textarea';
 import useRoute from '@/Hooks/useRoute';
 import AppLayout from '@/Layouts/AppLayout';
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import React, { ChangeEvent, useState } from 'react'
-import { Label } from '@/Components/Shadcn/ui/label';
-import { Input } from '@/Components/Shadcn/ui/input';
-import InputError from '@/Components/InputError';
-import { Textarea } from '@/Components/Shadcn/ui/textarea';
-import UpdateApplicationDataForm, { CleanTag } from '../Profile/Partials/UpdateApplicationDataForm';
-import useTypedPage from '@/Hooks/useTypedPage';
-import Tag from '@/Components/MyComponents/Tag';
-import { Badge } from '@/Components/Shadcn/ui/badge';
-import { Button } from '@/Components/Shadcn/ui/button';
-import { z } from "zod"
-import axios from 'axios';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
-import { AlertCircle, Calendar, CheckCircle2, ClipboardList, Euro, ListTodo, PlusCircle, Save, Trash2 } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/Components/Shadcn/ui/alert';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/Shadcn/ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from '@/Components/Shadcn/ui/popover';
-import { format } from 'date-fns';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/Shadcn/ui/table';
 import { Idea, Task } from '@/types';
-import { Calendar as CalendarComponent } from "@/Components/Shadcn/ui/calendar";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from 'axios';
+import { format } from 'date-fns';
+import { AlertCircle, Calendar, CheckCircle2, ClipboardList, Euro, ListTodo, PlusCircle, Save, Trash2 } from 'lucide-react';
+import React, { ChangeEvent, useState } from 'react';
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { CleanTag } from '../Profile/Partials/UpdateApplicationDataForm';
 
 
 export default function EditIdeaAndTasks({

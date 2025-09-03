@@ -90,7 +90,6 @@ export type Idea = {
 	title: string;
 	description: string;
 	tags: Tag[];
-	tasks: Task[];
 	user: User;
 	user_id: number;
 	id: number;
@@ -103,25 +102,16 @@ export type Idea = {
 	expires: string;
 };
 
-export type PaginatedIdea = {
-	id: number;
-	title: string;
-	description: string;
-	tags: string[];
-	active: boolean;
-	total_value: number;
-	user: { id: number; name: string };
-	applications_count: number;
-	tasks_count: number;
-	created_at: DateTime;
-	updated_at: DateTime;
+export type IdeaWithTasks = Idea & {
+	tasks: Task[];
 };
 
 export type PaginationInstance = {
-	data: PaginatedIdea[];
+	data: Idea[];
 	next_cursor: string;
 	prev_cursor: string;
 	onLastPage: boolean;
+	tags: Tag[];
 }
 
 export type Application = {

@@ -26,28 +26,14 @@ class IdeaController extends Controller
 		$tags = $request->input('tags');
 		$perPage = 10;
 
-		$builder = Idea::where('active', true)
-			->whereHas('tasks', function($query) {
-				$query->where('status', 'to_do');
-			})
-			->with([
-				'user:id,name',
-				'tags' => function($query) {
-					$query->select('tags.id', 'tags.name')->pluck('name');
-				}
-			])
-			->withSum('tasks as total_value', 'value')
-			->withCount('tasks')
-			->withCount(['tasks as applications_count' => function($query) {
-				$query->withCount('applications')->selectRaw('sum(applications_count)');
-			}]);
+		$builder =  Idea::ideasList();
 
 
-			// Get IDs that match the search query
-			if($query) {
-				$ids = Idea::search($query)->where('active', true)->get()->pluck('id');
-				$builder->whereIn('id', $ids);
-			}
+		// Get IDs that match the search query
+		if($query) {
+			$ids = Idea::search($query)->where('active', true)->get()->pluck('id');
+			$builder->whereIn('id', $ids);
+		}
 
 		// Then apply tag filtering if tags are provided
 		if ($tags) {
@@ -128,32 +114,10 @@ class IdeaController extends Controller
 	public function show(string $id): \Inertia\Response
 	{
 
-		$idea = Idea::with(['tasks' => function ($query) {
-			$query->withCount('applications');
-		}, 'user', 'tags'])
-			->findOrFail($id);
+		 $idea = Idea::ideasPage()
+            ->findOrFail($id);
 
-		$tagIds = $idea->tags->pluck('id');
-
-		$recommendations = Idea::where('id', '!=', $idea->id)
-			->where('active', true)
-			->whereHas('tags', fn($q) => $q->whereIn('tags.id', $tagIds))
-			->with([
-				'user:id,name',
-				'tags' => function ($query) {
-					$query->select('tags.id', 'tags.name')->pluck('name');
-				}
-			])
-			->withSum('tasks as total_value', 'value')
-			->withCount('tasks')
-			->withCount(['tasks as applications_count' => function ($query) {
-				$query->withCount('applications')->selectRaw('sum(applications_count)');
-			}])
-			->take(8)
-			->get();
-
-		//$recommendations = $this->TransformIdeas($recommendations);
-
+		$recommendations = Idea::ideasList(8)->get();
 
 		if (!$idea) {
 			abort(404);

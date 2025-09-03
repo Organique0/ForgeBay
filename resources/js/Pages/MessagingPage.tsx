@@ -1,17 +1,13 @@
-import React, { useMemo } from "react"
-import { useState, useRef, useEffect } from "react"
-import { Paperclip, ImageIcon, Send, File, X } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/Shadcn/ui/avatar"
-import { ScrollArea } from "@/Components/Shadcn/ui/scroll-area"
-import { Input } from "@/Components/Shadcn/ui/input"
 import { Button } from "@/Components/Shadcn/ui/button"
-import AppLayout from "@/Layouts/AppLayout"
+import { Input } from "@/Components/Shadcn/ui/input"
+import { ScrollArea } from "@/Components/Shadcn/ui/scroll-area"
 import useTypedPage from "@/Hooks/useTypedPage"
-import { useRoute } from "ziggy-js"
+import AppLayout from "@/Layouts/AppLayout"
+import { ApplicationWithUserObject, DateTime, User } from "@/types"
 import axios from "axios"
-import { Application, ApplicationWithUserObject, DateTime, User } from "@/types"
-import { formatDate } from "date-fns"
-import { now } from "lodash"
+import { File, ImageIcon, Paperclip, Send, X } from "lucide-react"
+import React, { useEffect, useRef, useState } from "react"
 
 type MessageType = {
 	application_id: number;

@@ -1,15 +1,10 @@
-import React from 'react';
-import { Head, Link } from '@inertiajs/react';
-import { Button } from '@/Components/Shadcn/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/Components/Shadcn/ui/card';
-import { Badge } from '@/Components/Shadcn/ui/badge';
-import { Idea } from '@/types';
-import { CalendarIcon, ChevronRightIcon, LightbulbIcon, UsersIcon } from 'lucide-react';
-import AppLayout from '@/Layouts/AppLayout';
-import { format, parseISO } from 'date-fns';
-import { Carousel } from 'react-instantsearch';
-import { CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/Shadcn/ui/carousel';
 import TrendingItems from '@/Components/MyComponents/TrendingItems';
+import { Button } from '@/Components/Shadcn/ui/button';
+import AppLayout from '@/Layouts/AppLayout';
+import { Idea } from '@/types';
+import { Link } from '@inertiajs/react';
+import { ChevronRightIcon } from 'lucide-react';
+import React from 'react';
 
 interface LandingPageProps {
 	latestIdeas: Idea[];
@@ -17,7 +12,6 @@ interface LandingPageProps {
 
 
 export default function LandingPage({ latestIdeas }: LandingPageProps) {
-	console.log("latest: ", latestIdeas);
 	return (
 		<AppLayout title="Welcome to ForgeBay" fullWidth>
 			{/* Hero Banner */}
@@ -66,54 +60,6 @@ export default function LandingPage({ latestIdeas }: LandingPageProps) {
 						itemClassName=''
 
 					/>
-
-					{/* <div className="grid grid-cols-1 lg:grid-cols-2 4xl:grid-cols-3 gap-6">
-						{latestIdeas.map((idea) => (
-							 <Card key={idea.id} className="transition-all hover:shadow-lg">
-							 	<CardHeader>
-							 		<CardTitle className="flex items-start gap-2">
-							 			<LightbulbIcon className="h-5 w-5 text-primary mt-1" />
-							 			<Link href={`/idea/${idea.id}`} className="hover:text-primary transition-colors">
-							 				{idea.title}
-							 			</Link>
-							 		</CardTitle>
-							 		<CardDescription className="flex items-center mt-2">
-							 			<CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
-							 			{format(parseISO(idea.created_at), 'PPP')}
-							 		</CardDescription>
-							 	</CardHeader>
-							 	<CardContent>
-							 		<p className="line-clamp-3 text-sm text-muted-foreground">
-							 			{idea.description}
-							 		</p>
-							 		<div className="flex flex-wrap gap-2 mt-4">
-							 			{idea.tags?.slice(0, 3).map((tag, i) => (
-							 				<Badge key={i} variant="secondary" className="text-xs">
-							 					{tag.name}
-							 				</Badge>
-							 			))}
-							 			{idea.tags?.length > 3 && (
-							 				<Badge variant="outline" className="text-xs">
-							 					+{idea.tags.length - 3} more
-							 				</Badge>
-							 			)}
-							 		</div>
-								</CardContent>
-							 	<CardFooter>
-							 		<div className="flex justify-between items-center w-full">
-							 			<div className="flex items-center text-sm text-muted-foreground">
-							 				<UsersIcon className="h-3.5 w-3.5 mr-1.5" />
-							 				{idea.applications_count || 0} applications
-							 			</div>
-							 			<Link href={`/idea/${idea.id}`}>
-							 				<Button size="sm" variant="ghost">Learn more</Button>
-							 			</Link>
-							 		</div>
-							 	</CardFooter>
-							 </Card>
-
-						))}
-					</div> */}
 				</div>
 			</div>
 		</AppLayout>

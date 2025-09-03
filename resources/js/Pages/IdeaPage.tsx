@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Idea, Idea as IdeaType, Task as TaskType } from '@/types';
+import { Idea, IdeaWithTasks } from '@/types';
 import AppLayout from '@/Layouts/AppLayout';
 import {
 	Timeline,
@@ -8,7 +8,6 @@ import {
 	TimelineFooter,
 	TimelineItem,
 	TimelineTitle,
-	TimelineLink,
 	TimelineIcon,
 } from '@/Components/MyComponents/timeline';
 import StatusPretty from '@/Components/MyComponents/StatusPretty';
@@ -26,8 +25,9 @@ import useTypedPage from '@/Hooks/useTypedPage';
 import { Link } from '@inertiajs/react';
 import TrendingItems from '@/Components/MyComponents/TrendingItems';
 
-const IdeaPage = ({ idea: initialIdea, recommendations }: { idea: IdeaType, recommendations: Idea[] }) => {
-	const [idea, setIdea] = useState<IdeaType>(initialIdea);
+const IdeaPage = ({ idea: initialIdea, recommendations }: { idea: IdeaWithTasks, recommendations: Idea[] }) => {
+	const [idea, setIdea] = useState<IdeaWithTasks>(initialIdea);
+	console.log('Initial idea:', initialIdea);
 	const firstToDoIndex = idea.tasks.findIndex(task => task.status === 'to_do');
 	const page = useTypedPage();
 
@@ -52,7 +52,7 @@ const IdeaPage = ({ idea: initialIdea, recommendations }: { idea: IdeaType, reco
 	 	};
 	 }, [initialIdea.id]);
 
-	console.log(recommendations);
+	console.log('recomend', recommendations);
 	return (
 		<AppLayout title={'Idea'}>
 			<div className={'mt-12'}>

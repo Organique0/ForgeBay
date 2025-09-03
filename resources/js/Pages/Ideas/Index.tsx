@@ -4,18 +4,17 @@ import SingleIdea from '@/Components/MyComponents/SingleIdea';
 import { Button } from '@/Components/Shadcn/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { router } from '@inertiajs/react';
-import { Idea, PaginatedIdea, PaginationInstance } from '@/types';
+import { Idea, PaginationInstance } from '@/types';
 import Checkbox from '@/Components/Checkbox';
 import useDebounce from '@/Hooks/useDebounce';
 import useImmediateScrollRestoration from '@/Hooks/useImmediateScrollRestoration';
 
 //here we are using cursor pagination because it's faster
-const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query: string} }) => {
-	console.log(ideas);
+const Index = ({ ideas, filters, orderBy }: { ideas: PaginationInstance, filters: {query: string}, orderBy: string }) => {
 	useImmediateScrollRestoration('ideasScrollPosition', true);
 	const [searchQuery, setSearchQuery] = useState(filters.query || '');
-	const [selectedTags, setSelectedTags] = useState([]);
-	const [orderBy, setOrderBy] = useState(filters.orderBy || 'latest_created');
+	const [selectedTags, setSelectedTags] = useState<number[]>([]);
+	const [orderByState, setOrderByState] = useState(orderBy || 'latest_created');
 
 	const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
@@ -63,16 +62,16 @@ const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query:
 	};
 
 	const handleOrderByChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setOrderBy(e.target.value);
+		setOrderByState(e.target.value);
 	};
 
 
 	useEffect(() => {
-		router.get('/idea', { query: debouncedSearchQuery, tags: selectedTags.join(','), orderBy: orderBy }, {
+		router.get('/idea', { query: debouncedSearchQuery, tags: selectedTags.join(','), orderBy: orderByState }, {
 			preserveState: true,
 			preserveScroll: true
 		});
-	}, [orderBy, selectedTags, debouncedSearchQuery]);
+	}, [orderByState, selectedTags, debouncedSearchQuery]);
 
 	return (
 		<AppLayout title='Ideas'>
@@ -104,7 +103,7 @@ const Index = ({ ideas, filters }: { ideas: PaginationInstance, filters: {query:
 
 
 				<select
-					value={orderBy}
+					value={orderByState}
 					onChange={handleOrderByChange}
 					className="border rounded p-2"
 				>
