@@ -60,7 +60,7 @@ export default function AppLayout({
 
 			<Banner />
 
-			<div className="min-h-screen bg-white dark:bg-gray-900 pb-32">
+			<div className="min-h-screen bg-white dark:bg-gray-900">
 				<ModeToggle />
 				<nav className="bg-white dark:bg-gray-800 border-b-2 border-gray-300 dark:border-gray-700">
 					{/* <!-- Primary Navigation Menu --> */}

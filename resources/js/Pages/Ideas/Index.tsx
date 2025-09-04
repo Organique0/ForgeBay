@@ -135,7 +135,7 @@ const Index = ({ ideas, filters, orderBy }: { ideas: PaginationInstance, filters
 				</div>
 
 				{/* Pagination */}
-				<div className="flex items-center justify-between">
+				<div className="flex items-center justify-between pb-8">
 					<Button
 						variant="outline"
 						disabled={!ideas.prev_cursor}

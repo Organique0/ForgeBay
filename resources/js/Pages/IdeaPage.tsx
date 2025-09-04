@@ -27,7 +27,6 @@ import TrendingItems from '@/Components/MyComponents/TrendingItems';
 
 const IdeaPage = ({ idea: initialIdea, recommendations }: { idea: IdeaWithTasks, recommendations: Idea[] }) => {
 	const [idea, setIdea] = useState<IdeaWithTasks>(initialIdea);
-	console.log('Initial idea:', initialIdea);
 	const firstToDoIndex = idea.tasks.findIndex(task => task.status === 'to_do');
 	const page = useTypedPage();
 
@@ -52,7 +51,6 @@ const IdeaPage = ({ idea: initialIdea, recommendations }: { idea: IdeaWithTasks,
 	 	};
 	 }, [initialIdea.id]);
 
-	console.log('recomend', recommendations);
 	return (
 		<AppLayout title={'Idea'}>
 			<div className={'mt-12'}>

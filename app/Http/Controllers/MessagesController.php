@@ -13,22 +13,27 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class messagesController extends Controller
 {
-   public function index($applicationId) {
+public function index($applicationId) {
 
 		$messages = Message::with(['user:id,name'])->where('application_id', $applicationId)->get();
-		$application = Application::with([
-			'user:id,name',
-			'task.idea.user:id,name',
-		])->where('id', $applicationId)->first();
 
-		// Replace the full task data with just the task's user information.
-		if ($application && $application->task) {
-			$application->setRelation('task', $application->task->idea->user);
+		// Load only the user who created the idea/task for this application and the application submitter
+		$application = Application::with(['task.idea.user:id,name', 'user:id,name'])->find($applicationId);
+
+		$ideaCreator = null;
+		if ($application && $application->task && $application->task->idea && $application->task->idea->user) {
+			$ideaCreator = $application->task->idea->user; // already limited to id,name
+		}
+
+		$recepientUser = null;
+		if ($application && $application->user) {
+			$recepientUser = $application->user; // the user who submitted the application (id,name)
 		}
 
 		return Inertia::render('MessagingPage', [
 			'loadedMessages' => $messages,
-			'application'    => $application,
+			'ideaCreator'    => $ideaCreator,
+			'recepientUser'  => $recepientUser,
 		]);
 	 }
 
@@ -77,14 +82,16 @@ class messagesController extends Controller
 		}
 
 		//$message->recipient_user = User::where('id', $request->recipient_id)->select('id', 'name')->first();
+		
 		$message->user = User::where('id', auth()->id())->select('id', 'name')->first();
 
 		broadcast(new MessageSent($request->application_id, $message))->toOthers();
-			return response()->json([
-				'text' => 'Message sent!',
-				'message' => $message
-			]);
-		}
+
+		return response()->json([
+			'text' => 'Message sent!',
+			'message' => $message
+		]);
+	}
 
 }
 

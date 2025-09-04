@@ -4,7 +4,7 @@ import { Input } from "@/Components/Shadcn/ui/input"
 import { ScrollArea } from "@/Components/Shadcn/ui/scroll-area"
 import useTypedPage from "@/Hooks/useTypedPage"
 import AppLayout from "@/Layouts/AppLayout"
-import { ApplicationWithUserObject, DateTime, User } from "@/types"
+import { SimpleUser, DateTime } from "@/types"
 import axios from "axios"
 import { File, ImageIcon, Paperclip, Send, X } from "lucide-react"
 import React, { useEffect, useRef, useState } from "react"
@@ -16,21 +16,23 @@ type MessageType = {
 	id: number;
 	message: string;
 	updated_at: DateTime;
-	user: User;
+	user: SimpleUser;
 	user_id: number;
 };
 
 export default function MessagingPage(
-	{loadedMessages, application}:
-	{ loadedMessages: MessageType[], application: ApplicationWithUserObject}
+	{ loadedMessages, ideaCreator, recepientUser }:
+		{ loadedMessages: MessageType[], ideaCreator: SimpleUser, recepientUser: SimpleUser }
 ) {
 	const [messages, setMessages] = useState(loadedMessages);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const { auth } = useTypedPage().props;
 
-	const applicationId = application.id + "";
-	const currentUserId = auth.user?.id;
-	const recipientUser = currentUserId === application.task.id ? application.user : application.task;
+	const pathParts = window.location.pathname.split('/').filter(Boolean);
+	const applicationId = String(pathParts[pathParts.length - 1]);
+	const currentUserId = Number(auth.user?.id);
+	const recipientUser = currentUserId === ideaCreator.id ? recepientUser : ideaCreator;
 
 
 	// window.Echo.private(`messages.${applicationId}`)
@@ -50,12 +52,43 @@ export default function MessagingPage(
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const imageInputRef = useRef<HTMLInputElement>(null)
 	const messagesEndRef = useRef<HTMLDivElement>(null)
+	const initialLoadRef = useRef(true)
+	const messagesContainerRef = useRef<HTMLDivElement>(null)
+	
 
+	// Wait for all images inside the container to finish loading (or error)
+	// Could be useless, but it works. 
+	const waitForImages = (container: HTMLElement | null) => {
+		setIsLoading(true);
+		if (!container) return Promise.resolve()
+		const imgs = Array.from(container.querySelectorAll('img')) as HTMLImageElement[]
+		if (imgs.length === 0) return Promise.resolve()
+		return Promise.all(imgs.map(img => {
+			if (img.complete) {
+				return Promise.resolve()}
+			return new Promise<void>(res => {
+				const done = () => res()
+				img.addEventListener('load', done, { once: true })
+				img.addEventListener('error', done, { once: true })
+			})
+		}))
+	}
+
+	//not perfect but works well enough
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-		}, 1000)
-		return () => clearTimeout(timer)
+		const behavior: ScrollBehavior = initialLoadRef.current ? 'auto' : 'smooth'
+		// quick scroll after paint
+		requestAnimationFrame(() => requestAnimationFrame(() => {
+			messagesEndRef.current?.scrollIntoView({ behavior, block: 'end' })
+		}))
+
+		// after images load, do a final scroll so image heights are included
+		waitForImages(messagesContainerRef.current).then(() => {
+			setIsLoading(false);
+			messagesEndRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' })
+		}).catch(() => {/* ignore */})
+
+		initialLoadRef.current = false
 	}, [messages])
 
 	const handleSendMessage = () => {
@@ -80,9 +113,11 @@ export default function MessagingPage(
 				'Content-Type': 'multipart/form-data'
 			}
 		}).then((response) => {
-			setMessages([...messages, response.data.message]);
+			setMessages(prev => [...prev, response.data.message]);
 			setNewMessage("");
 			setAttachments([]);
+		}).catch((err) => {
+			console.error('Failed to send message', err)
 		});
 	}
 
@@ -162,8 +197,6 @@ export default function MessagingPage(
 				])
 			}
 		}
-
-		// Reset the input
 		e.target.value = ""
 	}
 
@@ -181,8 +214,8 @@ export default function MessagingPage(
 		<div className="flex flex-col h-[80vh] max-w-7xl mx-auto border rounded-lg overflow-hidden mt-12">
 			<div className="flex items-center p-4 border-b bg-background">
 				<Avatar className="h-10 w-10 mr-3">
-					<AvatarImage src={application.user.profile_photo_url} alt="Contact" />
-					<AvatarFallback>{application.user.name}</AvatarFallback>
+						<AvatarImage src={ideaCreator.profile_photo_url} alt="Contact" />
+						<AvatarFallback>{ideaCreator.name}</AvatarFallback>
 				</Avatar>
 				<div>
 						<h2 className="text-sm font-medium">{recipientUser.name}</h2>
@@ -194,7 +227,10 @@ export default function MessagingPage(
 			</div>
 
 			<ScrollArea className="flex-1 p-4 h-72!">
-				<div className="space-y-4">
+				{
+				//visual glitches when loading, so hide until loaded. Easiest fix of my life.
+				}
+				<div ref={messagesContainerRef} className={`space-y-4 ${isLoading ? 'invisible' : ''}`}>
 					{messages.map((message) => (
 						<div key={message.id} className={`flex ${message.user.id === auth.user!.id ? "justify-end" : "justify-start"}`}>
 							<div
@@ -218,6 +254,7 @@ export default function MessagingPage(
 																	src={url}
 																	alt={`Attachment ${index}`}
 																	className="max-w-full h-auto"
+																	loading="eager"
 																/>
 															</div>
 														) : (
