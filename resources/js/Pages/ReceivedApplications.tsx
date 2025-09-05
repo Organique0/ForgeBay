@@ -175,11 +175,11 @@ export default function ReceivedApplications({ applications, team }: { applicati
 							)}
 							{application.status == 'sent' && (
 								<div className="flex space-x-2 w-full">
-									<Button variant="outline" className='w-full' size="sm" onClick={() => approve(application.id)}>
+									<Button variant="outline" className='w-1/2' size="sm" onClick={() => approve(application.id)}>
 										<CheckCircle className="h-4 w-4 mr-2" />
 										Approve
 									</Button>
-									<Button variant="outline" className='w-full' size="sm" onClick={() => decline(application.id)}>
+									<Button variant="outline" className='w-1/2' size="sm" onClick={() => decline(application.id)}>
 										<CircleX className="h-4 w-4 mr-2" />
 										Decline
 									</Button>
