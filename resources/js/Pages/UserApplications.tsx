@@ -151,7 +151,7 @@ function ApplicationCard({ application }: { application: UserApplication }) {
                     <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                         <Link href={`/messages/${application.id}`}>
                             <Button variant="default" size="sm" className="w-full sm:w-auto">
-                                View Messages (does not work)
+                                View Messages
                             </Button>
                         </Link>
                     </div>
