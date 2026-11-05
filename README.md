@@ -7,7 +7,7 @@ Povzetek
 Zahtevano: 
 - MacOs, Linux ali WSL2 (https://dev.to/robencom/laravel-sail-on-windows-1pgk).
 - Docker nameščen in zagnan (Linux ukaz za zagon Docker storitve: sudo systemctl start docker, Windows: Uporabi Docker Desktop)
-- nameščen in pravilno nastavljen PHP in Composer
+- nameščen in pravilno nastavljen PHP in Composer (v WSL in ne Windows)
 
 !! Če Docker storitev ne dela na Linux, je verjetno potreben ukaz: docker context use default. !!
 
