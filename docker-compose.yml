@@ -1,7 +1,7 @@
 services:
   laravel.test:
     build:
-      context: './vendor/laravel/sail/runtimes/8.4'
+      context: './vendor/laravel/sail/runtimes/8.5'
       dockerfile: Dockerfile
       args:
         WWWGROUP: '${WWWGROUP}'
@@ -9,7 +9,7 @@ services:
       resources:
         limits:
           memory: 4G
-    image: 'sail-8.4/app'
+    image: 'sail-8.5/app'
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     ports:
@@ -73,7 +73,6 @@ services:
   mailpit:
     image: axllent/mailpit
     container_name: mailpit
-    restart: unless-stopped
     volumes:
         - ./data:/data
     ports:
