@@ -1,4 +1,4 @@
-Za localno testiranje je zelo priporočeno uporabiti Laravel Sail.
+Za localno testiranje je zelo priporočeno uporabiti Laravel Sail (opomba: Sail je samo Bash skripta za Docker).
 Drugače je potrebno imeti Larael, Postgreql in Redis že nameščen.
 Dokumentacija: https://laravel.com/docs/12.x/sail
 
